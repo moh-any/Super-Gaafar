@@ -24,6 +24,7 @@ public:
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
     bool eventFilter(QObject *object,QEvent *event);
+    void spawnCoin(qreal x, qreal y);
 
 private slots:
     void updateGame();

@@ -28,6 +28,10 @@ private:
     double jumpForce;
     double ground;
     QTimer* jumpTimer;
+
+signals:
+void collidedWithCoin();
+
 };
 
 #endif // PLAYER_H

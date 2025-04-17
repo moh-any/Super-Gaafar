@@ -7,6 +7,8 @@
 #include <QGraphicsItem>
 #include <QTimer>
 #include <QObject>
+
+
 Player::Player(QGraphicsItem *parent):QGraphicsPixmapItem(parent),facingRight(true),velocityX(0),movementSpeed(5.0),velocityY(0),gravity(0.5),isJumping(false),jumpForce(15.0),ground(600){
     sprite=QPixmap(":/images/supermario.png");
     sprite=sprite.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -62,5 +64,13 @@ void Player::applyGravity(){
         setPos(pos().x(),ground);
         velocityY=0;
         isJumping=false;
+    }
+}
+
+QList<QGraphicsItem*> collidedItems = collidingItems();
+for (QGraphicsItem* item : collidedItems) {
+    Coin* coin = dynamic_cast<Coin*>(item);
+    if (coin) {
+        emit collidedWithCoin();  // emit a signal to handle collection
     }
 }

@@ -66,3 +66,15 @@ void MainGameWindow::updateGame(){
     player->update();
     player->applyGravity();
 }
+
+void Game::spawnCoin(qreal x, qreal y) {
+    Coin* coin = new Coin();
+    coin->setPos(x, y);
+    gameScene->addItem(coin);
+
+    connect(player, &Player::collidedWithCoin, coin, [coin, this]() {
+        gameScene->removeItem(coin);
+        delete coin;
+        updateScore();
+    });
+}
