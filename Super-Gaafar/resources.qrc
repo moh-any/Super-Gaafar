@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/images">
         <file>supermario.png</file>
+        <file>mario.png</file>
     </qresource>
 </RCC>

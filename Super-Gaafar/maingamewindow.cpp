@@ -17,7 +17,7 @@ MainGameWindow::MainGameWindow(QWidget *parent)
     setupGame();
     gameTimer=new QTimer(this);
     connect(gameTimer,&QTimer::timeout,this,&MainGameWindow::updateGame);
-    gameTimer->start(10);
+    gameTimer->start(20);
 }
 
 MainGameWindow::~MainGameWindow()
@@ -64,5 +64,4 @@ bool MainGameWindow::eventFilter(QObject *object,QEvent *event){
 }
 void MainGameWindow::updateGame(){
     player->update();
-    player->applyGravity();
 }

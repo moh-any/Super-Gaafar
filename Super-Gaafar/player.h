@@ -5,6 +5,8 @@
 #include <QGraphicsPixmapItem>
 #include <QPixmap>
 #include <QTimer>
+#include <QRect>
+#include <QVector>
 
 class Player:public QObject,public QGraphicsPixmapItem{
     Q_OBJECT
@@ -16,7 +18,9 @@ public:
     void jump();
     void update();
     void applyGravity();
-
+    bool getIsJumping(){
+        return isJumping;
+    };
 private:
     QPixmap sprite;
     bool facingRight;
@@ -28,6 +32,24 @@ private:
     double jumpForce;
     double ground;
     QTimer* jumpTimer;
+
+    enum AnimationState {
+        IDLE,
+        RUNNING,
+        JUMPING
+    };
+    AnimationState currentState;
+    int currentFrame;
+    int animationSpeed;
+    int animationCounter;
+    QPixmap spriteSheet;
+    QVector<QRect> idleRects;
+    QVector<QRect> runRects;
+    QVector<QRect> jumpRects;
+
+    void loadSpriteSheet();
+    void updateAnimation();
+    void updateSprite();
 };
 
 #endif // PLAYER_H
