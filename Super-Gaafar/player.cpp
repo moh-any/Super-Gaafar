@@ -7,6 +7,8 @@
 #include <QGraphicsItem>
 #include <QTimer>
 #include <QObject>
+
+
 Player::Player(QGraphicsItem *parent):QGraphicsPixmapItem(parent),facingRight(true),velocityX(0),movementSpeed(5.0),velocityY(0),gravity(0.5),isJumping(false),jumpForce(15.0),ground(600){
     sprite=QPixmap(":/images/supermario.png");
     sprite=sprite.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -15,6 +17,10 @@ Player::Player(QGraphicsItem *parent):QGraphicsPixmapItem(parent),facingRight(tr
     jumpTimer=new QTimer(this);
     connect(jumpTimer,&QTimer::timeout,this,&Player::applyGravity);
     jumpTimer->start(20);
+
+    if (sprite.isNull()) {
+        qDebug() << "Failed to load coin image!";
+    }
 }
 
 void Player::moveLeft(){
@@ -64,3 +70,6 @@ void Player::applyGravity(){
         isJumping=false;
     }
 }
+
+int Player::getScore() const { return score; }
+void Player::increaseScore(int amount) { score += amount; }
