@@ -1,4 +1,5 @@
 QT       += core gui
+QT += multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -9,13 +10,16 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    coin.cpp \
     main.cpp \
     maingamewindow.cpp \
     player.cpp
-
+    coin.cpp
 HEADERS += \
+    coin.h \
     maingamewindow.h \
     player.h
+    coin.h
 
 FORMS += \
     maingamewindow.ui
@@ -27,3 +31,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     resources.qrc
+
+DISTFILES += \
+    coin.png

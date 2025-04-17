@@ -2,15 +2,26 @@
 #define COIN_H
 
 #include <QGraphicsPixmapItem>
+#include <QTimer>
 #include <QObject>
 
-class Coin : public QObject, public QGraphicsPixmapItem {
+class Coin : public QObject, public QGraphicsPixmapItem
+{
     Q_OBJECT
 public:
-    Coin();
+    Coin(QGraphicsItem *parent = nullptr);
 
-signals:
-    void collected();
+private slots:
+    void nextFrame();
+
+private:
+    QPixmap spriteSheet;
+    int currentFrame;
+    int frameCount;
+    int frameWidth;
+    int frameHeight;
+    QTimer *animationTimer;
+    double ground;
 };
 
 #endif // COIN_H

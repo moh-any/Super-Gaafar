@@ -16,6 +16,8 @@ public:
     void jump();
     void update();
     void applyGravity();
+    int getScore() const;
+    void increaseScore(int amount);
 
 private:
     QPixmap sprite;
@@ -28,7 +30,7 @@ private:
     double jumpForce;
     double ground;
     QTimer* jumpTimer;
-
+    int score = 0;
 signals:
 void collidedWithCoin();
 

@@ -7,6 +7,7 @@
 #include <QGraphicsScene>
 #include <QTimer>
 #include <QEvent>
+#include <QSoundEffect>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -24,10 +25,10 @@ public:
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
     bool eventFilter(QObject *object,QEvent *event);
-    void spawnCoin(qreal x, qreal y);
 
 private slots:
     void updateGame();
+    void spawnCoin();
 
 private:
     Ui::MainGameWindow *ui;
@@ -35,6 +36,12 @@ private:
     QGraphicsView *gameView;
     Player *player;
     QTimer *gameTimer;
+    QTimer *coinTimer;
+
+    QGraphicsTextItem * score;
+
+    QSoundEffect* coinSound;
+
 
     void setupGame();
 };

@@ -1,5 +1,7 @@
 <RCC>
-    <qresource prefix="/images">
-        <file>supermario.png</file>
+    <qresource prefix="/">
+        <file>images/coin.png</file>
+        <file>images/supermario.png</file>
+        <file>sounds/coin.wav</file>
     </qresource>
 </RCC>

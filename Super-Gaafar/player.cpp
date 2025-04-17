@@ -17,6 +17,10 @@ Player::Player(QGraphicsItem *parent):QGraphicsPixmapItem(parent),facingRight(tr
     jumpTimer=new QTimer(this);
     connect(jumpTimer,&QTimer::timeout,this,&Player::applyGravity);
     jumpTimer->start(20);
+
+    if (sprite.isNull()) {
+        qDebug() << "Failed to load coin image!";
+    }
 }
 
 void Player::moveLeft(){
@@ -67,10 +71,5 @@ void Player::applyGravity(){
     }
 }
 
-QList<QGraphicsItem*> collidedItems = collidingItems();
-for (QGraphicsItem* item : collidedItems) {
-    Coin* coin = dynamic_cast<Coin*>(item);
-    if (coin) {
-        emit collidedWithCoin();  // emit a signal to handle collection
-    }
-}
+int Player::getScore() const { return score; }
+void Player::increaseScore(int amount) { score += amount; }
