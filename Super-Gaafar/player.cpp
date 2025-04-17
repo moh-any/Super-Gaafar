@@ -7,8 +7,8 @@
 #include <QGraphicsItem>
 #include <QTimer>
 #include <QObject>
-Player::Player(QGraphicsItem *parent):QGraphicsPixmapItem(parent),facingRight(true),velocityX(0),movementSpeed(5.0),velocityY(0),gravity(0.5),isJumping(false),jumpForce(15.0),ground(600),currentState(IDLE),currentFrame(0),animationSpeed(5),animationCounter(0){
-    setPos(800,ground);
+Player::Player(QGraphicsItem *parent):QGraphicsPixmapItem(parent),facingRight(true),velocityX(0),movementSpeed(5.0),velocityY(0),gravity(0.5),isJumping(false),jumpForce(15.0),ground(535),currentState(IDLE),currentFrame(0),animationSpeed(5),animationCounter(0){
+    setPos(350,ground);
     loadSpriteSheet();
     updateSprite();
 }
@@ -76,26 +76,24 @@ void Player::applyGravity(){
 
 void Player::loadSpriteSheet(){
     spriteSheet.load(":/images/mario.png");
-    idleRects.append(QRect(110,0,50,75));
     int frameWidth=50;
     int frameHeight=75;
     int runningFrameCount=21;
     for(int i=0;i<runningFrameCount; i++){
-        runRects.append(QRect(i*frameWidth+7*i,0,frameWidth,frameHeight));
+        Rects.append(QRect(i*frameWidth+7*i,0,frameWidth,frameHeight));
     }
-    jumpRects.append(QRect(0,0,50,75));
 }
 
 void Player::updateAnimation(){
     switch(currentState){
     case IDLE:
-        currentFrame=(currentFrame+1)%idleRects.size();
+        currentFrame=0;
         break;
     case RUNNING:
-        currentFrame=(currentFrame+1)%runRects.size();
+        currentFrame=(currentFrame+1)%Rects.size();
         break;
     case JUMPING:
-        currentFrame=(currentFrame+1)%jumpRects.size();
+        currentFrame=0;
         break;
     }
     updateSprite();
@@ -105,13 +103,13 @@ void Player::updateSprite(){
     QRect frameRect;
     switch(currentState){
     case IDLE:
-        frameRect=idleRects[currentFrame];
+        frameRect=Rects[currentFrame];
         break;
     case RUNNING:
-        frameRect=runRects[currentFrame];
+        frameRect=Rects[currentFrame];
         break;
     case JUMPING:
-        frameRect=jumpRects[currentFrame];
+        frameRect=Rects[currentFrame];
         break;
     }
     QPixmap currentFramePixmap=spriteSheet.copy(frameRect);

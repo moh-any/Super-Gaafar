@@ -43,9 +43,7 @@ private:
     int animationSpeed;
     int animationCounter;
     QPixmap spriteSheet;
-    QVector<QRect> idleRects;
-    QVector<QRect> runRects;
-    QVector<QRect> jumpRects;
+    QVector<QRect> Rects;
 
     void loadSpriteSheet();
     void updateAnimation();

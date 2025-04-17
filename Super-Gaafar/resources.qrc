@@ -2,5 +2,7 @@
     <qresource prefix="/images">
         <file>supermario.png</file>
         <file>mario.png</file>
+        <file>ground.png</file>
+        <file>background.png</file>
     </qresource>
 </RCC>
