@@ -1,6 +1,7 @@
 #include "maingamewindow.h"
 #include "ui_maingamewindow.h"
 #include "coin.h"
+#include "enemy.h"
 #include <QWidget>
 #include <QTimer>
 #include <QGraphicsScene>
@@ -29,10 +30,13 @@ MainGameWindow::MainGameWindow(QWidget *parent)
 
     PlatformsNum = 10;
     ObstaclesNum = 10;
+    EnemiesNum = 10;
     platforms.clear();
     platforms.reserve(PlatformsNum);
     obstacles.clear();
     obstacles.reserve(ObstaclesNum);
+    enemies.clear();
+    enemies.reserve(EnemiesNum);
     setupGame();
 }
 
@@ -56,6 +60,7 @@ void MainGameWindow::setupGame(){
     bg=new Background();
     gameScene->addItem(bg);
 
+    //creating platforms
     for (int i = 0; i < PlatformsNum; i++){
         auto *p = new Platform(1000*(i+1), 360, "brick");
         platforms.append(p);
@@ -63,11 +68,20 @@ void MainGameWindow::setupGame(){
         platforms[i]->setZValue(3);
     }
 
+    //creating obstacles
     for (int i = 0; i < ObstaclesNum; i++){
         auto *o = new Platform(1500*(i+1), 465, "warp");
         obstacles.append(o);
         gameScene->addItem(obstacles[i]);
         obstacles[i]->setZValue(3);
+    }
+
+    //creating enemies
+    for (int i = 0; i < EnemiesNum; i++){
+        auto *e = new Enemy(1200*(i+1));
+        enemies.append(e);
+        gameScene->addItem(enemies[i]);
+        enemies[i]->setZValue(3);
     }
 
     bg->setZValue(1);
@@ -81,8 +95,6 @@ void MainGameWindow::setupGame(){
     gameView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     statusBar()->hide();
     setCentralWidget(gameView);
-
-
 
     Coin* coin = new Coin();
     coin->setPos(300, 500);
@@ -125,16 +137,25 @@ bool MainGameWindow::eventFilter(QObject *object,QEvent *event){
 }
 void MainGameWindow::updateGame(){
     player->update();
+    for (auto enemy : enemies){
+        enemy->move();
+    }
     gameView->centerOn(player->pos());
     QList<QGraphicsItem*> colliding = player->collidingItems(Qt::IntersectsItemBoundingRect);
     for(int i = 0; i < colliding.size(); i++){
         Coin* coin=dynamic_cast<Coin*>(colliding[i]);
+        Enemy* enemy=dynamic_cast<Enemy*>(colliding[i]);
         if(coin){
             coinSound->play();
             gameScene->removeItem(coin);
             delete coin;
         }
+        else if (enemy){
+            player->die();
+        }
     }
+
+
 }
 
 void MainGameWindow::spawnCoin() {

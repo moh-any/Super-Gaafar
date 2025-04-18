@@ -12,6 +12,7 @@ CONFIG += c++17
 SOURCES += \
     background.cpp \
     coin.cpp \
+    enemy.cpp \
     ground.cpp \
     main.cpp \
     maingamewindow.cpp \
@@ -21,6 +22,7 @@ SOURCES += \
 HEADERS += \
     background.h \
     coin.h \
+    enemy.h \
     ground.h \
     maingamewindow.h \
     platform.h \

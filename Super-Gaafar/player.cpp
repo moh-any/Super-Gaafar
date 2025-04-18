@@ -1,5 +1,6 @@
 #include "player.h"
 #include "platform.h"
+#include "enemy.h"
 #include <QGraphicsScene>
 #include <QRectF>
 #include <QTransform>
@@ -85,11 +86,12 @@ void Player::applyGravity(){
     QList<QGraphicsItem*> colliding = this->collidingItems(Qt::IntersectsItemBoundingRect);
     for(auto item:colliding){
         qDebug() << " collided with:" << typeid(*item).name();
-        Ground* tmp1=dynamic_cast<Ground*>(item);
-        Platform* tmp2=dynamic_cast<Platform*>(item);
+        Ground* _ground=dynamic_cast<Ground*>(item);
+        Platform* _platform=dynamic_cast<Platform*>(item);
+        Enemy* _enemy = dynamic_cast<Enemy*>(item);
 
-        if(tmp1){
-            setPos(pos().x(),ground+1);
+        if(_ground){
+            setPos(pos().x(),ground);
             velocityY=0;
             isJumping=false;
             if(velocityX!=0){
@@ -99,7 +101,7 @@ void Player::applyGravity(){
                 currentState=IDLE;
             }
         }
-        else if (tmp2){
+        else if (_platform){
             if (velocityY > 0){
                 setY(item->y() - pixmap().height());
                 velocityY=0;
@@ -112,9 +114,12 @@ void Player::applyGravity(){
                 }
             }
             else{
-                setY(tmp2->y() + tmp2->pixmap().height()+1);
+                setY(_platform->y() + _platform->pixmap().height()+1);
                 velocityY=5;
             }
+        }
+        else if (_enemy){
+            die();
         }
     }
 }
@@ -163,4 +168,8 @@ void Player::updateSprite(){
         currentFramePixmap=currentFramePixmap.transformed(QTransform().scale(-1, 1));
     }
     setPixmap(currentFramePixmap);
+}
+
+void Player::die(){
+    //needs further work
 }

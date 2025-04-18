@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "player.h"
 #include "platform.h"
+#include "enemy.h"
 #include <ground.h>
 #include <background.h>
 #include <QGraphicsView>
@@ -43,8 +44,10 @@ private:
     Background *bg;
     QList<Platform *> platforms;
     QList<Platform *> obstacles;
+    QList<Enemy *> enemies;
     int PlatformsNum;
     int ObstaclesNum;
+    int EnemiesNum;
     QTimer *gameTimer;
     QGraphicsTextItem* score;
     QSoundEffect* coinSound;

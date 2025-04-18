@@ -6,6 +6,7 @@
         <file>coin.png</file>
         <file>brick.png</file>
         <file>warp.png</file>
+        <file>redt.png</file>
     </qresource>
     <qresource prefix="/sounds">
         <file>coin.wav</file>

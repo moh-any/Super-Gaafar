@@ -24,6 +24,7 @@ public:
     void setSceneWidth(int w){
         sceneWidth=w;
     }
+    void die();
 private:
     QPixmap sprite;
     bool facingRight;
