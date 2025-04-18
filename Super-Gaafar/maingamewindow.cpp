@@ -25,9 +25,9 @@ MainGameWindow::MainGameWindow(QWidget *parent)
     setWindowTitle("Super Gaafar");
     setFixedSize(900,650);
 
-    PlatformsNum = 10;
-    ObstaclesNum = 10;
-    EnemiesNum=10;
+    PlatformsNum = 6;
+    ObstaclesNum = 5;
+    EnemiesNum= 4;
     platforms.clear();
     platforms.reserve(PlatformsNum);
     obstacles.clear();
@@ -40,9 +40,9 @@ MainGameWindow::MainGameWindow(QWidget *parent)
 
     themeSong = new QSoundEffect(this);
     themeSong->setSource(QUrl("qrc:/sounds/ThemeSong.wav"));
-    themeSong->setVolume(0.7);
+    themeSong->setVolume(0.75);
     themeSong->setLoopCount(QSoundEffect::Infinite);
-    // themeSong->play();
+    themeSong->play();
 }
 
 MainGameWindow::~MainGameWindow()
@@ -52,11 +52,11 @@ MainGameWindow::~MainGameWindow()
 
 void MainGameWindow::setupGame(){
     gameScene=new QGraphicsScene(this);
-    gameScene->setSceneRect(0,0,10000,600);
+    gameScene->setSceneRect(0,0,5000,600);
 
     player=new Player();
     gameScene->addItem(player);
-    player->setSceneWidth(10000);
+    player->setSceneWidth(5000);
 
     ground=new Ground();
     gameScene->addItem(ground);
@@ -69,26 +69,88 @@ void MainGameWindow::setupGame(){
     ground->setZValue(2);
     player->setZValue(3);
 
-    for (int i = 0; i < PlatformsNum; i++){
-        auto *p = new Platform(1000*(i+1), 360, "brick",5);
+    /*for (int i = 0; i < PlatformsNum; i++){
+        auto *p = new Platform((rand()%500+500)*(i+1), 360, "brick", rand()%3+2);
         platforms.append(p);
         gameScene->addItem(platforms[i]);
         platforms[i]->setZValue(3);
-    }
+    }*/
 
-    for (int i = 0; i < ObstaclesNum; i++){
-        auto *o = new Platform(1500*(i+1), 465, "warp");
+    //manual
+    auto *p1 = new Platform(500, 360, "brick", 2);
+    auto *p2 = new Platform(1000, 360, "brick", 2);
+    auto *p3 = new Platform(1700, 360, "brick", 4);
+    auto *p4 = new Platform(2600, 360, "brick", 3);
+    auto *p5 = new Platform(3200, 360, "brick", 2);
+    auto *p6 = new Platform(4000, 360, "brick", 3);
+
+    gameScene->addItem(p1);
+    gameScene->addItem(p2);
+    gameScene->addItem(p3);
+    gameScene->addItem(p4);
+    gameScene->addItem(p5);
+    gameScene->addItem(p6);
+
+    p1->setZValue(3);
+    p2->setZValue(3);
+    p3->setZValue(3);
+    p4->setZValue(3);
+    p5->setZValue(3);
+    p6->setZValue(3);
+
+    /*for (int i = 0; i < ObstaclesNum; i++){
+        auto *o = new Platform((rand()%500+500)*(i+1), 465, "warp");
         obstacles.append(o);
         gameScene->addItem(obstacles[i]);
         obstacles[i]->setZValue(3);
-    }
+    }*/
 
-    for (int i = 0; i < EnemiesNum; i++){
-        auto *e = new Enemy(1200*(i+1));
+    //manual
+    auto *o1 = new Platform(700, 465, "warp");
+    auto *o2 = new Platform(1200, 465, "warp");
+    auto *o3 = new Platform(2300, 465, "warp");
+    auto *o4 = new Platform(3000, 465, "warp");
+    auto *o5 = new Platform(3700, 465, "warp");
+
+    gameScene->addItem(o1);
+    gameScene->addItem(o2);
+    gameScene->addItem(o3);
+    gameScene->addItem(o4);
+    gameScene->addItem(o5);
+
+    o1->setZValue(3);
+    o2->setZValue(3);
+    o3->setZValue(3);
+    o4->setZValue(3);
+    o5->setZValue(3);
+
+    /*for (int i = 0; i < EnemiesNum; i++){
+        auto *e = new Enemy((rand()%500+500)*(i+1));
         enemies.append(e);
         gameScene->addItem(enemies[i]);
         enemies[i]->setZValue(3);
-    }
+    }*/
+
+    auto *e1 = new Enemy(1000);
+    auto *e2 = new Enemy(1800);
+    auto *e3 = new Enemy(2900);
+    auto *e4 = new Enemy(3100);
+
+    enemies.append(e1);
+    enemies.append(e2);
+    enemies.append(e3);
+    enemies.append(e4);
+
+    gameScene->addItem(e1);
+    gameScene->addItem(e2);
+    gameScene->addItem(e3);
+    gameScene->addItem(e4);
+
+    e1->setZValue(3);
+    e2->setZValue(3);
+    e3->setZValue(3);
+    e4->setZValue(3);
+
     gameView=new QGraphicsView(gameScene,this);
     gameView->installEventFilter(this);
     gameView->setRenderHint(QPainter::Antialiasing);
@@ -98,46 +160,68 @@ void MainGameWindow::setupGame(){
     statusBar()->hide();
     setCentralWidget(gameView);
 
-    Coin* coin = new Coin();
-    coin->setPos(300, 500);
-    gameScene->addItem(coin);
-    coin->setZValue(3);
+    Coin* coin1 = new Coin();
+    Coin* coin2 = new Coin();
+    Coin* coin3 = new Coin();
+    Coin* coin4 = new Coin();
+    Coin* coin5 = new Coin();
+    Coin* coin6 = new Coin();
+
+    coin1->setPos(300, 500);
+    coin2->setPos(320, 500);
+    coin4->setPos(1000, 500);
+    coin5->setPos(1750, 325);
+    coin6->setPos(1900, 500);
+    coin3->setPos(2315, 420);
+
+    gameScene->addItem(coin1);
+    gameScene->addItem(coin2);
+    gameScene->addItem(coin3);
+    gameScene->addItem(coin4);
+    gameScene->addItem(coin5);
+    gameScene->addItem(coin6);
+
+    coin1->setZValue(3);
+    coin2->setZValue(3);
+    coin3->setZValue(3);
+    coin4->setZValue(3);
+    coin5->setZValue(3);
+    coin6->setZValue(3);
 
     Pole* pole=new Pole();
-    pole->setPos(10000-350,365);
+    pole->setPos(5000-350,365);
     gameScene->addItem(pole);
     pole->setZValue(2);
 
     Castle* castle=new Castle();
-    castle->setPos(10000-230,370);
+    castle->setPos(5000-230,370);
     gameScene->addItem(castle);
     castle->setZValue(2);
 
     coinSound = new QSoundEffect(this);
     coinSound->setSource(QUrl("qrc:/sounds/coin.wav"));
-    coinSound->setVolume(0.25);
+    coinSound->setVolume(0.75);
 
     PowerUp* powerup1 = new PowerUp(Gigantification);
-    int x = QRandomGenerator::global()->bounded(gameScene->width() - 500);
-    int y = QRandomGenerator::global()->bounded(400, 500);
-    powerup1->setPos(x, y);
+    //int x = QRandomGenerator::global()->bounded(gameScene->width() - 500);
+    //int y = QRandomGenerator::global()->bounded(400, 500);
+    powerup1->setPos(2000, 520);
     powerup1->setZValue(3);
     gameScene->addItem(powerup1);
 
     PowerUp* powerup2 = new PowerUp(SpeedBoost);
-    x = QRandomGenerator::global()->bounded(gameScene->width() - 500);
-    y = QRandomGenerator::global()->bounded(400, 500);
-    powerup2->setPos(x, y);
+    //x = QRandomGenerator::global()->bounded(gameScene->width() - 500);
+    //y = QRandomGenerator::global()->bounded(400, 500);
+    powerup2->setPos(1550, 520);
     powerup2->setZValue(3);
     gameScene->addItem(powerup2);
 
     PowerUp* powerup3 = new PowerUp(JumpBoost);
-    x = QRandomGenerator::global()->bounded(gameScene->width() - 500);
-    y = QRandomGenerator::global()->bounded(400, 500);
-    powerup3->setPos(x, y);
+    //x = QRandomGenerator::global()->bounded(gameScene->width() - 500);
+    //y = QRandomGenerator::global()->bounded(400, 500);
+    powerup3->setPos(525, 325);
     powerup3->setZValue(3);
     gameScene->addItem(powerup3);
-
 }
 
 
@@ -175,8 +259,9 @@ void MainGameWindow::updateGame(){
         enemy->move();
     }
     QList<QGraphicsItem*> colliding = player->collidingItems(Qt::IntersectsItemBoundingRect);
-    for(auto item:colliding){
-        if(dynamic_cast<Coin*>(item)){
+    for(auto item : colliding){
+        Coin* coin=dynamic_cast<Coin*>(item);
+        if(coin){
             coinSound->play();
             gameScene->removeItem(item);
             delete item;
@@ -185,7 +270,7 @@ void MainGameWindow::updateGame(){
             reachedPole=true;
             qDebug() << "flag";
             flag=new Flag();
-            flag->setPos(10000-325,500);
+            flag->setPos(5000-325,500);
             gameScene->addItem(flag);
             flag->setZValue(2);
         }
@@ -193,7 +278,7 @@ void MainGameWindow::updateGame(){
             gameScene->removeItem(player);
             victorySong = new QSoundEffect(this);
             victorySong->setSource(QUrl("qrc:/sounds/victory.wav"));
-            victorySong->setVolume(0.25);
+            victorySong->setVolume(0.75);
             themeSong->stop();
             victorySong->play();
         }

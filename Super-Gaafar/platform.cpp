@@ -16,5 +16,5 @@ Platform::Platform(qreal x, qreal y, QString s, int length) {
     }
     p.end();
     setPixmap(big);
-    setPos(x,y);
+    setPos(x,y+5);
 }
