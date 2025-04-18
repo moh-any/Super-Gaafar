@@ -22,14 +22,18 @@ MainGameWindow::MainGameWindow(QWidget *parent)
     ui->setupUi(this);
     setWindowTitle("Super Gaafar");
     setFixedSize(900,650);
-    setupGame();
+
     gameTimer=new QTimer(this);
     connect(gameTimer,&QTimer::timeout,this,&MainGameWindow::updateGame);
     gameTimer->start(15);
 
     PlatformsNum = 10;
+    ObstaclesNum = 10;
     platforms.clear();
     platforms.reserve(PlatformsNum);
+    obstacles.clear();
+    obstacles.reserve(ObstaclesNum);
+    setupGame();
 }
 
 MainGameWindow::~MainGameWindow()
@@ -53,10 +57,17 @@ void MainGameWindow::setupGame(){
     gameScene->addItem(bg);
 
     for (int i = 0; i < PlatformsNum; i++){
-        auto *p = new Platform(100*(i+1), 360);
+        auto *p = new Platform(1000*(i+1), 360, "brick");
         platforms.append(p);
         gameScene->addItem(platforms[i]);
         platforms[i]->setZValue(3);
+    }
+
+    for (int i = 0; i < ObstaclesNum; i++){
+        auto *o = new Platform(1500*(i+1), 465, "warp");
+        obstacles.append(o);
+        gameScene->addItem(obstacles[i]);
+        obstacles[i]->setZValue(3);
     }
 
     bg->setZValue(1);

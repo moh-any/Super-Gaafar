@@ -42,7 +42,9 @@ private:
     Ground *ground;
     Background *bg;
     QList<Platform *> platforms;
+    QList<Platform *> obstacles;
     int PlatformsNum;
+    int ObstaclesNum;
     QTimer *gameTimer;
     QGraphicsTextItem* score;
     QSoundEffect* coinSound;

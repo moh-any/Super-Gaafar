@@ -6,7 +6,7 @@
 class Platform : public QGraphicsPixmapItem
 {
 public:
-    Platform(qreal x, qreal y);
+    Platform(qreal x, qreal y, QString s);
 };
 
 #endif // PLATFORM_H
