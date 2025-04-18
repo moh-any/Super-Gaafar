@@ -69,20 +69,13 @@ void MainGameWindow::setupGame(){
     ground->setZValue(2);
     player->setZValue(3);
 
-    /*for (int i = 0; i < PlatformsNum; i++){
-        auto *p = new Platform((rand()%500+500)*(i+1), 360, "brick", rand()%3+2);
-        platforms.append(p);
-        gameScene->addItem(platforms[i]);
-        platforms[i]->setZValue(3);
-    }*/
-
     //manual
-    auto *p1 = new Platform(500, 360, "brick", 2);
-    auto *p2 = new Platform(1000, 360, "brick", 2);
-    auto *p3 = new Platform(1700, 360, "brick", 4);
-    auto *p4 = new Platform(2600, 360, "brick", 3);
-    auto *p5 = new Platform(3200, 360, "brick", 2);
-    auto *p6 = new Platform(4000, 360, "brick", 3);
+    auto *p1 = new Platform(500, 400, "brick", 2);
+    auto *p2 = new Platform(1000, 400, "brick", 2);
+    auto *p3 = new Platform(1700, 400, "brick", 4);
+    auto *p4 = new Platform(2600, 400, "brick", 3);
+    auto *p5 = new Platform(3200, 400, "brick", 2);
+    auto *p6 = new Platform(4000, 400, "brick", 3);
 
     gameScene->addItem(p1);
     gameScene->addItem(p2);
@@ -98,12 +91,6 @@ void MainGameWindow::setupGame(){
     p5->setZValue(3);
     p6->setZValue(3);
 
-    /*for (int i = 0; i < ObstaclesNum; i++){
-        auto *o = new Platform((rand()%500+500)*(i+1), 465, "warp");
-        obstacles.append(o);
-        gameScene->addItem(obstacles[i]);
-        obstacles[i]->setZValue(3);
-    }*/
 
     //manual
     auto *o1 = new Platform(700, 465, "warp");
@@ -124,12 +111,6 @@ void MainGameWindow::setupGame(){
     o4->setZValue(3);
     o5->setZValue(3);
 
-    /*for (int i = 0; i < EnemiesNum; i++){
-        auto *e = new Enemy((rand()%500+500)*(i+1));
-        enemies.append(e);
-        gameScene->addItem(enemies[i]);
-        enemies[i]->setZValue(3);
-    }*/
 
     auto *e1 = new Enemy(1000);
     auto *e2 = new Enemy(1800);
@@ -170,7 +151,7 @@ void MainGameWindow::setupGame(){
     coin1->setPos(300, 500);
     coin2->setPos(320, 500);
     coin4->setPos(1000, 500);
-    coin5->setPos(1750, 325);
+    coin5->setPos(1750, 365);
     coin6->setPos(1900, 500);
     coin3->setPos(2315, 420);
 
@@ -203,23 +184,19 @@ void MainGameWindow::setupGame(){
     coinSound->setVolume(0.75);
 
     PowerUp* powerup1 = new PowerUp(Gigantification);
-    //int x = QRandomGenerator::global()->bounded(gameScene->width() - 500);
-    //int y = QRandomGenerator::global()->bounded(400, 500);
     powerup1->setPos(2000, 520);
     powerup1->setZValue(3);
     gameScene->addItem(powerup1);
 
     PowerUp* powerup2 = new PowerUp(SpeedBoost);
-    //x = QRandomGenerator::global()->bounded(gameScene->width() - 500);
-    //y = QRandomGenerator::global()->bounded(400, 500);
+
     powerup2->setPos(1550, 520);
     powerup2->setZValue(3);
     gameScene->addItem(powerup2);
 
     PowerUp* powerup3 = new PowerUp(JumpBoost);
-    //x = QRandomGenerator::global()->bounded(gameScene->width() - 500);
-    //y = QRandomGenerator::global()->bounded(400, 500);
-    powerup3->setPos(525, 325);
+
+    powerup3->setPos(525, 365);
     powerup3->setZValue(3);
     gameScene->addItem(powerup3);
 }
