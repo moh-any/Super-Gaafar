@@ -1,4 +1,5 @@
 #include "player.h"
+#include "platform.h"
 #include <QGraphicsScene>
 #include <QRectF>
 #include <QTransform>
@@ -21,21 +22,35 @@ Player::Player(QGraphicsItem *parent):QObject() ,QGraphicsPixmapItem(parent),fac
 
 void Player::moveLeft(){
     velocityX=-movementSpeed;
+    currentState=RUNNING;
+    QList<QGraphicsItem *> colliding = collidingItems();
+    for (auto item : colliding){
+        Platform *platform = dynamic_cast<Platform *> (item);
+        if (!facingRight && platform){
+            stopMoving();
+        }
+    }
     if(facingRight){
         QPixmap flippedSprite=sprite.transformed(QTransform().scale(-1, 1));
         setPixmap(flippedSprite);
         facingRight=false;
     }
-    currentState=RUNNING;
 }
 
 void Player::moveRight(){
     velocityX=movementSpeed;
+    currentState=RUNNING;
+    QList<QGraphicsItem *> colliding = collidingItems();
+    for (auto item : colliding){
+        Platform *platform = dynamic_cast<Platform *> (item);
+        if (facingRight && platform){
+            stopMoving();
+        }
+    }
     if(!facingRight) {
         setPixmap(sprite);
         facingRight=true;
     }
-    currentState=RUNNING;
 }
 
 void Player::stopMoving(){
@@ -71,9 +86,11 @@ void Player::applyGravity(){
     QList<QGraphicsItem*> colliding = this->collidingItems(Qt::IntersectsItemBoundingRect);
     for(auto item:colliding){
         qDebug() << " collided with:" << typeid(*item).name();
-        Ground* tmp=dynamic_cast<Ground*>(item);
-        if(tmp){
-            setPos(pos().x(),ground);
+        Ground* tmp1=dynamic_cast<Ground*>(item);
+        Platform* tmp2=dynamic_cast<Platform*>(item);
+
+        if(tmp1){
+            setPos(pos().x(),ground+1);
             velocityY=0;
             isJumping=false;
             if(velocityX!=0){
@@ -81,6 +98,23 @@ void Player::applyGravity(){
             }
             else{
                 currentState=IDLE;
+            }
+        }
+        else if (tmp2){
+            if (velocityY > 0){
+                setY(item->y() - pixmap().height());
+                velocityY=0;
+                isJumping=false;
+                if (velocityX!=0){
+                    currentState=RUNNING;
+                }
+                else{
+                    currentState=IDLE;
+                }
+            }
+            else{
+                setY(tmp2->y() + tmp2->pixmap().height()+1);
+                velocityY=5;
             }
         }
     }

@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "player.h"
+#include "platform.h"
 #include <ground.h>
 #include <background.h>
 #include <QGraphicsView>
@@ -40,6 +41,8 @@ private:
     Player *player;
     Ground *ground;
     Background *bg;
+    Platform *platform;
+    Platform *platform2;
     QTimer *gameTimer;
     QGraphicsTextItem* score;
     QSoundEffect* coinSound;

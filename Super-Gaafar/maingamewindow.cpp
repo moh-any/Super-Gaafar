@@ -12,6 +12,9 @@
 #include <background.h>
 #include <coin.h>
 #include <QRandomGenerator>
+#include <QGraphicsItem>
+#include <QGraphicsPixmapItem>
+
 MainGameWindow::MainGameWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainGameWindow)
@@ -32,11 +35,11 @@ MainGameWindow::~MainGameWindow()
 
 void MainGameWindow::setupGame(){
     gameScene=new QGraphicsScene(this);
-    gameScene->setSceneRect(0,0,2000,600);
+    gameScene->setSceneRect(0,0,10000,600);
 
     player=new Player();
     gameScene->addItem(player);
-    player->setSceneWidth(2000);
+    player->setSceneWidth(10000);
 
     ground=new Ground();
     gameScene->addItem(ground);
@@ -45,9 +48,16 @@ void MainGameWindow::setupGame(){
     bg=new Background();
     gameScene->addItem(bg);
 
+    platform = new Platform(200,360);
+    platform2 = new Platform(500,505);
+    gameScene->addItem(platform);
+    gameScene->addItem(platform2);
+
     bg->setZValue(1);
     ground->setZValue(2);
-    player->setZValue(3);
+    platform->setZValue(3);
+    platform2->setZValue(3);
+    player->setZValue(4);
 
     gameView=new QGraphicsView(gameScene,this);
     gameView->installEventFilter(this);
@@ -81,7 +91,6 @@ void MainGameWindow::keyPressEvent(QKeyEvent *event){
     else if(event->key()==Qt::Key_Space || event->key()==Qt::Key_Up){
         player->jump();
     }
-
 }
 
 void MainGameWindow::keyReleaseEvent(QKeyEvent *event){

@@ -17,5 +17,3 @@ Ground::Ground(QGraphicsItem *parent):QObject(), QGraphicsPixmapItem(parent){
     setPixmap(big);
     setPos(0,565);
 }
-
-

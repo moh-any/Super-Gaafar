@@ -15,6 +15,7 @@ SOURCES += \
     ground.cpp \
     main.cpp \
     maingamewindow.cpp \
+    platform.cpp \
     player.cpp
     coin.cpp
 HEADERS += \
@@ -22,6 +23,7 @@ HEADERS += \
     coin.h \
     ground.h \
     maingamewindow.h \
+    platform.h \
     player.h
     coin.h
 
