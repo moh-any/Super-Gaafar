@@ -2,7 +2,6 @@
 #define GROUND_H
 
 #include <QGraphicsPixmapItem>
-#include <QVector>
 
 class Ground :public QObject, public QGraphicsPixmapItem
 {

@@ -24,6 +24,12 @@ public:
     void setSceneWidth(int w){
         sceneWidth=w;
     }
+    bool getFacingRight(){
+        return facingRight;
+    }
+    void setMovementSpeed(double speed);
+    void setJumpForce(double force);
+    void applyGiantPowerUp();
 private:
     QPixmap sprite;
     bool facingRight;
@@ -35,7 +41,10 @@ private:
     double jumpForce;
     double ground;
     int sceneWidth=2000;
+    int height=64;
+    int width=64;
     QTimer* jumpTimer;
+    int counter;
 
     enum AnimationState {
         IDLE,
@@ -44,8 +53,6 @@ private:
     };
     AnimationState currentState;
     int currentFrame;
-    int animationSpeed;
-    int animationCounter;
     QPixmap spriteSheet;
     QVector<QRect> Rects;
     QSoundEffect* jumpSound;

@@ -4,9 +4,23 @@
         <file>ground.png</file>
         <file>background.png</file>
         <file>coin.png</file>
+        <file>castle.png</file>
+        <file>pole.png</file>
+        <file>mflag.png</file>
+        <file>speedBoost.png</file>
+        <file>GiantUp.png</file>
+        <file>JumpUp.png</file>
+        <file>warp.png</file>
+        <file>brick.png</file>
+        <file>redt.png</file>
     </qresource>
     <qresource prefix="/sounds">
         <file>coin.wav</file>
         <file>jump.wav</file>
+        <file>levelclear.wav</file>
+        <file>ThemeSong.mp3</file>
+        <file>ThemeSong.wav</file>
+        <file>victory.wav</file>
+        <file>death.wav</file>
     </qresource>
 </RCC>

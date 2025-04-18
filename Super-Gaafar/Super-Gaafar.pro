@@ -1,6 +1,6 @@
 QT       += core gui
 QT += core gui multimedia
-
+QT += multimedia
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
@@ -11,18 +11,30 @@ CONFIG += c++17
 
 SOURCES += \
     background.cpp \
+    castle.cpp \
     coin.cpp \
+    enemy.cpp \
+    flag.cpp \
     ground.cpp \
     main.cpp \
     maingamewindow.cpp \
-    player.cpp
+    platform.cpp \
+    player.cpp \
+    pole.cpp \
+    powerup.cpp
     coin.cpp
 HEADERS += \
     background.h \
+    castle.h \
     coin.h \
+    enemy.h \
+    flag.h \
     ground.h \
     maingamewindow.h \
-    player.h
+    platform.h \
+    player.h \
+    pole.h \
+    powerup.h
     coin.h
 
 FORMS += \
