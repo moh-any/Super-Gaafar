@@ -12,6 +12,10 @@
 #include <background.h>
 #include <coin.h>
 #include <QRandomGenerator>
+#include "powerup.h"
+
+
+
 MainGameWindow::MainGameWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainGameWindow)
@@ -64,10 +68,16 @@ void MainGameWindow::setupGame(){
     gameScene->addItem(coin);
     coin->setZValue(3);
 
-
     coinSound = new QSoundEffect(this);
     coinSound->setSource(QUrl("qrc:/sounds/coin.wav"));
     coinSound->setVolume(0.25);
+
+
+    powerupTimer = new QTimer(this);
+    connect(powerupTimer, &QTimer::timeout, this, &MainGameWindow::spawnPowerUp);
+    powerupTimer->start(2000); // Spawns a powerup every n seconds
+
+
 }
 
 
@@ -99,6 +109,7 @@ bool MainGameWindow::eventFilter(QObject *object,QEvent *event){
     }
     else return QObject::eventFilter(object, event);
 }
+
 void MainGameWindow::updateGame(){
     player->update();
     gameView->centerOn(player->pos());
@@ -109,6 +120,15 @@ void MainGameWindow::updateGame(){
             coinSound->play();
             gameScene->removeItem(coin);
             delete coin;
+        }
+        PowerUp* powerUp = dynamic_cast<PowerUp*>(item);
+        if (powerUp) {
+
+            applyPowerUp(powerUp->getType());
+            coinSound->play(); // until we get power ups sounds
+
+            gameScene->removeItem(powerUp);
+            delete powerUp;
         }
     }
 }
@@ -123,3 +143,28 @@ void MainGameWindow::spawnCoin() {
     gameScene->addItem(coin);
 }
 
+void MainGameWindow::spawnPowerUp() {
+    PowerUpType type = static_cast<PowerUpType>(QRandomGenerator::global()->bounded(3));
+    PowerUp* powerup = new PowerUp(type);
+    int x = QRandomGenerator::global()->bounded(gameScene->width() - 50);
+    int y = QRandomGenerator::global()->bounded(400, 550);
+    powerup->setPos(x, y);
+    powerup->setZValue(3);
+    gameScene->addItem(powerup);
+}
+
+void MainGameWindow::applyPowerUp(PowerUpType type) {
+    switch (type) {
+    case SpeedBoost:
+        player->setMovementSpeed(10.0);
+        QTimer::singleShot(5000, [=]() { player->setMovementSpeed(5.0); });
+        break;
+    case JumpBoost:
+        player->setJumpForce(20.0);
+        QTimer::singleShot(5000, [=]() { player->setJumpForce(15.0); });
+        break;
+    case Gigantification:
+        player->applyGiantPowerUp();
+        break;
+    }
+}

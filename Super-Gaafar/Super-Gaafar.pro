@@ -15,14 +15,16 @@ SOURCES += \
     ground.cpp \
     main.cpp \
     maingamewindow.cpp \
-    player.cpp
+    player.cpp \
+    powerup.cpp
     coin.cpp
 HEADERS += \
     background.h \
     coin.h \
     ground.h \
     maingamewindow.h \
-    player.h
+    player.h \
+    powerup.h
     coin.h
 
 FORMS += \

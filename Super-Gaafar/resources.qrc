@@ -1,12 +1,14 @@
 <RCC>
-    <qresource prefix="/images">
-        <file>mario.png</file>
-        <file>ground.png</file>
-        <file>background.png</file>
-        <file>coin.png</file>
-    </qresource>
-    <qresource prefix="/sounds">
-        <file>coin.wav</file>
-        <file>jump.wav</file>
+    <qresource prefix="/">
+        <file>images/background.png</file>
+        <file>images/coin.png</file>
+        <file>images/ground.png</file>
+        <file>images/mario.png</file>
+        <file>images/supermario.png</file>
+        <file>sounds/coin.wav</file>
+        <file>sounds/jump.wav</file>
+        <file>images/GiantUp.png</file>
+        <file>images/JumpUp.png</file>
+        <file>images/SpeedUp.png</file>
     </qresource>
 </RCC>

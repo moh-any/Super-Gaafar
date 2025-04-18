@@ -18,12 +18,12 @@ public:
     void jump();
     void update();
     void applyGravity();
-    bool getIsJumping(){
-        return isJumping;
-    };
-    void setSceneWidth(int w){
-        sceneWidth=w;
-    }
+    bool getIsJumping();
+    void setSceneWidth(int w);
+    void setMovementSpeed(double speed);
+    void setJumpForce(double force);
+    void applyGiantPowerUp();
+
 private:
     QPixmap sprite;
     bool facingRight;

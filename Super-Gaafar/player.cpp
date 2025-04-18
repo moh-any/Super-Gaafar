@@ -131,3 +131,27 @@ void Player::updateSprite(){
     }
     setPixmap(currentFramePixmap);
 }
+
+bool Player::getIsJumping(){
+    return isJumping;
+}
+void Player::setSceneWidth(int w){
+    sceneWidth=w;
+}
+void Player::setMovementSpeed(double speed) { movementSpeed = speed; }
+void Player::setJumpForce(double force) { jumpForce = force; }
+
+void Player::applyGiantPowerUp() {
+    setScale(2.0);  // Make Mario visually bigger
+
+    // Adjust Y so feet stay at ground level
+    qreal newHeight = pixmap().height() * scale();
+    setPos(pos().x(), ground - newHeight);
+
+    // Schedule return to normal
+    QTimer::singleShot(5000, this, [this]() {
+        setScale(1.0);
+        qreal normalHeight = pixmap().height() * scale(); // scale is now 1.0
+        setPos(pos().x(), ground - normalHeight);
+    });
+}

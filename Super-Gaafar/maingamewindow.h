@@ -10,6 +10,8 @@
 #include <QTimer>
 #include <QEvent>
 #include <QSoundEffect>
+#include "coin.h"
+#include "powerup.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -27,6 +29,8 @@ public:
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
     bool eventFilter(QObject *object,QEvent *event);
+    void spawnPowerUp();
+    void applyPowerUp(PowerUpType type);
 
 private slots:
     void updateGame();
@@ -43,6 +47,8 @@ private:
     QTimer *gameTimer;
     QGraphicsTextItem* score;
     QSoundEffect* coinSound;
+    QTimer* powerupTimer;
+
 
 };
 #endif // MAINGAMEWINDOW_H
