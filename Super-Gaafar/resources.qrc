@@ -4,5 +4,10 @@
         <file>mario.png</file>
         <file>ground.png</file>
         <file>background.png</file>
+        <file>coin.png</file>
+    </qresource>
+    <qresource prefix="/sounds">
+        <file>coin.wav</file>
+        <file>jump.wav</file>
     </qresource>
 </RCC>

@@ -9,6 +9,7 @@
 #include <QGraphicsScene>
 #include <QTimer>
 #include <QEvent>
+#include <QSoundEffect>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -29,6 +30,8 @@ public:
 
 private slots:
     void updateGame();
+    void setupGame();
+    void spawnCoin();
 
 private:
     Ui::MainGameWindow *ui;
@@ -38,9 +41,8 @@ private:
     Ground *ground;
     Background *bg;
     QTimer *gameTimer;
-    double cameraX;
-    void updateCamera();
-    void setupGame();
-    void scroll();
+    QGraphicsTextItem* score;
+    QSoundEffect* coinSound;
+
 };
 #endif // MAINGAMEWINDOW_H

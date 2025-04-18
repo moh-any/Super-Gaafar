@@ -1,4 +1,5 @@
 QT       += core gui
+QT += core gui multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -10,6 +11,7 @@ CONFIG += c++17
 
 SOURCES += \
     background.cpp \
+    coin.cpp \
     ground.cpp \
     main.cpp \
     maingamewindow.cpp \
@@ -17,6 +19,7 @@ SOURCES += \
 
 HEADERS += \
     background.h \
+    coin.h \
     ground.h \
     maingamewindow.h \
     player.h

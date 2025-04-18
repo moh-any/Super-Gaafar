@@ -6,11 +6,16 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsItem>
 #include <QTimer>
+#include <ground.h>
 #include <QObject>
-Player::Player(QGraphicsItem *parent):QGraphicsPixmapItem(parent),facingRight(true),velocityX(0),movementSpeed(5.0),velocityY(0),gravity(0.5),isJumping(false),jumpForce(15.0),ground(535),currentState(IDLE),currentFrame(0),animationSpeed(5),animationCounter(0){
-    setPos(350,ground);
+
+Player::Player(QGraphicsItem *parent):QObject() ,QGraphicsPixmapItem(parent),facingRight(true),velocityX(0),movementSpeed(5.0),velocityY(0),gravity(0.5),isJumping(false),jumpForce(15.0),ground(505),currentState(IDLE),currentFrame(0),animationSpeed(5),animationCounter(0){
+    setPos(0,ground);
     loadSpriteSheet();
     updateSprite();
+    jumpSound=new QSoundEffect(this);
+    jumpSound->setSource(QUrl("qrc:/sounds/jump.wav"));
+    jumpSound->setVolume(0.25);
 }
 
 
@@ -42,18 +47,20 @@ void Player::jump(){
     if(!isJumping){
         isJumping=true;
         velocityY=-jumpForce;
+        jumpSound->play();
         currentState=JUMPING;
+        // qDebug() << "Jumped";
     }
 }
 
 void Player::update(){
-    setPos(pos().x()+velocityX,pos().y());
-    if(pos().x()<0){
+    if(pos().x()<=0){
         setPos(0,pos().y());
     }
-    else if(pos().x()+boundingRect().width()>800){
-        setPos(800-boundingRect().width(), pos().y());
+    else if(pos().x()+boundingRect().width()>=sceneWidth){
+        setPos(sceneWidth-boundingRect().width(),pos().y());
     }
+    setPos(pos().x()+velocityX,pos().y());
     updateAnimation();
     applyGravity();
 }
@@ -61,26 +68,31 @@ void Player::update(){
 void Player::applyGravity(){
     velocityY+=gravity;
     setPos(pos().x(),pos().y()+velocityY);
-    if(pos().y()>=ground){
-        setPos(pos().x(),ground);
-        velocityY=0;
-        isJumping=false;
-        if(velocityX!=0){
-            currentState=RUNNING;
-        }
-        else{
-            currentState=IDLE;
+    QList<QGraphicsItem*> colliding = this->collidingItems(Qt::IntersectsItemBoundingRect);
+    for(auto item:colliding){
+        qDebug() << " collided with:" << typeid(*item).name();
+        Ground* tmp=dynamic_cast<Ground*>(item);
+        if(tmp){
+            setPos(pos().x(),ground);
+            velocityY=0;
+            isJumping=false;
+            if(velocityX!=0){
+                currentState=RUNNING;
+            }
+            else{
+                currentState=IDLE;
+            }
         }
     }
 }
 
 void Player::loadSpriteSheet(){
     spriteSheet.load(":/images/mario.png");
-    int frameWidth=50;
+    int frameWidth=57;
     int frameHeight=75;
     int runningFrameCount=21;
     for(int i=0;i<runningFrameCount; i++){
-        Rects.append(QRect(i*frameWidth+7*i,0,frameWidth,frameHeight));
+        Rects.append(QRect(i*frameWidth,0,frameWidth,frameHeight));
     }
 }
 

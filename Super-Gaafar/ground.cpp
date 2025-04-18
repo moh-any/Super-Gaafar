@@ -1,51 +1,21 @@
 #include "ground.h"
+#include <QPainter>
 #include <QGraphicsScene>
 
-Ground::Ground():totalWidth(0),scrollOffset(0){
-    groundTexture.load(":/images/ground.png");
-    segmentWidth=groundTexture.width();
-    createSegment(-100);
-    setVisible(true);
+Ground::Ground(QGraphicsItem *parent):QObject(), QGraphicsPixmapItem(parent){
+    QPixmap tile(":/images/ground.png");
+    int tileW = tile.width();
+    int tileH = tile.height();
+    int repeatCount=10;
+    QPixmap big(tileW *repeatCount, tileH);
+    big.fill(Qt::transparent);
+    QPainter p(&big);
+    for(int i=0; i<repeatCount; ++i){
+        p.drawPixmap(i*tileW,0,tile);
+    }
+    p.end();
+    setPixmap(big);
+    setPos(0,565);
 }
 
-QGraphicsPixmapItem* Ground::createSegment(double xPos){
-    QGraphicsPixmapItem* segment=new QGraphicsPixmapItem(this);
-    segment->setPixmap(groundTexture);
-    segment->setPos(xPos, 0);
-    groundSegments.append(segment);
-    totalWidth+=segmentWidth;
-    return segment;
-}
 
-void Ground::updateSegments(double viewWidth){
-    double requiredWidth=viewWidth+segmentWidth*2;
-    while(totalWidth<requiredWidth) {
-        double xPos=-100;
-        if(!groundSegments.isEmpty()) {
-            QGraphicsPixmapItem* lastSegment=groundSegments.last();
-            xPos=lastSegment->x()+segmentWidth;
-        }
-        createSegment(xPos);
-    }
-}
-
-void Ground::scroll(double deltaX){
-    scrollOffset += deltaX;
-    for(auto segment:groundSegments){
-        segment->setX(segment->x()-deltaX);
-    }
-    QGraphicsPixmapItem* firstSegment=groundSegments.first();
-    if (firstSegment->x()+segmentWidth<-100) {
-        double newX=groundSegments.last()->x()+segmentWidth;
-        firstSegment->setX(newX);
-        groundSegments.removeFirst();
-        groundSegments.append(firstSegment);
-    }
-    QGraphicsPixmapItem* lastSegment=groundSegments.last();
-    if(lastSegment->x()>scene()->width()+100){
-        double newX=groundSegments.first()->x()-segmentWidth;
-        lastSegment->setX(newX);
-        groundSegments.removeLast();
-        groundSegments.prepend(lastSegment);
-    }
-}

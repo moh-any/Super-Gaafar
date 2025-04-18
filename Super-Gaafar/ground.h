@@ -4,19 +4,13 @@
 #include <QGraphicsPixmapItem>
 #include <QVector>
 
-class Ground : public QGraphicsPixmapItem
+class Ground :public QObject, public QGraphicsPixmapItem
 {
+    Q_OBJECT
 public:
-    Ground();
-    void scroll(double deltaX);
-    void updateSegments(double viewWidth);
+    Ground(QGraphicsItem *parent = nullptr);
 private:
     QPixmap groundTexture;
-    QVector<QGraphicsPixmapItem*> groundSegments;
-    double totalWidth;
-    double segmentWidth;
-    double scrollOffset;
-    QGraphicsPixmapItem* createSegment(double xPos);
 };
 
 #endif // GROUND_H

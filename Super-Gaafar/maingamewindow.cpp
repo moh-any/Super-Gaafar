@@ -9,7 +9,8 @@
 #include <QPixmap>
 #include <ground.h>
 #include <background.h>
-#include <QPoint>
+#include <coin.h>
+#include <QRandomGenerator>
 MainGameWindow::MainGameWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainGameWindow)
@@ -21,7 +22,6 @@ MainGameWindow::MainGameWindow(QWidget *parent)
     gameTimer=new QTimer(this);
     connect(gameTimer,&QTimer::timeout,this,&MainGameWindow::updateGame);
     gameTimer->start(15);
-
 }
 
 MainGameWindow::~MainGameWindow()
@@ -33,51 +33,42 @@ void MainGameWindow::setupGame(){
     gameScene=new QGraphicsScene(this);
     gameScene->setSceneRect(0,0,2000,600);
 
-    gameView=new QGraphicsView(gameScene,this);
-    gameView->installEventFilter(this);
-    gameView->setRenderHint(QPainter::Antialiasing);
-
-    gameView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    gameView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    statusBar()->setSizeGripEnabled(false);
-    statusBar()->hide();
-    setCentralWidget(gameView);
-
     player=new Player();
     gameScene->addItem(player);
+    player->setSceneWidth(2000);
 
     ground=new Ground();
     gameScene->addItem(ground);
-    ground->setPos(-100, 600);
-    ground->updateSegments(gameScene->width());
+
 
     bg=new Background();
     gameScene->addItem(bg);
-    bg->setPos(-100,0);
-    bg->updateSegments(gameScene->width());
 
     bg->setZValue(1);
     ground->setZValue(2);
     player->setZValue(3);
+
+    gameView=new QGraphicsView(gameScene,this);
+    gameView->installEventFilter(this);
+
+    gameView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    gameView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    statusBar()->hide();
+    setCentralWidget(gameView);
+
+
+
+    Coin* coin = new Coin();
+    coin->setPos(300, 500);
+    gameScene->addItem(coin);
+    coin->setZValue(3);
+
+
+    coinSound = new QSoundEffect(this);
+    coinSound->setSource(QUrl("qrc:/sounds/coin.wav"));
+    coinSound->setVolume(0.25);
 }
 
-void MainGameWindow::scroll(){
-    double scrollSpeed=0;
-    if(player->pos().x()>gameView->width()*0.4){
-        scrollSpeed=1.5;
-        // player->setPos(player->pos().x()-scrollSpeed,player->pos().y());
-        gameView->setSceneRect(cameraX,0,gameView->viewport()->width(),gameView->viewport()->height());
-    }
-    else if(player->pos().x()<gameView->width()*0.6){
-        scrollSpeed=-1.5;
-        // player->setPos(player->pos().x()-scrollSpeed,player->pos().y());
-        gameView->setSceneRect(cameraX,0,gameView->viewport()->width(),gameView->viewport()->height());
-    }
-    // if(scrollSpeed!=0){
-    //     bg->scroll(scrollSpeed);
-    //     ground->scroll(scrollSpeed);
-    // }
-}
 
 void MainGameWindow::keyPressEvent(QKeyEvent *event){
     if(event->key()==Qt::Key_Left){
@@ -108,37 +99,25 @@ bool MainGameWindow::eventFilter(QObject *object,QEvent *event){
 }
 void MainGameWindow::updateGame(){
     player->update();
-    updateCamera();
-    scroll();
-}
-
-void MainGameWindow::updateCamera()
-{
-    int viewWidth=gameView->viewport()->width();
-
-    double deadZoneLeft=cameraX+(viewWidth*0.35);
-    double deadZoneRight=cameraX+(viewWidth*0.35);
-
-
-    bool needsUpdate=false;
-    double targetX = cameraX;
-    if (player->x()<deadZoneLeft) {
-        targetX = player->x() - (viewWidth * 0.35)+5;
-        needsUpdate = true;
-    }
-    else if(player->x()>deadZoneRight) {
-        targetX = player->x() - (viewWidth * 0.65);
-        needsUpdate = true;
-    }
-    if (needsUpdate) {
-        double smoothFactor = 1;
-        double newCameraX = qMax(0.0,cameraX +(targetX-cameraX)*smoothFactor);
-
-        double deltaX=newCameraX-cameraX;
-        if (deltaX != 0) {
-            cameraX = newCameraX;
-            gameView->setSceneRect(cameraX, 0, viewWidth, gameView->viewport()->height());
+    gameView->centerOn(player->pos());
+    QList<QGraphicsItem*> colliding = player->collidingItems(Qt::IntersectsItemBoundingRect);
+    for(auto item:colliding){
+        Coin* coin=dynamic_cast<Coin*>(item);
+        if(coin){
+            coinSound->play();
+            gameScene->removeItem(coin);
+            delete coin;
         }
     }
+}
+
+void MainGameWindow::spawnCoin() {
+    int sceneWidth = gameScene->sceneRect().width();
+    int sceneHeight = gameScene->sceneRect().height();
+    int x = QRandomGenerator::global()->bounded(sceneWidth - 50);
+    int y = QRandomGenerator::global()->bounded(sceneHeight - 200, sceneHeight);
+    Coin* coin = new Coin();
+    coin->setPos(x, y);
+    gameScene->addItem(coin);
 }
 

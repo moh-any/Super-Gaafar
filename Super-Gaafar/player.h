@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QRect>
 #include <QVector>
-
+#include <QSoundEffect>
 class Player:public QObject,public QGraphicsPixmapItem{
     Q_OBJECT
 public:
@@ -21,6 +21,9 @@ public:
     bool getIsJumping(){
         return isJumping;
     };
+    void setSceneWidth(int w){
+        sceneWidth=w;
+    }
 private:
     QPixmap sprite;
     bool facingRight;
@@ -31,6 +34,7 @@ private:
     bool isJumping;
     double jumpForce;
     double ground;
+    int sceneWidth=2000;
     QTimer* jumpTimer;
 
     enum AnimationState {
@@ -44,6 +48,7 @@ private:
     int animationCounter;
     QPixmap spriteSheet;
     QVector<QRect> Rects;
+    QSoundEffect* jumpSound;
 
     void loadSpriteSheet();
     void updateAnimation();
