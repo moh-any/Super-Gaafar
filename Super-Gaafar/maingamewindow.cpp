@@ -103,8 +103,8 @@ void MainGameWindow::updateGame(){
     player->update();
     gameView->centerOn(player->pos());
     QList<QGraphicsItem*> colliding = player->collidingItems(Qt::IntersectsItemBoundingRect);
-    for(auto item:colliding){
-        Coin* coin=dynamic_cast<Coin*>(item);
+    for(int i = 0; i < colliding.size(); i++){
+        Coin* coin=dynamic_cast<Coin*>(colliding[i]);
         if(coin){
             coinSound->play();
             gameScene->removeItem(coin);
