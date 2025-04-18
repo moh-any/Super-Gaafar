@@ -21,7 +21,6 @@ private:
     int frameWidth;
     int frameHeight;
     QTimer *animationTimer;
-    double ground;
 };
 
 #endif // COIN_H
