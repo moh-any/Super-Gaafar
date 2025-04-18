@@ -3,7 +3,7 @@
 #include <QGraphicsItem>
 #include <QGraphicsPixmapItem>
 
-Enemy::Enemy(qreal x):QObject(), ground(470), velocityX(3),currentFrame(0){
+Enemy::Enemy(qreal x):QObject(), ground(470), velocityX(1),currentFrame(0){
     facingRight = true;
     setPos(x, ground);
     loadSpriteSheet();
