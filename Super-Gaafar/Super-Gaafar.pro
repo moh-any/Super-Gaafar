@@ -16,13 +16,14 @@ SOURCES += \
     main.cpp \
     maingamewindow.cpp \
     player.cpp
-
+    coin.cpp
 HEADERS += \
     background.h \
     coin.h \
     ground.h \
     maingamewindow.h \
     player.h
+    coin.h
 
 FORMS += \
     maingamewindow.ui
@@ -34,3 +35,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     resources.qrc
+
+DISTFILES += \
+    coin.png

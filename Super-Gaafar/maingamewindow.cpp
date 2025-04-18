@@ -1,5 +1,6 @@
 #include "maingamewindow.h"
 #include "ui_maingamewindow.h"
+#include "coin.h"
 #include <QWidget>
 #include <QTimer>
 #include <QGraphicsScene>
@@ -77,9 +78,10 @@ void MainGameWindow::keyPressEvent(QKeyEvent *event){
     else if(event->key()==Qt::Key_Right){
         player->moveRight();
     }
-    else if(event->key()==Qt::Key_Space){
+    else if(event->key()==Qt::Key_Space || event->key()==Qt::Key_Up){
         player->jump();
     }
+
 }
 
 void MainGameWindow::keyReleaseEvent(QKeyEvent *event){
