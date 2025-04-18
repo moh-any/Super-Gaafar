@@ -174,7 +174,6 @@ void MainGameWindow::updateGame(){
     for (auto enemy : enemies){
         enemy->move();
     }
-    // enemies[0]->move();
     QList<QGraphicsItem*> colliding = player->collidingItems(Qt::IntersectsItemBoundingRect);
     for(auto item:colliding){
         if(dynamic_cast<Coin*>(item)){
@@ -183,7 +182,6 @@ void MainGameWindow::updateGame(){
             delete item;
         }
         if(dynamic_cast<Pole*>(item)&& !reachedPole){
-            // stop mario and raise the flag
             reachedPole=true;
             qDebug() << "flag";
             flag=new Flag();
