@@ -26,6 +26,10 @@ MainGameWindow::MainGameWindow(QWidget *parent)
     gameTimer=new QTimer(this);
     connect(gameTimer,&QTimer::timeout,this,&MainGameWindow::updateGame);
     gameTimer->start(15);
+
+    PlatformsNum = 10;
+    platforms.clear();
+    platforms.reserve(PlatformsNum);
 }
 
 MainGameWindow::~MainGameWindow()
@@ -48,15 +52,15 @@ void MainGameWindow::setupGame(){
     bg=new Background();
     gameScene->addItem(bg);
 
-    platform = new Platform(200,360);
-    platform2 = new Platform(500,505);
-    gameScene->addItem(platform);
-    gameScene->addItem(platform2);
+    for (int i = 0; i < PlatformsNum; i++){
+        auto *p = new Platform(100*(i+1), 360);
+        platforms.append(p);
+        gameScene->addItem(platforms[i]);
+        platforms[i]->setZValue(3);
+    }
 
     bg->setZValue(1);
     ground->setZValue(2);
-    platform->setZValue(3);
-    platform2->setZValue(3);
     player->setZValue(4);
 
     gameView=new QGraphicsView(gameScene,this);

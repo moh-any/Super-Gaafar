@@ -19,7 +19,6 @@ Player::Player(QGraphicsItem *parent):QObject() ,QGraphicsPixmapItem(parent),fac
     jumpSound->setVolume(0.25);
 }
 
-
 void Player::moveLeft(){
     velocityX=-movementSpeed;
     currentState=RUNNING;

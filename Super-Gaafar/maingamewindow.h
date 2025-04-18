@@ -41,8 +41,8 @@ private:
     Player *player;
     Ground *ground;
     Background *bg;
-    Platform *platform;
-    Platform *platform2;
+    QList<Platform *> platforms;
+    int PlatformsNum;
     QTimer *gameTimer;
     QGraphicsTextItem* score;
     QSoundEffect* coinSound;
