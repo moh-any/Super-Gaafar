@@ -18,12 +18,27 @@ public:
     void jump();
     void update();
     void applyGravity();
+<<<<<<< HEAD
     bool getIsJumping();
     void setSceneWidth(int w);
     void setMovementSpeed(double speed);
     void setJumpForce(double force);
     void applyGiantPowerUp();
 
+=======
+    bool getIsJumping(){
+        return isJumping;
+    };
+    void setSceneWidth(int w){
+        sceneWidth=w;
+    }
+    bool getFacingRight(){
+        return facingRight;
+    }
+    void setMovementSpeed(double speed);
+    void setJumpForce(double force);
+    void applyGiantPowerUp();
+>>>>>>> efe10f60e5238827d4b4fada4d846132ba7b4703
 private:
     QPixmap sprite;
     bool facingRight;
@@ -35,7 +50,10 @@ private:
     double jumpForce;
     double ground;
     int sceneWidth=2000;
+    int height=64;
+    int width=64;
     QTimer* jumpTimer;
+    int counter;
 
     enum AnimationState {
         IDLE,
@@ -44,8 +62,6 @@ private:
     };
     AnimationState currentState;
     int currentFrame;
-    int animationSpeed;
-    int animationCounter;
     QPixmap spriteSheet;
     QVector<QRect> Rects;
     QSoundEffect* jumpSound;

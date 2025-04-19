@@ -17,4 +17,3 @@ Background::Background(){
     setPos(0,-100);
     setVisible(true);
 }
-
