@@ -32,9 +32,19 @@ public:
     void keyReleaseEvent(QKeyEvent *event);
     bool eventFilter(QObject *object,QEvent *event);
 
+    void returnToMainMenu();
+
+
+    void setupLevelOne();
+    void setupLevelTwo();
+    void setupLevelThree();
+    void setupLevelFour();
+    void setupLevelFive();
+
+
 private slots:
     void updateGame();
-    void setupGame();
+    //void setupGame();
     void spawnCoin();
     void applyPowerUp(PowerUpType type);
 

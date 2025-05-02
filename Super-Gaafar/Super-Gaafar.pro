@@ -16,8 +16,10 @@ SOURCES += \
     enemy.cpp \
     flag.cpp \
     ground.cpp \
+    levelsmenu.cpp \
     main.cpp \
     maingamewindow.cpp \
+    menu.cpp \
     platform.cpp \
     player.cpp \
     pole.cpp \
@@ -30,7 +32,9 @@ HEADERS += \
     enemy.h \
     flag.h \
     ground.h \
+    levelsmenu.h \
     maingamewindow.h \
+    menu.h \
     platform.h \
     player.h \
     pole.h \
@@ -38,7 +42,9 @@ HEADERS += \
     coin.h
 
 FORMS += \
-    maingamewindow.ui
+    levelsmenu.ui \
+    maingamewindow.ui \
+    menu.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
