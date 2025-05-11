@@ -10,7 +10,7 @@
 #include <QObject>
 #include <platform.h>
 
-Player::Player(QGraphicsItem *parent):QObject() ,QGraphicsPixmapItem(parent),facingRight(true),velocityX(0),movementSpeed(5.0),velocityY(0),gravity(0.5),isJumping(false),jumpForce(15.0),ground(505),currentState(IDLE),currentFrame(0){
+Player::Player(QGraphicsItem *parent):QObject() ,QGraphicsPixmapItem(parent),facingRight(true),velocityX(0),movementSpeed(5.0),velocityY(0),gravity(0.5),isJumping(false),jumpForce(15.0),ground(505),currentState(IDLE),currentFrame(0),health(3),lives(3){
     setPos(0,ground);
     loadSpriteSheet();
     updateSprite();
@@ -154,4 +154,24 @@ void Player::applyGiantPowerUp() {
         width=64;
         ground+=height;
     });
+}
+
+bool Player::takeDmg()
+{
+    if(health>0){
+        health--;
+        return true;
+    }
+    else
+    {
+        if(lives>0)
+        {
+            lives--;
+            health =3;
+            return true;
+        }
+        else
+            return false;
+    }
+
 }

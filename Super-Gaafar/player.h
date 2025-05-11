@@ -30,6 +30,12 @@ public:
     void setMovementSpeed(double speed);
     void setJumpForce(double force);
     void applyGiantPowerUp();
+
+    bool takeDmg();
+    int lives;
+    int health;
+    void setVelocityY(double vy) { velocityY = vy; }
+
 private:
     QPixmap sprite;
     bool facingRight;
@@ -45,6 +51,8 @@ private:
     int width=64;
     QTimer* jumpTimer;
     int counter;
+
+
 
     enum AnimationState {
         IDLE,

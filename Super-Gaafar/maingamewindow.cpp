@@ -274,18 +274,48 @@ void MainGameWindow::updateGame(){
             delete item;
         }
         if(dynamic_cast<Enemy*>(item)){
-            gameScene->removeItem(player);
-            deathSong = new QSoundEffect(this);
-            deathSong->setSource(QUrl("qrc:/sounds/death.wav"));
-            deathSong->setVolume(0.25);
-            themeSong->stop();
-            deathSong->play();
 
-            connect(deathSong, &QSoundEffect::playingChanged, this, [=]() {
-                if (!deathSong->isPlaying()) {
-                    returnToMainMenu();
+          /*  // Check if player is above the enemy (simulating a "stomp")
+            if (player->y() + player->pixmap().height() - 100 < item->y()) {
+                // Stomped enemy
+                gameScene->removeItem(item);
+                delete item;
+                // Optional: bounce the player up slightly
+                player->setY(item->y() - player->pixmap().height());
+                player->setVelocityY(-10);  // You need to make a setVelocityY() function in Player class
+            } else */{
+                // Took damage
+                if (player->takeDmg() == false) {
+                    gameScene->removeItem(player);
+                    deathSong = new QSoundEffect(this);
+                    deathSong->setSource(QUrl("qrc:/sounds/death.wav"));
+                    deathSong->setVolume(0.25);
+                    themeSong->stop();
+                    deathSong->play();
+
+                    connect(deathSong, &QSoundEffect::playingChanged, this, [=]() {
+                        if (!deathSong->isPlaying()) {
+                            returnToMainMenu();
+                        }
+                    });
                 }
-            });
+            }
+
+            // player->takeDmg();
+            // if(player->lives<=0){
+            //     gameScene->removeItem(player);
+            //     deathSong = new QSoundEffect(this);
+            //     deathSong->setSource(QUrl("qrc:/sounds/death.wav"));
+            //     deathSong->setVolume(0.25);
+            //     themeSong->stop();
+            //     deathSong->play();
+
+            //     connect(deathSong, &QSoundEffect::playingChanged, this, [=]() {
+            //         if (!deathSong->isPlaying()) {
+            //             returnToMainMenu();
+            //         }
+            //     });
+            // }
         }
         Platform *platform = dynamic_cast<Platform *> (item);
         if (platform && player->getFacingRight()){
@@ -445,17 +475,20 @@ void MainGameWindow::setupLevelOne() {
 
 void MainGameWindow::setupLevelTwo() {
     // TODO: Implement Level 2
+    setupLevelOne();
 }
 
 void MainGameWindow::setupLevelThree() {
     // TODO: Implement Level 3
+    setupLevelOne();
 }
 
 void MainGameWindow::setupLevelFour() {
     // TODO: Implement Level 4
+    setupLevelOne();
 }
 
 void MainGameWindow::setupLevelFive() {
     // TODO: Implement Level 5
+    setupLevelOne();
 }
-

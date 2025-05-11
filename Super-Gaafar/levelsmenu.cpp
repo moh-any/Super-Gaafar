@@ -30,7 +30,15 @@ void LevelsMenu::on_level1Button_clicked()
     this->close();
 }
 
-void LevelsMenu::on_level2Button_clicked() {}
-void LevelsMenu::on_level3Button_clicked() {}
-void LevelsMenu::on_level4Button_clicked() {}
-void LevelsMenu::on_level5Button_clicked() {}
+void LevelsMenu::on_level2Button_clicked() {    MainGameWindow* game = new MainGameWindow(this->parentWidget());
+    game->show();
+    this->close();}
+void LevelsMenu::on_level3Button_clicked() {    MainGameWindow* game = new MainGameWindow(this->parentWidget());
+    game->show();
+    this->close();}
+void LevelsMenu::on_level4Button_clicked() {    MainGameWindow* game = new MainGameWindow(this->parentWidget());
+    game->show();
+    this->close();}
+void LevelsMenu::on_level5Button_clicked() {    MainGameWindow* game = new MainGameWindow(this->parentWidget());
+    game->show();
+    this->close();}
