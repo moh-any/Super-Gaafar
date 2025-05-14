@@ -16,6 +16,7 @@ public:
     void moveLeft();
     void moveRight();
     void stopMoving();
+    void jump(double force);
     void jump();
     void update();
     void applyGravity();
@@ -55,7 +56,7 @@ private:
     double velocityY;
     double gravity;
     bool isJumping;
-    double jumpForce;
+    double jumpForce = 15;
     double ground;
     int sceneWidth = 2000;
     int height = 64;

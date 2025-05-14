@@ -23,7 +23,7 @@ Player::Player(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent), 
     invincibilityTimer = new QTimer(this);
     invincibilityTimer->setSingleShot(true);
     flickerTimer = new QTimer(this);
-    flickerTimer->setInterval(100); // Flicker every 100ms
+    flickerTimer->setInterval(100);
     connect(flickerTimer, &QTimer::timeout, this, [=]() {
         setVisible(!isVisible());
     });
@@ -32,7 +32,7 @@ Player::Player(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent), 
         isInvincible = false;
         stopFlicker();
     });
-}
+ }
 
 void Player::moveLeft()
 {
@@ -61,6 +61,18 @@ void Player::stopMoving()
 {
     velocityX = 0;
     currentState = IDLE;
+}
+
+void Player::jump(double force)
+{
+    qDebug() << "jumped with force " << force;
+    if (!isJumping)
+    {
+        isJumping = true;
+        velocityY = -force;
+        jumpSound->play();
+        currentState = JUMPING;
+    }
 }
 
 void Player::jump()
@@ -189,7 +201,6 @@ void Player::applyGiantPowerUp()
     height = 128;
     ground -= height / 2;
 
-    // Schedule return to normal
     QTimer::singleShot(5000, this, [this]()
                        {
         height=64;
@@ -209,10 +220,12 @@ void Player::stopFlicker() {
 
 void Player::applyKnockback(bool fromRight) {
     isKnockbackActive = true;
-    // Knockback velocity: push left if hit from right, right if hit from left
-    velocityX = fromRight ? -5 : 5;
-    velocityY = -7; // Small upward knockback
-    // Optionally, you can set a timer to end knockback after a short duration
+
+    //velocityX = fromRight ? -5 : 5;
+    //velocityY = -7;
+    jump(10);
+    qDebug() << "knocked back";
+
     QTimer::singleShot(300, this, [this]() {
         isKnockbackActive = false;
         velocityX = 0;
@@ -221,12 +234,12 @@ void Player::applyKnockback(bool fromRight) {
 
 bool Player::takeDmg()
 {
-    if (isInvincible) return false;  // Ignore damage during invincibility
+    if (isInvincible) return false;
 
     isInvincible = true;
-    invincibilityTimer->start(1500); // 1 second of invincibility
+    invincibilityTimer->start(2000);
     startFlicker();
-    // Knockback: if facing right, assume hit from right, else from left
+
     applyKnockback(facingRight);
 
     qDebug() << "taking dmg" << health << " " << lives;

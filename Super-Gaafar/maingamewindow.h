@@ -43,6 +43,8 @@ public:
     void setupLevelFive();
 
     void updateScore(int amount);
+    void updateHealth(int amount);
+    void updateLives(int amount);
 
 
 private slots:
@@ -59,7 +61,7 @@ private:
     Ground *ground;
     Background *bg;
     QTimer *gameTimer;
-    //QGraphicsTextItem* score;
+
     QSoundEffect* coinSound;
     QSoundEffect* themeSong;
     QSoundEffect* victorySong;
@@ -73,8 +75,11 @@ private:
     int ObstaclesNum;
     int EnemiesNum;
 
-    int score = 0;
     QLabel* scoreLabel;
+    QLabel* healthLabel;
+    QLabel* livesLabel;
+
+    int score = 0;
 
 };
 #endif // MAINGAMEWINDOW_H
