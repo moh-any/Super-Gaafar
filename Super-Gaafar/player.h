@@ -8,7 +8,8 @@
 #include <QRect>
 #include <QVector>
 #include <QSoundEffect>
-class Player:public QObject,public QGraphicsPixmapItem{
+class Player : public QObject, public QGraphicsPixmapItem
+{
     Q_OBJECT
 public:
     Player(QGraphicsItem *parent = nullptr);
@@ -18,13 +19,16 @@ public:
     void jump();
     void update();
     void applyGravity();
-    bool getIsJumping(){
+    bool getIsJumping()
+    {
         return isJumping;
     };
-    void setSceneWidth(int w){
-        sceneWidth=w;
+    void setSceneWidth(int w)
+    {
+        sceneWidth = w;
     }
-    bool getFacingRight(){
+    bool getFacingRight()
+    {
         return facingRight;
     }
     void setMovementSpeed(double speed);
@@ -35,6 +39,13 @@ public:
     int lives;
     int health;
     void setVelocityY(double vy) { velocityY = vy; }
+    bool isInvincible = false;
+    QTimer *invincibilityTimer;
+    QTimer *flickerTimer;
+    void startFlicker();
+    void stopFlicker();
+    void applyKnockback(bool fromRight);
+    bool isKnockbackActive = false;
 
 private:
     QPixmap sprite;
@@ -46,15 +57,15 @@ private:
     bool isJumping;
     double jumpForce;
     double ground;
-    int sceneWidth=2000;
-    int height=64;
-    int width=64;
-    QTimer* jumpTimer;
+    int sceneWidth = 2000;
+    int height = 64;
+    int width = 64;
+    QTimer *jumpTimer;
     int counter;
 
 
-
-    enum AnimationState {
+    enum AnimationState
+    {
         IDLE,
         RUNNING,
         JUMPING
@@ -63,7 +74,7 @@ private:
     int currentFrame;
     QPixmap spriteSheet;
     QVector<QRect> Rects;
-    QSoundEffect* jumpSound;
+    QSoundEffect *jumpSound;
 
     void loadSpriteSheet();
     void updateAnimation();

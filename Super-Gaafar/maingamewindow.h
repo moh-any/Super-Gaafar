@@ -14,6 +14,7 @@
 #include <powerup.h>
 #include <platform.h>
 #include <enemy.h>
+#include <QLabel>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -41,6 +42,8 @@ public:
     void setupLevelFour();
     void setupLevelFive();
 
+    void updateScore(int amount);
+
 
 private slots:
     void updateGame();
@@ -56,7 +59,7 @@ private:
     Ground *ground;
     Background *bg;
     QTimer *gameTimer;
-    QGraphicsTextItem* score;
+    //QGraphicsTextItem* score;
     QSoundEffect* coinSound;
     QSoundEffect* themeSong;
     QSoundEffect* victorySong;
@@ -69,5 +72,9 @@ private:
     int PlatformsNum;
     int ObstaclesNum;
     int EnemiesNum;
+
+    int score = 0;
+    QLabel* scoreLabel;
+
 };
 #endif // MAINGAMEWINDOW_H

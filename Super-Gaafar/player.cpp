@@ -10,168 +10,240 @@
 #include <QObject>
 #include <platform.h>
 
-Player::Player(QGraphicsItem *parent):QObject() ,QGraphicsPixmapItem(parent),facingRight(true),velocityX(0),movementSpeed(5.0),velocityY(0),gravity(0.5),isJumping(false),jumpForce(15.0),ground(505),currentState(IDLE),currentFrame(0),health(3),lives(3){
-    setPos(0,ground);
+Player::Player(QGraphicsItem *parent) : QObject(), QGraphicsPixmapItem(parent), facingRight(true), velocityX(0), movementSpeed(5.0), velocityY(0), gravity(0.5), isJumping(false), jumpForce(15.0), ground(505), currentState(IDLE), currentFrame(0), health(3), lives(3)
+{
+    setPos(0, ground);
     loadSpriteSheet();
     updateSprite();
-    jumpSound=new QSoundEffect(this);
+    jumpSound = new QSoundEffect(this);
     jumpSound->setSource(QUrl("qrc:/sounds/jump.wav"));
     jumpSound->setVolume(0.25);
+
+    isInvincible = false;
+    invincibilityTimer = new QTimer(this);
+    invincibilityTimer->setSingleShot(true);
+    flickerTimer = new QTimer(this);
+    flickerTimer->setInterval(100); // Flicker every 100ms
+    connect(flickerTimer, &QTimer::timeout, this, [=]() {
+        setVisible(!isVisible());
+    });
+
+    connect(invincibilityTimer, &QTimer::timeout, this, [=]() {
+        isInvincible = false;
+        stopFlicker();
+    });
 }
 
-
-void Player::moveLeft(){
-    velocityX=-movementSpeed;
-    if(facingRight){
-        QPixmap flippedSprite=sprite.transformed(QTransform().scale(-1, 1));
+void Player::moveLeft()
+{
+    velocityX = -movementSpeed;
+    if (facingRight)
+    {
+        QPixmap flippedSprite = sprite.transformed(QTransform().scale(-1, 1));
         setPixmap(flippedSprite);
-        facingRight=false;
+        facingRight = false;
     }
-    currentState=RUNNING;
+    currentState = RUNNING;
 }
 
-void Player::moveRight(){
-    velocityX=movementSpeed;
-    if(!facingRight) {
+void Player::moveRight()
+{
+    velocityX = movementSpeed;
+    if (!facingRight)
+    {
         setPixmap(sprite);
-        facingRight=true;
+        facingRight = true;
     }
-    currentState=RUNNING;
+    currentState = RUNNING;
 }
 
-void Player::stopMoving(){
-    velocityX=0;
-    currentState=IDLE;
+void Player::stopMoving()
+{
+    velocityX = 0;
+    currentState = IDLE;
 }
 
-void Player::jump(){
-    if(!isJumping){
-        isJumping=true;
-        velocityY=-jumpForce;
+void Player::jump()
+{
+    if (!isJumping)
+    {
+        isJumping = true;
+        velocityY = -jumpForce;
         jumpSound->play();
-        currentState=JUMPING;
+        currentState = JUMPING;
     }
 }
 
-void Player::update(){
-    if(pos().x()<=0){
-        setPos(0,pos().y());
+void Player::update()
+{
+    if (pos().x() <= 0)
+    {
+        setPos(0, pos().y());
     }
-    else if(pos().x()+boundingRect().width()>=sceneWidth){
-        setPos(sceneWidth-boundingRect().width(),pos().y());
+    else if (pos().x() + boundingRect().width() >= sceneWidth)
+    {
+        setPos(sceneWidth - boundingRect().width(), pos().y());
     }
-    setPos(pos().x()+velocityX,pos().y());
+    setPos(pos().x() + velocityX, pos().y());
     updateAnimation();
     applyGravity();
 }
 
-void Player::applyGravity(){
-    velocityY+=gravity;
-    setPos(pos().x(),pos().y()+velocityY);
-    QList<QGraphicsItem*> colliding = this->collidingItems(Qt::IntersectsItemBoundingRect);
-    for(auto item:colliding){
+void Player::applyGravity()
+{
+    velocityY += gravity;
+    setPos(pos().x(), pos().y() + velocityY);
+    QList<QGraphicsItem *> colliding = this->collidingItems(Qt::IntersectsItemBoundingRect);
+    for (auto item : colliding)
+    {
         // qDebug() << " collided with:" << typeid(*item).name();
-        Ground* tmp1=dynamic_cast<Ground*>(item);
-        Platform* tmp2=dynamic_cast<Platform*>(item);
+        Ground *tmp1 = dynamic_cast<Ground *>(item);
+        Platform *tmp2 = dynamic_cast<Platform *>(item);
 
-        if(tmp1){
-            setPos(pos().x(),ground+1);
-            velocityY=0;
-            isJumping=false;
-            if(velocityX!=0){
-                currentState=RUNNING;
+        if (tmp1)
+        {
+            setPos(pos().x(), ground + 1);
+            velocityY = 0;
+            isJumping = false;
+            if (velocityX != 0)
+            {
+                currentState = RUNNING;
             }
-            else{
-                currentState=IDLE;
+            else
+            {
+                currentState = IDLE;
             }
         }
-        else if (tmp2){
-            if (velocityY > 0){
+        else if (tmp2)
+        {
+            if (velocityY > 0)
+            {
                 setY(item->y() - pixmap().height());
-                velocityY=0;
-                isJumping=false;
-                if (velocityX!=0){
-                    currentState=RUNNING;
+                velocityY = 0;
+                isJumping = false;
+                if (velocityX != 0)
+                {
+                    currentState = RUNNING;
                 }
-                else{
-                    currentState=IDLE;
+                else
+                {
+                    currentState = IDLE;
                 }
             }
-            else{
-                setY(tmp2->y() + tmp2->pixmap().height()+1);
-                velocityY=5;
+            else
+            {
+                setY(tmp2->y() + tmp2->pixmap().height() + 1);
+                velocityY = 5;
             }
         }
     }
 }
 
-void Player::loadSpriteSheet(){
+void Player::loadSpriteSheet()
+{
     spriteSheet.load(":/images/mario.png");
-    int frameWidth=57;
-    int frameHeight=75;
-    int runningFrameCount=21;
-    for(int i=0;i<runningFrameCount; i++){
-        Rects.append(QRect(i*frameWidth,0,frameWidth,frameHeight));
+    int frameWidth = 57;
+    int frameHeight = 75;
+    int runningFrameCount = 21;
+    for (int i = 0; i < runningFrameCount; i++)
+    {
+        Rects.append(QRect(i * frameWidth, 0, frameWidth, frameHeight));
     }
 }
 
-void Player::updateAnimation(){
-    switch(currentState){
+void Player::updateAnimation()
+{
+    switch (currentState)
+    {
     case IDLE:
-        currentFrame=0;
+        currentFrame = 0;
         break;
     case RUNNING:
-        currentFrame=(currentFrame+1)%Rects.size();
+        currentFrame = (currentFrame + 1) % Rects.size();
         break;
     case JUMPING:
-        currentFrame=0;
+        currentFrame = 0;
         break;
     }
     updateSprite();
 }
 
-void Player::updateSprite(){
-    QRect frameRect=Rects[currentFrame];
-    QPixmap currentFramePixmap=spriteSheet.copy(frameRect);
-    currentFramePixmap=currentFramePixmap.scaled(width,height, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    if(!facingRight){
-        currentFramePixmap=currentFramePixmap.transformed(QTransform().scale(-1, 1));
+void Player::updateSprite()
+{
+    QRect frameRect = Rects[currentFrame];
+    QPixmap currentFramePixmap = spriteSheet.copy(frameRect);
+    currentFramePixmap = currentFramePixmap.scaled(width, height, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    if (!facingRight)
+    {
+        currentFramePixmap = currentFramePixmap.transformed(QTransform().scale(-1, 1));
     }
     setPixmap(currentFramePixmap);
 }
 
-void Player::setMovementSpeed(double speed) {movementSpeed = speed;}
-void Player::setJumpForce(double force) {jumpForce = force;}
+void Player::setMovementSpeed(double speed) { movementSpeed = speed; }
+void Player::setJumpForce(double force) { jumpForce = force; }
 
-void Player::applyGiantPowerUp() {
-    width=128;
-    height=128;
-    ground-=height/2;
+void Player::applyGiantPowerUp()
+{
+    width = 128;
+    height = 128;
+    ground -= height / 2;
 
     // Schedule return to normal
-    QTimer::singleShot(5000, this, [this]() {
+    QTimer::singleShot(5000, this, [this]()
+                       {
         height=64;
         width=64;
-        ground+=height;
+        ground+=height; });
+}
+
+void Player::startFlicker() {
+    setVisible(false);
+    flickerTimer->start();
+}
+
+void Player::stopFlicker() {
+    flickerTimer->stop();
+    setVisible(true);
+}
+
+void Player::applyKnockback(bool fromRight) {
+    isKnockbackActive = true;
+    // Knockback velocity: push left if hit from right, right if hit from left
+    velocityX = fromRight ? -5 : 5;
+    velocityY = -7; // Small upward knockback
+    // Optionally, you can set a timer to end knockback after a short duration
+    QTimer::singleShot(300, this, [this]() {
+        isKnockbackActive = false;
+        velocityX = 0;
     });
 }
 
 bool Player::takeDmg()
 {
-    if(health>0){
+    if (isInvincible) return false;  // Ignore damage during invincibility
+
+    isInvincible = true;
+    invincibilityTimer->start(1500); // 1 second of invincibility
+    startFlicker();
+    // Knockback: if facing right, assume hit from right, else from left
+    applyKnockback(facingRight);
+
+    qDebug() << "taking dmg" << health << " " << lives;
+    if (health > 0)
+    {
         health--;
         return true;
     }
     else
     {
-        if(lives>0)
+        if (lives > 0)
         {
             lives--;
-            health =3;
+            health = 3;
             return true;
         }
         else
             return false;
     }
-
 }

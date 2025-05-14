@@ -19,26 +19,31 @@
 #include "menu.h"
 
 MainGameWindow::MainGameWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainGameWindow)
+    : QMainWindow(parent), ui(new Ui::MainGameWindow)
 {
     ui->setupUi(this);
     setWindowTitle("Super Gaafar");
-    setFixedSize(900,650);
+    setFixedSize(900, 650);
 
     PlatformsNum = 6;
     ObstaclesNum = 5;
-    EnemiesNum= 4;
+    EnemiesNum = 4;
     platforms.clear();
     platforms.reserve(PlatformsNum);
     obstacles.clear();
     obstacles.reserve(ObstaclesNum);
 
-    //setupGame();
+    // setupGame();
     setupLevelOne();
-    gameTimer=new QTimer(this);
-    connect(gameTimer,&QTimer::timeout,this,&MainGameWindow::updateGame);
+    gameTimer = new QTimer(this);
+    connect(gameTimer, &QTimer::timeout, this, &MainGameWindow::updateGame);
     gameTimer->start(15);
+
+
+    // ui->scoreLabel = new QLabel("Score: 0");
+    // ui->scoreLabel->setStyleSheet("color: white; font: bold 20px;");
+    // ui->scoreLabel->setZValue(3);
+    //gameScene->addWidget(scoreLabel);
 
     themeSong = new QSoundEffect(this);
     themeSong->setSource(QUrl("qrc:/sounds/ThemeSong.wav"));
@@ -62,7 +67,6 @@ MainGameWindow::~MainGameWindow()
 
 //     ground=new Ground();
 //     gameScene->addItem(ground);
-
 
 //     bg=new Background();
 //     gameScene->addItem(bg);
@@ -93,7 +97,6 @@ MainGameWindow::~MainGameWindow()
 //     p5->setZValue(3);
 //     p6->setZValue(3);
 
-
 //     //manual
 //     auto *o1 = new Platform(700, 465, "warp");
 //     auto *o2 = new Platform(1200, 465, "warp");
@@ -112,7 +115,6 @@ MainGameWindow::~MainGameWindow()
 //     o3->setZValue(3);
 //     o4->setZValue(3);
 //     o5->setZValue(3);
-
 
 //     auto *e1 = new Enemy(1000);
 //     auto *e2 = new Enemy(1800);
@@ -203,57 +205,74 @@ MainGameWindow::~MainGameWindow()
 //     gameScene->addItem(powerup3);
 // }
 
-
-void MainGameWindow::keyPressEvent(QKeyEvent *event){
-    if(event->key()==Qt::Key_Left){
+void MainGameWindow::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Left)
+    {
         player->moveLeft();
     }
-    else if(event->key()==Qt::Key_Right){
+    else if (event->key() == Qt::Key_Right)
+    {
         player->moveRight();
     }
-    else if(event->key()==Qt::Key_Space){
+    else if (event->key() == Qt::Key_Space)
+    {
         player->jump();
     }
 }
 
-void MainGameWindow::keyReleaseEvent(QKeyEvent *event){
-    if(event->key()==Qt::Key_Left || event->key()==Qt::Key_Right) player->stopMoving();
+void MainGameWindow::keyReleaseEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right)
+        player->stopMoving();
 }
 
-bool MainGameWindow::eventFilter(QObject *object,QEvent *event){
-    if(event->type()==QEvent::KeyPress){
-        keyPressEvent((QKeyEvent*)event);
+bool MainGameWindow::eventFilter(QObject *object, QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress)
+    {
+        keyPressEvent((QKeyEvent *)event);
         return true;
     }
-    else if(event->type()==QEvent::KeyRelease){
-        keyReleaseEvent((QKeyEvent*)event);
+    else if (event->type() == QEvent::KeyRelease)
+    {
+        keyReleaseEvent((QKeyEvent *)event);
         return true;
     }
-    else return QObject::eventFilter(object, event);
+    else
+        return QObject::eventFilter(object, event);
 }
-void MainGameWindow::updateGame(){
+void MainGameWindow::updateGame()
+{
     player->update();
     gameView->centerOn(player->pos());
-    for (auto enemy : enemies){
+    for (auto enemy : enemies)
+    {
         enemy->move();
     }
-    QList<QGraphicsItem*> colliding = player->collidingItems(Qt::IntersectsItemBoundingRect);
-    for(auto item : colliding){
-        Coin* coin=dynamic_cast<Coin*>(item);
-        if(coin){
+    QList<QGraphicsItem *> colliding = player->collidingItems(Qt::IntersectsItemBoundingRect);
+    for (auto item : colliding)
+    {
+        Coin *coin = dynamic_cast<Coin *>(item);
+        if (coin)
+        {
             coinSound->play();
+            //updateScore(10);
+
             gameScene->removeItem(item);
             delete item;
         }
-        if(dynamic_cast<Pole*>(item)&& !reachedPole){
-            reachedPole=true;
+        if (dynamic_cast<Pole *>(item) && !reachedPole)
+        {
+            reachedPole = true;
             qDebug() << "flag";
-            flag=new Flag();
-            flag->setPos(5000-325,500);
+            flag = new Flag();
+            flag->setPos(5000 - 325, 500);
             gameScene->addItem(flag);
             flag->setZValue(2);
         }
-        if(dynamic_cast<Castle*>(item)){
+        if (dynamic_cast<Castle *>(item))
+        {
             gameScene->removeItem(player);
             victorySong = new QSoundEffect(this);
             victorySong->setSource(QUrl("qrc:/sounds/victory.wav"));
@@ -261,44 +280,48 @@ void MainGameWindow::updateGame(){
             themeSong->stop();
             victorySong->play();
 
-            connect(victorySong, &QSoundEffect::playingChanged, this, [=]() {
+            connect(victorySong, &QSoundEffect::playingChanged, this, [=]()
+                    {
                 if (!victorySong->isPlaying()) {
                     returnToMainMenu();
-                }
-            });
+                } });
         }
-        if(dynamic_cast<PowerUp*>(item)){
-            applyPowerUp(((PowerUp*)item)->getType());
+        if (dynamic_cast<PowerUp *>(item))
+        {
+            applyPowerUp(((PowerUp *)item)->getType());
             coinSound->play(); // until we get power ups sounds
             gameScene->removeItem(item);
+            //updateScore(50);
+
             delete item;
         }
-        if(dynamic_cast<Enemy*>(item)){
 
-          /*  // Check if player is above the enemy (simulating a "stomp")
-            if (player->y() + player->pixmap().height() - 100 < item->y()) {
-                // Stomped enemy
-                gameScene->removeItem(item);
-                delete item;
-                // Optional: bounce the player up slightly
-                player->setY(item->y() - player->pixmap().height());
-                player->setVelocityY(-10);  // You need to make a setVelocityY() function in Player class
-            } else */{
-                // Took damage
-                if (player->takeDmg() == false) {
-                    gameScene->removeItem(player);
-                    deathSong = new QSoundEffect(this);
-                    deathSong->setSource(QUrl("qrc:/sounds/death.wav"));
-                    deathSong->setVolume(0.25);
-                    themeSong->stop();
-                    deathSong->play();
+        if (dynamic_cast<Enemy *>(item)&&!player->isInvincible)
+        {
 
-                    connect(deathSong, &QSoundEffect::playingChanged, this, [=]() {
+            /*  // Check if player is above the enemy (simulating a "stomp")
+              if (player->y() + player->pixmap().height() - 100 < item->y()) {
+                  // Stomped enemy
+                  gameScene->removeItem(item);
+                  delete item;
+                  // Optional: bounce the player up slightly
+                  player->setY(item->y() - player->pixmap().height());
+                  player->setVelocityY(-10);  // You need to make a setVelocityY() function in Player class
+              } else */
+            if (!player->takeDmg())
+            {
+                gameScene->removeItem(player);
+                deathSong = new QSoundEffect(this);
+                deathSong->setSource(QUrl("qrc:/sounds/death.wav"));
+                deathSong->setVolume(0.25);
+                themeSong->stop();
+                deathSong->play();
+
+                connect(deathSong, &QSoundEffect::playingChanged, this, [=]()
+                        {
                         if (!deathSong->isPlaying()) {
                             returnToMainMenu();
-                        }
-                    });
-                }
+                        } });
             }
 
             // player->takeDmg();
@@ -317,35 +340,42 @@ void MainGameWindow::updateGame(){
             //     });
             // }
         }
-        Platform *platform = dynamic_cast<Platform *> (item);
-        if (platform && player->getFacingRight()){
-            player->setPos(platform->pos().x()-player->boundingRect().width()+5,player->pos().y());
+        Platform *platform = dynamic_cast<Platform *>(item);
+        if (platform && player->getFacingRight())
+        {
+            player->setPos(platform->pos().x() - player->boundingRect().width() + 5, player->pos().y());
         }
-        else if(platform && !player->getFacingRight()){
-            player->setPos(platform->pos().x()+platform->boundingRect().width(),player->pos().y());
+        else if (platform && !player->getFacingRight())
+        {
+            player->setPos(platform->pos().x() + platform->boundingRect().width(), player->pos().y());
         }
     }
 }
 
-void MainGameWindow::spawnCoin() {
+void MainGameWindow::spawnCoin()
+{
     int sceneWidth = gameScene->sceneRect().width();
     int sceneHeight = gameScene->sceneRect().height();
     int x = QRandomGenerator::global()->bounded(sceneWidth - 50);
     int y = QRandomGenerator::global()->bounded(sceneHeight - 200, sceneHeight);
-    Coin* coin = new Coin();
+    Coin *coin = new Coin();
     coin->setPos(x, y);
     gameScene->addItem(coin);
 }
 
-void MainGameWindow::applyPowerUp(PowerUpType type){
-    switch(type){
+void MainGameWindow::applyPowerUp(PowerUpType type)
+{
+    switch (type)
+    {
     case SpeedBoost:
         player->setMovementSpeed(10.0);
-        QTimer::singleShot(5000, [=]() { player->setMovementSpeed(5.0); });
+        QTimer::singleShot(5000, [=]()
+                           { player->setMovementSpeed(5.0); });
         break;
     case JumpBoost:
         player->setJumpForce(20.0);
-        QTimer::singleShot(5000, [=]() { player->setJumpForce(15.0); });
+        QTimer::singleShot(5000, [=]()
+                           { player->setJumpForce(15.0); });
         break;
     case Gigantification:
         player->applyGiantPowerUp();
@@ -353,14 +383,15 @@ void MainGameWindow::applyPowerUp(PowerUpType type){
     }
 }
 
-void MainGameWindow::returnToMainMenu() {
-    Menu* menu = new Menu();
+void MainGameWindow::returnToMainMenu()
+{
+    Menu *menu = new Menu();
     menu->show();
     this->close();
 }
 
-
-void MainGameWindow::setupLevelOne() {
+void MainGameWindow::setupLevelOne()
+{
     // This is just your existing setupGame() function, renamed and extracted.
     gameScene = new QGraphicsScene(this);
     gameScene->setSceneRect(0, 0, 5000, 600);
@@ -375,6 +406,7 @@ void MainGameWindow::setupLevelOne() {
     bg = new Background();
     gameScene->addItem(bg);
 
+
     bg->setZValue(1);
     ground->setZValue(2);
     player->setZValue(3);
@@ -386,9 +418,9 @@ void MainGameWindow::setupLevelOne() {
         new Platform(1700, 400, "brick", 4),
         new Platform(2600, 400, "brick", 3),
         new Platform(3200, 400, "brick", 2),
-        new Platform(4000, 400, "brick", 3)
-    };
-    for (auto* p : platforms) {
+        new Platform(4000, 400, "brick", 3)};
+    for (auto *p : platforms)
+    {
         gameScene->addItem(p);
         p->setZValue(3);
     }
@@ -399,9 +431,9 @@ void MainGameWindow::setupLevelOne() {
         new Platform(1200, 465, "warp"),
         new Platform(2300, 465, "warp"),
         new Platform(3000, 465, "warp"),
-        new Platform(3700, 465, "warp")
-    };
-    for (auto* o : obstacles) {
+        new Platform(3700, 465, "warp")};
+    for (auto *o : obstacles)
+    {
         gameScene->addItem(o);
         o->setZValue(3);
     }
@@ -411,9 +443,9 @@ void MainGameWindow::setupLevelOne() {
         new Enemy(1000),
         new Enemy(1800),
         new Enemy(2900),
-        new Enemy(3100)
-    };
-    for (auto* e : enemies) {
+        new Enemy(3100)};
+    for (auto *e : enemies)
+    {
         gameScene->addItem(e);
         e->setZValue(3);
     }
@@ -429,27 +461,23 @@ void MainGameWindow::setupLevelOne() {
 
     // --- Coins ---
     QVector<QPointF> coinPositions = {
-        {290, 500}, {320, 500},{350, 500}, {380, 500},
-        {2315, 420},{2345, 420},{2375, 420},{2405, 420},
-        {1000, 500}, {1030, 500},{1060, 500},{1090, 500},
-        {1750, 365}, {1780, 365}, {1210, 365}, {1240, 365},
-        {1900, 500}, {1930, 500},{1960, 500},{1990, 500}
-    };
+        {290, 500}, {320, 500}, {350, 500}, {380, 500}, {2315, 420}, {2345, 420}, {2375, 420}, {2405, 420}, {1000, 500}, {1030, 500}, {1060, 500}, {1090, 500}, {1750, 365}, {1780, 365}, {1210, 365}, {1240, 365}, {1900, 500}, {1930, 500}, {1960, 500}, {1990, 500}};
 
-    for (const QPointF& pos : coinPositions) {
-        Coin* coin = new Coin();
+    for (const QPointF &pos : coinPositions)
+    {
+        Coin *coin = new Coin();
         coin->setPos(pos);
         coin->setZValue(3);
         gameScene->addItem(coin);
     }
 
     // --- Pole & Castle ---
-    Pole* pole = new Pole();
+    Pole *pole = new Pole();
     pole->setPos(5000 - 350, 365);
     pole->setZValue(2);
     gameScene->addItem(pole);
 
-    Castle* castle = new Castle();
+    Castle *castle = new Castle();
     castle->setPos(5000 - 230, 370);
     castle->setZValue(2);
     gameScene->addItem(castle);
@@ -458,10 +486,10 @@ void MainGameWindow::setupLevelOne() {
     QVector<QPair<QPointF, PowerUpType>> powerUps = {
         {{2000, 520}, Gigantification},
         {{1550, 520}, SpeedBoost},
-        {{525, 365}, JumpBoost}
-    };
-    for (auto& [pos, type] : powerUps) {
-        PowerUp* p = new PowerUp(type);
+        {{525, 365}, JumpBoost}};
+    for (auto &[pos, type] : powerUps)
+    {
+        PowerUp *p = new PowerUp(type);
         p->setPos(pos);
         p->setZValue(3);
         gameScene->addItem(p);
@@ -473,22 +501,32 @@ void MainGameWindow::setupLevelOne() {
     coinSound->setVolume(0.75);
 }
 
-void MainGameWindow::setupLevelTwo() {
+void MainGameWindow::setupLevelTwo()
+{
     // TODO: Implement Level 2
     setupLevelOne();
 }
 
-void MainGameWindow::setupLevelThree() {
+void MainGameWindow::setupLevelThree()
+{
     // TODO: Implement Level 3
     setupLevelOne();
 }
 
-void MainGameWindow::setupLevelFour() {
+void MainGameWindow::setupLevelFour()
+{
     // TODO: Implement Level 4
     setupLevelOne();
 }
 
-void MainGameWindow::setupLevelFive() {
+void MainGameWindow::setupLevelFive()
+{
     // TODO: Implement Level 5
     setupLevelOne();
+}
+
+void MainGameWindow::updateScore(int amount)
+{
+    score += amount;
+    scoreLabel->setText("Score: " + QString::number(score));
 }
