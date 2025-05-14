@@ -1,26 +1,26 @@
 <RCC>
     <qresource prefix="/images">
-        <file>mario.png</file>
-        <file>ground.png</file>
-        <file>background.png</file>
-        <file>coin.png</file>
-        <file>castle.png</file>
-        <file>pole.png</file>
-        <file>mflag.png</file>
-        <file>speedBoost.png</file>
-        <file>GiantUp.png</file>
-        <file>JumpUp.png</file>
-        <file>warp.png</file>
-        <file>brick.png</file>
-        <file>redt.png</file>
+        <file>images/background.png</file>
+        <file>images/brick.png</file>
+        <file>images/castle.png</file>
+        <file>images/coin.png</file>
+        <file>images/GiantUp.png</file>
+        <file>images/ground.png</file>
+        <file>images/JumpUp.png</file>
+        <file>images/mario.png</file>
+        <file>images/mflag.png</file>
+        <file>images/pole.png</file>
+        <file>images/redt.png</file>
+        <file>images/speedBoost.png</file>
+        <file>images/warp.png</file>
     </qresource>
     <qresource prefix="/sounds">
-        <file>coin.wav</file>
-        <file>jump.wav</file>
-        <file>levelclear.wav</file>
-        <file>ThemeSong.mp3</file>
-        <file>ThemeSong.wav</file>
-        <file>victory.wav</file>
-        <file>death.wav</file>
+        <file>sounds/coin.wav</file>
+        <file>sounds/powerup.wav</file>
+        <file>sounds/ThemeSong.wav</file>
+        <file>sounds/death.wav</file>
+        <file>sounds/jump.wav</file>
+        <file>sounds/levelclear.wav</file>
+        <file>sounds/victory.wav</file>
     </qresource>
 </RCC>

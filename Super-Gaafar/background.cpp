@@ -2,7 +2,7 @@
 #include <QPainter>
 #include <QGraphicsScene>
 Background::Background(){
-    QPixmap tile(":/images/background.png");
+    QPixmap tile(":/images/images/background.png");
     int tileW = tile.width();
     int tileH = tile.height();
     int repeatCount=10;

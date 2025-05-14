@@ -2,7 +2,7 @@
 #include <Qstring>
 #include <QPainter>
 Platform::Platform(qreal x, qreal y, QString s, int length) {
-    QString path = ":/images/";
+    QString path = ":/images/images/";
     path.append(s);
     path.append(".png");
     QPixmap tile(path);

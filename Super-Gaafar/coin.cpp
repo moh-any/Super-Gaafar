@@ -3,7 +3,7 @@
 Coin::Coin(QGraphicsItem *parent)
     : QObject(), QGraphicsPixmapItem(parent), currentFrame(0)
 {
-    spriteSheet = QPixmap(":/images/coin.png");
+    spriteSheet = QPixmap(":/images/images/coin.png");
     frameCount = 8;
     frameWidth = spriteSheet.width() / frameCount;
     frameHeight = spriteSheet.height();

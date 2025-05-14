@@ -15,7 +15,7 @@ Player::Player(QGraphicsItem *parent):QObject() ,QGraphicsPixmapItem(parent),fac
     loadSpriteSheet();
     updateSprite();
     jumpSound=new QSoundEffect(this);
-    jumpSound->setSource(QUrl("qrc:/sounds/jump.wav"));
+    jumpSound->setSource(QUrl("qrc:/sounds/sounds/jump.wav"));
     jumpSound->setVolume(0.25);
 }
 
@@ -106,7 +106,7 @@ void Player::applyGravity(){
 }
 
 void Player::loadSpriteSheet(){
-    spriteSheet.load(":/images/mario.png");
+    spriteSheet.load(":/images/images/mario.png");
     int frameWidth=57;
     int frameHeight=75;
     int runningFrameCount=21;

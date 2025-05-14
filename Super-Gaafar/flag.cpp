@@ -3,7 +3,7 @@
 Flag::Flag(QGraphicsItem *parent)
     : QObject(),QGraphicsPixmapItem(parent)
 {
-    flag.load(":/images/mflag.png");
+    flag.load(":/images/images/mflag.png");
     frameWidth = 115;
     frameHeight = 84;
     setPixmap(flag.copy(0, 0, frameWidth, frameHeight));

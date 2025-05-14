@@ -11,7 +11,7 @@ Enemy::Enemy(qreal x):QObject(), ground(470), velocityX(1),currentFrame(0){
 }
 
 void Enemy::loadSpriteSheet(){
-    spriteSheet.load(":/images/redt.png");
+    spriteSheet.load(":/images/images/redt.png");
     double frameWidth=59.5;
     int frameHeight=75;
     int runningFrameCount=20;
