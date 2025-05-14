@@ -41,7 +41,7 @@ MainGameWindow::MainGameWindow(QWidget *parent)
     gameTimer->start(15);
 
     themeSong = new QSoundEffect(this);
-    themeSong->setSource(QUrl("qrc:/sounds/ThemeSong.wav"));
+    themeSong->setSource(QUrl("qrc:/sounds/sounds/ThemeSong.wav"));
     themeSong->setVolume(0.75);
     themeSong->setLoopCount(QSoundEffect::Infinite);
     themeSong->play();
@@ -182,8 +182,12 @@ void MainGameWindow::setupGame(){
     castle->setZValue(2);
 
     coinSound = new QSoundEffect(this);
-    coinSound->setSource(QUrl("qrc:/sounds/coin.wav"));
+    coinSound->setSource(QUrl("qrc:/sounds/sounds/coin.wav"));
     coinSound->setVolume(0.75);
+
+    powerupSound = new QSoundEffect(this);
+    powerupSound->setSource(QUrl("qrc:/sounds/sounds/powerup.wav"));
+    powerupSound->setVolume(0.75);
 
     PowerUp* powerup1 = new PowerUp(Gigantification);
     powerup1->setPos(2000, 520);
@@ -256,7 +260,7 @@ void MainGameWindow::updateGame(){
         if(dynamic_cast<Castle*>(item)){
             gameScene->removeItem(player);
             victorySong = new QSoundEffect(this);
-            victorySong->setSource(QUrl("qrc:/sounds/victory.wav"));
+            victorySong->setSource(QUrl("qrc:/sounds/sounds/victory.wav"));
             victorySong->setVolume(0.75);
             themeSong->stop();
             victorySong->play();
@@ -264,14 +268,14 @@ void MainGameWindow::updateGame(){
         }
         if(dynamic_cast<PowerUp*>(item)){
             applyPowerUp(((PowerUp*)item)->getType());
-            coinSound->play();
+            powerupSound->play();
             gameScene->removeItem(item);
             delete item;
         }
         if(dynamic_cast<Enemy*>(item)){
             gameScene->removeItem(player);
             deathSong = new QSoundEffect(this);
-            deathSong->setSource(QUrl("qrc:/sounds/death.wav"));
+            deathSong->setSource(QUrl("qrc:/sounds/sounds/death.wav"));
             deathSong->setVolume(0.25);
             themeSong->stop();
             deathSong->play();

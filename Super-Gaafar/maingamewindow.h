@@ -51,6 +51,7 @@ private:
     QSoundEffect* themeSong;
     QSoundEffect* victorySong;
     QSoundEffect* deathSong;
+    QSoundEffect* powerupSound;
     Flag *flag;
     bool reachedPole=false;
     QList<Platform *> platforms;

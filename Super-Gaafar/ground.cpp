@@ -3,7 +3,7 @@
 #include <QGraphicsScene>
 
 Ground::Ground(QGraphicsItem *parent):QObject(), QGraphicsPixmapItem(parent){
-    QPixmap tile(":/images/ground.png");
+    QPixmap tile(":/images/images/ground.png");
     int tileW = tile.width();
     int tileH = tile.height();
     int repeatCount=10;
