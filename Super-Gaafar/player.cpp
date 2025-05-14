@@ -66,12 +66,10 @@ void Player::update(){
 }
 
 void Player::applyGravity(){
-    qDebug() << sceneBoundingRect().topLeft().y();
     velocityY+=gravity;
     setPos(pos().x(),pos().y()+velocityY);
     QList<QGraphicsItem*> colliding = this->collidingItems(Qt::IntersectsItemBoundingRect);
     for(auto item:colliding){
-        // qDebug() << " collided with:" << typeid(*item).name();
         Ground* tmp1=dynamic_cast<Ground*>(item);
         Platform* tmp2=dynamic_cast<Platform*>(item);
 
@@ -88,10 +86,6 @@ void Player::applyGravity(){
         }
         else if(tmp2){
             if(velocityY>0){
-                qDebug() << pos().y()+boundingRect().height()-tmp2->pos().y();
-                if(abs(pos().y()+boundingRect().height()-tmp2->pos().y())<=3){
-
-                }
                 setY(item->y() - pixmap().height());
                 velocityY=0;
                 isJumping=false;
@@ -103,11 +97,6 @@ void Player::applyGravity(){
                 }
             }
             else{
-                qDebug() << boundingRect().y() << " " << tmp2->pos().y()+tmp2->boundingRect().height();
-
-                if(pos().y()+7.5>=tmp2->pos().y()+tmp2->boundingRect().height()){
-
-                }
                 setY(tmp2->y()+tmp2->pixmap().height()+1);
                 velocityY=5;
             }
@@ -141,9 +130,8 @@ void Player::updateAnimation(){
 }
 
 void Player::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
-    QGraphicsPixmapItem::paint(painter, option, widget);
-    
-    painter->setPen(QPen(Qt::red, 1));
+    QGraphicsPixmapItem::paint(painter,option,widget);
+    painter->setPen(QPen(Qt::red,1));
     painter->drawRect(boundingRect());
 }
 

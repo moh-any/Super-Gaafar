@@ -4,7 +4,7 @@
 #include <QTransform>
 
 RedT::RedT(qreal x) : Enemy(x) {
-    spriteSheet.load(":/images/redt.png");
+    spriteSheet.load(":/images/images/redt.png");
     frameWidth = 130;
     frameHeight = 140;
     animationCounter = 0;

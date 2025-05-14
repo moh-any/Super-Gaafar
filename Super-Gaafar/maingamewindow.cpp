@@ -17,6 +17,7 @@
 #include <redt.h>
 #include <enemy.h>
 #include <spiny.h>
+#include <goomba.h>
 #include <QRandomGenerator>
 
 MainGameWindow::MainGameWindow(QWidget *parent)
@@ -115,9 +116,9 @@ void MainGameWindow::setupGame(){
 
 
     RedT *e1 = new RedT(3100);
-    RedT *e2 = new RedT(1800);
     RedT *e3 = new RedT(2900);
     Spiny *e4=new Spiny(1000);
+    Goomba *e2=new Goomba(1800);
 
     enemies.append(e1);
     enemies.append(e2);
@@ -187,7 +188,7 @@ void MainGameWindow::setupGame(){
 
     powerupSound = new QSoundEffect(this);
     powerupSound->setSource(QUrl("qrc:/sounds/sounds/powerup.wav"));
-    powerupSound->setVolume(0.75);
+    powerupSound->setVolume(0.5);
 
     PowerUp* powerup1 = new PowerUp(Gigantification);
     powerup1->setPos(2000, 520);
@@ -251,7 +252,6 @@ void MainGameWindow::updateGame(){
         }
         if(dynamic_cast<Pole*>(item)&& !reachedPole){
             reachedPole=true;
-            qDebug() << "flag";
             flag=new Flag();
             flag->setPos(5000-325,500);
             gameScene->addItem(flag);
@@ -288,8 +288,6 @@ void MainGameWindow::updateGame(){
         else if(platform && !player->getFacingRight()){
             player->setPos(platform->pos().x()+platform->boundingRect().width(),player->pos().y());
         }
-        qDebug() << player->boundingRect().y();
-        // qDebug() << player->sceneBoundingRect().topLeft().y();
     }
 }
 

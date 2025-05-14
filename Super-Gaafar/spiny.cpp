@@ -4,7 +4,7 @@
 #include <QTransform>
 
 Spiny::Spiny(qreal x) : Enemy(x) {
-    spriteSheet.load(":/images/spiny.png"); // Make sure you have the correct image path
+    spriteSheet.load(":/images/images/spiny.png");
     frameWidth = 120;
     frameHeight = 93;
     animationCounter = 0;
@@ -45,7 +45,6 @@ void Spiny::updateAnimation() {
 void Spiny::updateSprite() {
     QRect frameRect(currentFrame, 0, frameWidth, frameHeight);
     QPixmap currentFramePixmap = spriteSheet.copy(frameRect);
-    // currentFramePixmap = currentFramePixmap.scaled(96, 96, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     setPixmap(currentFramePixmap);
     if(facingRight) setPixmap(pixmap().transformed(QTransform().scale(-1,1)));
 }

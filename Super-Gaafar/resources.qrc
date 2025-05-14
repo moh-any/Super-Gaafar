@@ -13,6 +13,8 @@
         <file>images/redt.png</file>
         <file>images/speedBoost.png</file>
         <file>images/warp.png</file>
+        <file>images/spiny.png</file>
+        <file>images/goomba.png</file>
     </qresource>
     <qresource prefix="/sounds">
         <file>sounds/coin.wav</file>
@@ -22,5 +24,6 @@
         <file>sounds/jump.wav</file>
         <file>sounds/levelclear.wav</file>
         <file>sounds/victory.wav</file>
+        <file>sounds/5friends.wav</file>
     </qresource>
 </RCC>

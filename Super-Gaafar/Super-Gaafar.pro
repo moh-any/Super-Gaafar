@@ -15,6 +15,7 @@ SOURCES += \
     coin.cpp \
     enemy.cpp \
     flag.cpp \
+    goomba.cpp \
     ground.cpp \
     main.cpp \
     maingamewindow.cpp \
@@ -31,6 +32,7 @@ HEADERS += \
     coin.h \
     enemy.h \
     flag.h \
+    goomba.h \
     ground.h \
     maingamewindow.h \
     platform.h \
