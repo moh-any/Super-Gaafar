@@ -13,6 +13,7 @@
 #include <QSoundEffect>
 #include <powerup.h>
 #include <platform.h>
+#include <RedT.h>
 #include <enemy.h>
 
 QT_BEGIN_NAMESPACE
@@ -35,7 +36,6 @@ public:
 private slots:
     void updateGame();
     void setupGame();
-    void spawnCoin();
     void applyPowerUp(PowerUpType type);
 
 private:

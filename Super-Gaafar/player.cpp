@@ -10,7 +10,7 @@
 #include <QObject>
 #include <platform.h>
 
-Player::Player(QGraphicsItem *parent):QObject() ,QGraphicsPixmapItem(parent),facingRight(true),velocityX(0),movementSpeed(5.0),velocityY(0),gravity(0.5),isJumping(false),jumpForce(15.0),ground(505),currentState(IDLE),currentFrame(0){
+Player::Player(QGraphicsItem *parent):QObject() ,QGraphicsPixmapItem(parent),facingRight(true),velocityX(0),movementSpeed(5.0),velocityY(0),gravity(0.5),isJumping(false),jumpForce(15.0),ground(470),currentState(IDLE),currentFrame(0){
     setPos(0,ground);
     loadSpriteSheet();
     updateSprite();
@@ -66,6 +66,7 @@ void Player::update(){
 }
 
 void Player::applyGravity(){
+    qDebug() << sceneBoundingRect().topLeft().y();
     velocityY+=gravity;
     setPos(pos().x(),pos().y()+velocityY);
     QList<QGraphicsItem*> colliding = this->collidingItems(Qt::IntersectsItemBoundingRect);
@@ -85,12 +86,16 @@ void Player::applyGravity(){
                 currentState=IDLE;
             }
         }
-        else if (tmp2){
-            if (velocityY > 0){
+        else if(tmp2){
+            if(velocityY>0){
+                qDebug() << pos().y()+boundingRect().height()-tmp2->pos().y();
+                if(abs(pos().y()+boundingRect().height()-tmp2->pos().y())<=3){
+
+                }
                 setY(item->y() - pixmap().height());
                 velocityY=0;
                 isJumping=false;
-                if (velocityX!=0){
+                if(velocityX!=0){
                     currentState=RUNNING;
                 }
                 else{
@@ -98,7 +103,12 @@ void Player::applyGravity(){
                 }
             }
             else{
-                setY(tmp2->y() + tmp2->pixmap().height()+1);
+                qDebug() << boundingRect().y() << " " << tmp2->pos().y()+tmp2->boundingRect().height();
+
+                if(pos().y()+7.5>=tmp2->pos().y()+tmp2->boundingRect().height()){
+
+                }
+                setY(tmp2->y()+tmp2->pixmap().height()+1);
                 velocityY=5;
             }
         }
@@ -130,6 +140,13 @@ void Player::updateAnimation(){
     updateSprite();
 }
 
+void Player::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
+    QGraphicsPixmapItem::paint(painter, option, widget);
+    
+    painter->setPen(QPen(Qt::red, 1));
+    painter->drawRect(boundingRect());
+}
+
 void Player::updateSprite(){
     QRect frameRect=Rects[currentFrame];
     QPixmap currentFramePixmap=spriteSheet.copy(frameRect);
@@ -138,20 +155,23 @@ void Player::updateSprite(){
         currentFramePixmap=currentFramePixmap.transformed(QTransform().scale(-1, 1));
     }
     setPixmap(currentFramePixmap);
+    
 }
 
 void Player::setMovementSpeed(double speed) {movementSpeed = speed;}
 void Player::setJumpForce(double force) {jumpForce = force;}
 
-void Player::applyGiantPowerUp() {
+void Player::applyGiantPowerUp(){
+    ground+=height;
     width=128;
     height=128;
-    ground-=height/2;
+    ground-=height;
 
-    // Schedule return to normal
-    QTimer::singleShot(5000, this, [this]() {
-        height=64;
-        width=64;
+    QTimer::singleShot(5000, this, [this](){
         ground+=height;
+        height=96;
+        width=96;
+        ground-=height;
+
     });
 }

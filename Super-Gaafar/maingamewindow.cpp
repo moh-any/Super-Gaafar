@@ -14,7 +14,9 @@
 #include <castle.h>
 #include <flag.h>
 #include <powerup.h>
+#include <redt.h>
 #include <enemy.h>
+#include <spiny.h>
 #include <QRandomGenerator>
 
 MainGameWindow::MainGameWindow(QWidget *parent)
@@ -112,10 +114,10 @@ void MainGameWindow::setupGame(){
     o5->setZValue(3);
 
 
-    auto *e1 = new Enemy(1000);
-    auto *e2 = new Enemy(1800);
-    auto *e3 = new Enemy(2900);
-    auto *e4 = new Enemy(3100);
+    RedT *e1 = new RedT(3100);
+    RedT *e2 = new RedT(1800);
+    RedT *e3 = new RedT(2900);
+    Spiny *e4=new Spiny(1000);
 
     enemies.append(e1);
     enemies.append(e2);
@@ -140,7 +142,7 @@ void MainGameWindow::setupGame(){
     gameView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     statusBar()->hide();
     setCentralWidget(gameView);
-
+    gameView->show();
     Coin* coin1 = new Coin();
     Coin* coin2 = new Coin();
     Coin* coin3 = new Coin();
@@ -258,10 +260,11 @@ void MainGameWindow::updateGame(){
             victorySong->setVolume(0.75);
             themeSong->stop();
             victorySong->play();
+            QTimer::singleShot(8000, this, &MainGameWindow::close);
         }
         if(dynamic_cast<PowerUp*>(item)){
             applyPowerUp(((PowerUp*)item)->getType());
-            coinSound->play(); // until we get power ups sounds
+            coinSound->play();
             gameScene->removeItem(item);
             delete item;
         }
@@ -272,26 +275,20 @@ void MainGameWindow::updateGame(){
             deathSong->setVolume(0.25);
             themeSong->stop();
             deathSong->play();
+            QTimer::singleShot(8000, this, &MainGameWindow::close);
         }
         Platform *platform = dynamic_cast<Platform *> (item);
-        if (platform && player->getFacingRight()){
+        if(platform && player->getFacingRight()){
             player->setPos(platform->pos().x()-player->boundingRect().width()+5,player->pos().y());
         }
         else if(platform && !player->getFacingRight()){
             player->setPos(platform->pos().x()+platform->boundingRect().width(),player->pos().y());
         }
+        qDebug() << player->boundingRect().y();
+        // qDebug() << player->sceneBoundingRect().topLeft().y();
     }
 }
 
-void MainGameWindow::spawnCoin() {
-    int sceneWidth = gameScene->sceneRect().width();
-    int sceneHeight = gameScene->sceneRect().height();
-    int x = QRandomGenerator::global()->bounded(sceneWidth - 50);
-    int y = QRandomGenerator::global()->bounded(sceneHeight - 200, sceneHeight);
-    Coin* coin = new Coin();
-    coin->setPos(x, y);
-    gameScene->addItem(coin);
-}
 
 void MainGameWindow::applyPowerUp(PowerUpType type){
     switch(type){

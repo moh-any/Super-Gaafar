@@ -1,0 +1,18 @@
+#ifndef REDT_H
+#define REDT_H
+
+#include <enemy.h>
+#include <QGraphicsPixmapItem>
+#include <QPixmap>
+
+class RedT : public Enemy {
+    Q_OBJECT
+public:
+    RedT(qreal x);
+    void move() override;
+private:
+    void updateAnimation() override;
+    void updateSprite() override;
+};
+
+#endif // REDT_H

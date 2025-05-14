@@ -8,6 +8,7 @@
 #include <QRect>
 #include <QVector>
 #include <QSoundEffect>
+#include <QPainter>
 class Player:public QObject,public QGraphicsPixmapItem{
     Q_OBJECT
 public:
@@ -30,6 +31,7 @@ public:
     void setMovementSpeed(double speed);
     void setJumpForce(double force);
     void applyGiantPowerUp();
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 private:
     QPixmap sprite;
     bool facingRight;
@@ -41,8 +43,8 @@ private:
     double jumpForce;
     double ground;
     int sceneWidth=2000;
-    int height=64;
-    int width=64;
+    int height=96;
+    int width=96;
     QTimer* jumpTimer;
     int counter;
 

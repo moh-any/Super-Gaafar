@@ -13,6 +13,7 @@
         <file>warp.png</file>
         <file>brick.png</file>
         <file>redt.png</file>
+        <file>spiny.png</file>
     </qresource>
     <qresource prefix="/sounds">
         <file>coin.wav</file>

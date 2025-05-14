@@ -21,7 +21,9 @@ SOURCES += \
     platform.cpp \
     player.cpp \
     pole.cpp \
-    powerup.cpp
+    powerup.cpp \
+    redt.cpp \
+    spiny.cpp
     coin.cpp
 HEADERS += \
     background.h \
@@ -34,7 +36,9 @@ HEADERS += \
     platform.h \
     player.h \
     pole.h \
-    powerup.h
+    powerup.h \
+    redt.h \
+    spiny.h
     coin.h
 
 FORMS += \

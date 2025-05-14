@@ -7,19 +7,22 @@
 class Enemy:public QObject,public QGraphicsPixmapItem {
 public:
     Enemy(qreal x);
-    void move();
+    virtual void move()=0;
 
-private:
-
+protected:
     qreal velocityX;
     QPixmap spriteSheet;
-    void loadSpriteSheet();
     QVector<QRect> Rects;
     qreal ground;
     bool facingRight;
     int currentFrame;
-    void updateSprite();
-    void updateAnimation();
+    int frameWidth;
+    int frameHeight;
+    int animationCounter;
+
+private:
+    virtual void updateSprite()=0;
+    virtual void updateAnimation()=0;
 };
 
 #endif // ENEMY_H

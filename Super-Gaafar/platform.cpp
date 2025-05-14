@@ -6,8 +6,8 @@ Platform::Platform(qreal x, qreal y, QString s, int length) {
     path.append(s);
     path.append(".png");
     QPixmap tile(path);
-    int tileW = tile.width();
-    int tileH = tile.height();
+    int tileW=tile.width();
+    int tileH=tile.height();
     QPixmap big(tileW *length, tileH);
     big.fill(Qt::transparent);
     QPainter p(&big);
