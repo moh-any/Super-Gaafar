@@ -13,6 +13,7 @@ SOURCES += \
     background.cpp \
     castle.cpp \
     coin.cpp \
+    credits.cpp \
     enemy.cpp \
     flag.cpp \
     ground.cpp \
@@ -29,6 +30,7 @@ HEADERS += \
     background.h \
     castle.h \
     coin.h \
+    credits.h \
     enemy.h \
     flag.h \
     ground.h \
@@ -42,6 +44,7 @@ HEADERS += \
     coin.h
 
 FORMS += \
+    credits.ui \
     levelsmenu.ui \
     maingamewindow.ui \
     menu.ui

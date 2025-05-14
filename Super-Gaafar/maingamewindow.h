@@ -27,7 +27,7 @@ class MainGameWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainGameWindow(QWidget *parent = nullptr);
+    MainGameWindow(QWidget *parent = nullptr, int level = 1);
     ~MainGameWindow();
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);

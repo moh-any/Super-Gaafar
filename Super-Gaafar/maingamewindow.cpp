@@ -18,7 +18,7 @@
 #include <QRandomGenerator>
 #include "menu.h"
 
-MainGameWindow::MainGameWindow(QWidget *parent)
+MainGameWindow::MainGameWindow(QWidget *parent, int level)
     : QMainWindow(parent), ui(new Ui::MainGameWindow)
 {
     ui->setupUi(this);
@@ -34,15 +34,34 @@ MainGameWindow::MainGameWindow(QWidget *parent)
     obstacles.reserve(ObstaclesNum);
 
     // setupGame();
-    setupLevelOne();
+    
+    if (level == 1)
+    {
+        setupLevelOne();
+    }
+    else if (level == 2)
+    {
+        setupLevelTwo();
+    }
+    else if (level == 3)
+    {
+        setupLevelThree();
+    }
+    else if (level == 4)
+    {
+        setupLevelFour();
+    }
+    else if (level == 5)
+    {
+        setupLevelFive();
+    }
+
+
+
     gameTimer = new QTimer(this);
     connect(gameTimer, &QTimer::timeout, this, &MainGameWindow::updateGame);
     gameTimer->start(15);
 
-    // ui->scoreLabel = new QLabel("Score: 0");
-    // ui->scoreLabel->setStyleSheet("color: white; font: bold 20px;");
-    // ui->scoreLabel->setZValue(3);
-    // gameScene->addWidget(scoreLabel);
 
     themeSong = new QSoundEffect(this);
     themeSong->setSource(QUrl("qrc:/sounds/ThemeSong.wav"));
@@ -230,6 +249,22 @@ void MainGameWindow::applyPowerUp(PowerUpType type)
     }
 }
 
+void MainGameWindow::updateScore(int value)
+{
+    score += value;
+    scoreLabel->setText("Score: " + QString::number(score));
+}
+
+void MainGameWindow::updateHealth(int value)
+{
+    healthLabel->setText("Health: " + QString::number(value));
+}
+
+void MainGameWindow::updateLives(int value)
+{
+    livesLabel->setText("Lives: " + QString::number(value));
+}
+
 void MainGameWindow::returnToMainMenu()
 {
     Menu *menu = new Menu();
@@ -356,20 +391,4 @@ void MainGameWindow::setupLevelFour()
 void MainGameWindow::setupLevelFive()
 {
     setupLevelOne();
-}
-
-void MainGameWindow::updateScore(int value)
-{
-    score += value;
-    scoreLabel->setText("Score: " + QString::number(score));
-}
-
-void MainGameWindow::updateHealth(int value)
-{
-    healthLabel->setText("Health: " + QString::number(value));
-}
-
-void MainGameWindow::updateLives(int value)
-{
-    livesLabel->setText("Lives: " + QString::number(value));
 }

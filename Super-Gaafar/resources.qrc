@@ -22,5 +22,6 @@
         <file>ThemeSong.wav</file>
         <file>victory.wav</file>
         <file>death.wav</file>
+        <file>credits.wav</file>
     </qresource>
 </RCC>

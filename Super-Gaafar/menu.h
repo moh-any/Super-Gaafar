@@ -20,6 +20,8 @@ private slots:
 
     void on_quitButton_clicked();
 
+    void on_creditsButton_clicked();
+
 private:
     Ui::Menu *ui;
 };

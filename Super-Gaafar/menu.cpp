@@ -2,6 +2,7 @@
 #include "ui_menu.h"
 #include "maingamewindow.h"
 #include "levelsmenu.h"
+#include "credits.h"
 
 Menu::Menu(QWidget *parent)
     : QDialog(parent)
@@ -27,5 +28,13 @@ void Menu::on_playButton_clicked()
 void Menu::on_quitButton_clicked()
 {
     QApplication::quit();
+}
+
+
+void Menu::on_creditsButton_clicked()
+{
+    Credits* cPage = new Credits(this->parentWidget());
+    cPage->show();
+    this->close();
 }
 
