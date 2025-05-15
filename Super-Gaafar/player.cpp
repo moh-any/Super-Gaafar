@@ -111,12 +111,6 @@ void Player::updateAnimation(){
     updateSprite();
 }
 
-void Player::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
-    QGraphicsPixmapItem::paint(painter,option,widget);
-    painter->setPen(QPen(Qt::red,1));
-    painter->drawRect(boundingRect());
-}
-
 void Player::updateSprite(){
     QRect frameRect=Rects[currentFrame];
     QPixmap currentFramePixmap=spriteSheet.copy(frameRect);

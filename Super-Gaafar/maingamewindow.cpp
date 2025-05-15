@@ -238,13 +238,14 @@ bool MainGameWindow::eventFilter(QObject *object,QEvent *event){
 }
 
 void MainGameWindow::updateGame(){
+    qDebug() << ground->sceneBoundingRect().topLeft().y();
     player->update();
     bool collidingSidePlatform = false;
     bool landedOnPlatform = false;
     QList<QGraphicsItem*> colliding = player->collidingItems(Qt::IntersectsItemBoundingRect);
     for(auto item : colliding){
         Platform* platform = dynamic_cast<Platform*>(item);
-        if(platform) {
+        if(platform){
             QRectF playerRect = player->sceneBoundingRect();
             QRectF platRect = platform->sceneBoundingRect();
             if(player->getVelocityX() > 0 && playerRect.right() > platRect.left() && playerRect.left() < platRect.left() && playerRect.bottom() > platRect.top() + 10 && playerRect.top() < platRect.bottom() - 10) {
@@ -321,12 +322,14 @@ void MainGameWindow::updateGame(){
         else if(enemy) {
             QRectF playerRect = player->sceneBoundingRect();
             QRectF enemyRect = enemy->sceneBoundingRect();
-            if(player->getVelocityY() > 0 && playerRect.bottom() <= enemyRect.top() + 20 && playerRect.right() > enemyRect.left() + 5 && playerRect.left() < enemyRect.right() - 5) {
-                gameScene->removeItem(enemy);
-                enemies.removeOne(enemy);
-                delete enemy;
-                player->setVelocityY(-10);
-            } else {
+            if(player->getVelocityY() > 0 && playerRect.bottom() <= enemyRect.top() + 20 && playerRect.right() > enemyRect.left() + 5 && playerRect.left() < enemyRect.right() - 5){
+                enemy->squish();
+                // gameScene->removeItem(enemy);
+                // enemies.removeOne(enemy);
+                // delete enemy;
+                if(!enemy->getIsSquished()) player->setVelocityY(-10);
+            }
+            else if(!enemy->getIsSquished()){
                 gameScene->removeItem(player);
                 deathSong = new QSoundEffect(this);
                 deathSong->setSource(QUrl("qrc:/sounds/sounds/death.wav"));

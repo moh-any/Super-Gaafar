@@ -3,11 +3,16 @@
 
 #include <QGraphicsPixmapItem>
 #include <QPixmap>
-
+#include <platform.h>
+#include <ground.h>
 class Enemy:public QObject,public QGraphicsPixmapItem {
 public:
     Enemy(qreal x);
-    virtual void move()=0;
+    virtual void move();
+    void squish();
+    bool getIsSquished();
+    virtual void updateSprite();
+    virtual void updateAnimation()=0;
 
 protected:
     qreal velocityX;
@@ -15,14 +20,13 @@ protected:
     QVector<QRect> Rects;
     qreal ground;
     bool facingRight;
+    bool isSquished;
     int currentFrame;
     int frameWidth;
     int frameHeight;
     int animationCounter;
-
-private:
-    virtual void updateSprite()=0;
-    virtual void updateAnimation()=0;
+    int width;
+    int height;
 };
 
 #endif // ENEMY_H

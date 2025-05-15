@@ -9,10 +9,7 @@ class Goomba : public Enemy {
     Q_OBJECT
 public:
     Goomba(qreal x);
-    void move() override;
-private:
     void updateAnimation() override;
-    void updateSprite() override;
 };
 
 #endif // Goomba_H

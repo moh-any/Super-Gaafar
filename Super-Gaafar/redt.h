@@ -9,10 +9,7 @@ class RedT : public Enemy {
     Q_OBJECT
 public:
     RedT(qreal x);
-    void move() override;
-private:
     void updateAnimation() override;
-    void updateSprite() override;
 };
 
 #endif // REDT_H

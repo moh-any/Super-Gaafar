@@ -9,10 +9,7 @@ class Spiny : public Enemy {
     Q_OBJECT
 public:
     Spiny(qreal x);
-    void move() override;
-private:
     void updateAnimation() override;
-    void updateSprite() override;
 };
 
 #endif // SPINY_H
