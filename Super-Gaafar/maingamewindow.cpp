@@ -322,11 +322,8 @@ void MainGameWindow::updateGame(){
         else if(enemy) {
             QRectF playerRect = player->sceneBoundingRect();
             QRectF enemyRect = enemy->sceneBoundingRect();
-            if(player->getVelocityY() > 0 && playerRect.bottom() <= enemyRect.top() + 20 && playerRect.right() > enemyRect.left() + 5 && playerRect.left() < enemyRect.right() - 5){
+            if(player->getVelocityY()>0 && playerRect.bottom()<=enemyRect.top()+20&&playerRect.right()>enemyRect.left()+5 &playerRect.left()<enemyRect.right()-5){
                 enemy->squish();
-                // gameScene->removeItem(enemy);
-                // enemies.removeOne(enemy);
-                // delete enemy;
                 if(!enemy->getIsSquished()) player->setVelocityY(-10);
             }
             else if(!enemy->getIsSquished()){
