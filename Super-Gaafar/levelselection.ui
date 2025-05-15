@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LevelSelection</class>
+ <widget class="QMainWindow" name="LevelSelection">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Super Gaafar - Level Selection</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-image: url(:/images/images/background.png);</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="contentContainer" native="true">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>800</width>
+      <height>600</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: transparent;</string>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="spacing">
+      <number>15</number>
+     </property>
+     <item>
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item alignment="Qt::AlignHCenter">
+      <widget class="QLabel" name="titleLabel">
+       <property name="styleSheet">
+        <string notr="true">color: white;
+background-color: rgba(0, 0, 0, 100);
+padding: 10px;
+border-radius: 10px;</string>
+       </property>
+       <property name="text">
+        <string>Super Gaafar</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Fixed</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item alignment="Qt::AlignHCenter">
+      <widget class="QLabel" name="selectLevelLabel">
+       <property name="styleSheet">
+        <string notr="true">color: white; 
+background-color: rgba(0, 0, 0, 100); 
+padding: 5px; 
+border-radius: 5px;</string>
+       </property>
+       <property name="text">
+        <string>Select Level</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Fixed</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>10</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item alignment="Qt::AlignHCenter">
+      <widget class="QPushButton" name="level1Button">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>200</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: rgba(50, 50, 200, 180);
+    color: white;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 10px;
+}
+QPushButton:hover {
+    background-color: rgba(80, 80, 255, 200);
+}</string>
+       </property>
+       <property name="text">
+        <string>Level 1 - Beginner</string>
+       </property>
+      </widget>
+     </item>
+     <item alignment="Qt::AlignHCenter">
+      <widget class="QPushButton" name="level2Button">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>200</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: rgba(50, 50, 200, 180);
+    color: white;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 10px;
+}
+QPushButton:hover {
+    background-color: rgba(80, 80, 255, 200);
+}</string>
+       </property>
+       <property name="text">
+        <string>Level 2 - Easy</string>
+       </property>
+      </widget>
+     </item>
+     <item alignment="Qt::AlignHCenter">
+      <widget class="QPushButton" name="level3Button">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>200</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: rgba(50, 50, 200, 180);
+    color: white;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 10px;
+}
+QPushButton:hover {
+    background-color: rgba(80, 80, 255, 200);
+}</string>
+       </property>
+       <property name="text">
+        <string>Level 3 - Medium</string>
+       </property>
+      </widget>
+     </item>
+     <item alignment="Qt::AlignHCenter">
+      <widget class="QPushButton" name="level4Button">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>200</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: rgba(50, 50, 200, 180);
+    color: white;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 10px;
+}
+QPushButton:hover {
+    background-color: rgba(80, 80, 255, 200);
+}</string>
+       </property>
+       <property name="text">
+        <string>Level 4 - Hard</string>
+       </property>
+      </widget>
+     </item>
+     <item alignment="Qt::AlignHCenter">
+      <widget class="QPushButton" name="level5Button">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>200</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: rgba(50, 50, 200, 180);
+    color: white;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 10px;
+}
+QPushButton:hover {
+    background-color: rgba(80, 80, 255, 200);
+}</string>
+       </property>
+       <property name="text">
+        <string>Level 5 - Expert</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

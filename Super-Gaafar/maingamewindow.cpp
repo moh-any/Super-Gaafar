@@ -1,5 +1,6 @@
 #include "maingamewindow.h"
 #include "ui_maingamewindow.h"
+#include "levelselection.h"
 #include <QWidget>
 #include <QTimer>
 #include <QGraphicsScene>
@@ -8,7 +9,7 @@
 #include <QEvent>
 
 
-MainGameWindow::MainGameWindow(QWidget *parent)
+MainGameWindow::MainGameWindow(QWidget *parent, int startLevel)
     : QMainWindow(parent)
     , ui(new Ui::MainGameWindow)
 {
@@ -24,7 +25,7 @@ MainGameWindow::MainGameWindow(QWidget *parent)
     obstacles.clear();
     obstacles.reserve(ObstaclesNum);
 
-    setupGame();
+    setupGame(startLevel);
     gameTimer=new QTimer(this);
     connect(gameTimer,&QTimer::timeout,this,&MainGameWindow::updateGame);
     gameTimer->start(15);
@@ -41,7 +42,8 @@ MainGameWindow::~MainGameWindow()
     delete ui;
 }
 
-void MainGameWindow::setupGame(){
+void MainGameWindow::setupGame(int startLevel){
+    levelCompleted = false;
     gameScene=new QGraphicsScene(this);
     gameScene->setSceneRect(0,0,5000,600);
 
@@ -59,9 +61,30 @@ void MainGameWindow::setupGame(){
     ground->setZValue(2);
     player->setZValue(3);
 
-    // Setup the current level
-    currentLevel = 1;
-    level1Setup();
+    // Setup the current level based on parameter
+    currentLevel = startLevel;
+    
+    // Initialize the appropriate level
+    switch (currentLevel) {
+        case 1:
+            level1Setup();
+            break;
+        case 2:
+            level2Setup();
+            break;
+        case 3:
+            level3Setup();
+            break;
+        case 4:
+            level4Setup();
+            break;
+        case 5:
+            level5Setup();
+            break;
+        default:
+            level1Setup(); // Fallback to level 1
+            break;
+    }
 
     gameView=new QGraphicsView(gameScene,this);
     gameView->installEventFilter(this);
@@ -329,87 +352,99 @@ void MainGameWindow::updateGame(){
                 player->setVelocityY(2);
             }
         }
-    }
-    if(!collidingSidePlatform) {
-        gameView->centerOn(player->pos());
-    }
-    if(!landedOnPlatform && !player->isOnGround()) {
-        player->setOnGround(false);
-    }
-    for (auto enemy : enemies){
-        enemy->move();
-    }
-    for(auto item : colliding){
-        Coin* coin=dynamic_cast<Coin*>(item);
-        if(coin){
-            coinSound->play();
-            gameScene->removeItem(item);
-            delete item;
-            score += 100;
-            updateHUD();
+        if(!collidingSidePlatform) {
+            gameView->centerOn(player->pos());
         }
-        if(dynamic_cast<Pole*>(item)&& !reachedPole){
-            reachedPole=true;
-            flag=new Flag();
-            flag->setPos(5000-325,500);
-            gameScene->addItem(flag);
-            flag->setZValue(2);
+        if(!landedOnPlatform && !player->isOnGround()) {
+            player->setOnGround(false);
         }
-        if(dynamic_cast<Castle*>(item)){
-            gameScene->removeItem(player);
-            victorySong=new QSoundEffect(this);
-            victorySong->setSource(QUrl("qrc:/sounds/sounds/victory.wav"));
-            victorySong->setVolume(0.75);
-            themeSong->stop();
-            victorySong->play();
-            QTimer::singleShot(8000, this, &MainGameWindow::close);
+        for (auto enemy : enemies){
+            enemy->move();
         }
-        if(dynamic_cast<PowerUp*>(item)){
-            applyPowerUp(((PowerUp*)item)->getType());
-            powerupSound->play();
-            gameScene->removeItem(item);
-            delete item;
-            score += 200;
-            updateHUD();
-        }
-        Spiny* spiny=dynamic_cast<Spiny*>(item);
-        Enemy* enemy=dynamic_cast<Enemy*>(item);
-        if(spiny){
-            if(!player->isInvincible()){
-                player->loseLife();
+        for(auto item : colliding){
+            Coin* coin=dynamic_cast<Coin*>(item);
+            if(coin){
+                coinSound->play();
+                gameScene->removeItem(item);
+                delete item;
+                score += 100;
                 updateHUD();
-                if(player->getLives()<=0) {
+            }
+            if(dynamic_cast<Pole*>(item)&& !reachedPole){
+                reachedPole=true;
+                flag=new Flag();
+                flag->setPos(5000-325,500);
+                gameScene->addItem(flag);
+                flag->setZValue(2);
+            }        
+            if(dynamic_cast<Castle*>(item)){
+                if (!levelCompleted) {
+                    levelCompleted = true;
                     gameScene->removeItem(player);
-                    deathSong = new QSoundEffect(this);
-                    deathSong->setSource(QUrl("qrc:/sounds/sounds/death.wav"));
-                    deathSong->setVolume(0.25);
+                    victorySong=new QSoundEffect(this);
+                    victorySong->setSource(QUrl("qrc:/sounds/sounds/victory.wav"));
+                    victorySong->setVolume(0.75);
                     themeSong->stop();
-                    deathSong->play();
-                    QTimer::singleShot(8000, this, &MainGameWindow::close);
+                    victorySong->play();
+                    // Reopen the level selection menu after victory
+                    QTimer::singleShot(8000, this, [this]() {
+                        LevelSelection *levelSelect = new LevelSelection();
+                        levelSelect->show();
+                        this->close();
+                    });
                 }
             }
-        } 
-        else if(enemy){
-            QRectF playerRect = player->sceneBoundingRect();
-            QRectF enemyRect = enemy->sceneBoundingRect();
-            if(player->getVelocityY()>0 && playerRect.bottom()<=enemyRect.top()+20&&playerRect.right()>enemyRect.left()+5 &playerRect.left()<enemyRect.right()-5){
-                if(!enemy->getIsSquished()) player->setVelocityY(-10);
-                enemy->squish();
-                score+=300;
+            if(dynamic_cast<PowerUp*>(item)){
+                applyPowerUp(((PowerUp*)item)->getType());
+                powerupSound->play();
+                gameScene->removeItem(item);
+                delete item;
+                score += 200;
                 updateHUD();
             }
-            else if(!enemy->getIsSquished()){
+            Spiny* spiny=dynamic_cast<Spiny*>(item);
+            Enemy* enemy=dynamic_cast<Enemy*>(item);
+            if(spiny){
                 if(!player->isInvincible()){
                     player->loseLife();
                     updateHUD();
-                    if(player->getLives()<=0){
+                    if(player->getLives()<=0) {
                         gameScene->removeItem(player);
                         deathSong = new QSoundEffect(this);
                         deathSong->setSource(QUrl("qrc:/sounds/sounds/death.wav"));
                         deathSong->setVolume(0.25);
                         themeSong->stop();
                         deathSong->play();
-                        QTimer::singleShot(8000, this, &MainGameWindow::close);
+                        // Return to level selection after death
+                        QTimer::singleShot(8000, this, [this]() {
+                            LevelSelection *levelSelect = new LevelSelection();
+                            levelSelect->show();
+                            this->close();
+                        });
+                    }
+                }
+            } else if(enemy){
+                QRectF playerRect = player->sceneBoundingRect();
+                QRectF enemyRect = enemy->sceneBoundingRect();
+                if(player->getVelocityY()>0 && playerRect.bottom()<=enemyRect.top()+20&&playerRect.right()>enemyRect.left()+5 && playerRect.left()<enemyRect.right()-5){
+                    if(!enemy->getIsSquished()) player->setVelocityY(-10);
+                    enemy->squish();
+                    score+=300;
+                    updateHUD();
+                }
+                else if(!enemy->getIsSquished()){
+                    if(!player->isInvincible()){
+                        player->loseLife();
+                        updateHUD();
+                        if(player->getLives()<=0){
+                            gameScene->removeItem(player);
+                            deathSong = new QSoundEffect(this);
+                            deathSong->setSource(QUrl("qrc:/sounds/sounds/death.wav"));
+                            deathSong->setVolume(0.25);
+                            themeSong->stop();
+                            deathSong->play();
+                            QTimer::singleShot(8000, this, &MainGameWindow::close);
+                        }
                     }
                 }
             }

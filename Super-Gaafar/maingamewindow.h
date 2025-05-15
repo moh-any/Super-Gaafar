@@ -34,7 +34,7 @@ class MainGameWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainGameWindow(QWidget *parent = nullptr);
+    MainGameWindow(QWidget *parent = nullptr, int startLevel = 1);
     ~MainGameWindow();
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
@@ -42,7 +42,7 @@ public:
 
 private slots:
     void updateGame();
-    void setupGame();
+    void setupGame(int startLevel = 1);
     void applyPowerUp(PowerUpType type);
     // Level setup functions
     void level1Setup();
@@ -69,6 +69,7 @@ private:
     QSoundEffect* levelCompletedSound;
     Flag *flag;
     bool reachedPole=false;
+    bool levelCompleted = false;
     QList<Platform *> platforms;
     QList<Platform *> obstacles;
     QList<Enemy *> enemies;

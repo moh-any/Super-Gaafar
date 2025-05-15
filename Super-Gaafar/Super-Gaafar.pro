@@ -17,6 +17,7 @@ SOURCES += \
     flag.cpp \
     goomba.cpp \
     ground.cpp \
+    levelselection.cpp \
     main.cpp \
     maingamewindow.cpp \
     platform.cpp \
@@ -25,7 +26,7 @@ SOURCES += \
     powerup.cpp \
     redt.cpp \
     spiny.cpp
-    coin.cpp
+
 HEADERS += \
     background.h \
     castle.h \
@@ -34,6 +35,7 @@ HEADERS += \
     flag.h \
     goomba.h \
     ground.h \
+    levelselection.h \
     maingamewindow.h \
     platform.h \
     player.h \
@@ -41,9 +43,9 @@ HEADERS += \
     powerup.h \
     redt.h \
     spiny.h
-    coin.h
 
 FORMS += \
+    levelselection.ui \
     maingamewindow.ui
 
 # Default rules for deployment.
