@@ -6,19 +6,7 @@
 #include <QGraphicsView>
 #include <QKeyEvent>
 #include <QEvent>
-#include <QPixmap>
-#include <ground.h>
-#include <background.h>
-#include <coin.h>
-#include <pole.h>
-#include <castle.h>
-#include <flag.h>
-#include <powerup.h>
-#include <redt.h>
-#include <enemy.h>
-#include <spiny.h>
-#include <goomba.h>
-#include <QRandomGenerator>
+
 
 MainGameWindow::MainGameWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -64,7 +52,6 @@ void MainGameWindow::setupGame(){
     ground=new Ground();
     gameScene->addItem(ground);
 
-
     bg=new Background();
     gameScene->addItem(bg);
 
@@ -72,7 +59,72 @@ void MainGameWindow::setupGame(){
     ground->setZValue(2);
     player->setZValue(3);
 
-    //manual
+    // Setup the current level
+    currentLevel = 1;
+    level1Setup();
+
+    gameView=new QGraphicsView(gameScene,this);
+    gameView->installEventFilter(this);
+    gameView->setRenderHint(QPainter::Antialiasing);
+
+    gameView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    gameView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    statusBar()->hide();
+    setCentralWidget(gameView);
+    gameView->show();
+
+    coinSound = new QSoundEffect(this);
+    coinSound->setSource(QUrl("qrc:/sounds/sounds/coin.wav"));
+    coinSound->setVolume(0.75);
+
+    powerupSound = new QSoundEffect(this);
+    powerupSound->setSource(QUrl("qrc:/sounds/sounds/powerup.wav"));
+    powerupSound->setVolume(0.5);
+    
+    levelCompletedSound = new QSoundEffect(this);
+    levelCompletedSound->setSource(QUrl("qrc:/sounds/sounds/levelclear.wav"));
+    levelCompletedSound->setVolume(0.75);
+
+    // HUD setup - added to UI layer, not the scene
+    scoreText = new QGraphicsTextItem();
+    scoreText->setFont(QFont("Arial", 18, QFont::Bold));
+    scoreText->setDefaultTextColor(Qt::black);
+    scoreText->setZValue(100);
+    scoreText->setPos(20, 10);
+    
+    livesText = new QGraphicsTextItem();
+    livesText->setDefaultTextColor(Qt::black);
+    livesText->setFont(QFont("Arial", 18, QFont::Bold));
+    livesText->setZValue(100);
+    livesText->setPos(20, 40);
+    
+    levelText = new QGraphicsTextItem();
+    levelText->setDefaultTextColor(Qt::black);
+    levelText->setFont(QFont("Arial", 18, QFont::Bold));
+    levelText->setZValue(100);
+    levelText->setPos(20, 70);
+    
+    // Create a separate scene for HUD that stays fixed
+    hudScene = new QGraphicsScene(this);
+    hudScene->addItem(scoreText);
+    hudScene->addItem(livesText);
+    hudScene->addItem(levelText);
+    
+    // Create a view for the HUD and overlay it on main view
+    hudView = new QGraphicsView(hudScene, gameView);
+    hudView->setStyleSheet("background: transparent");
+    hudView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    hudView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    hudView->setFrameShape(QFrame::NoFrame);
+    hudView->setFixedSize(200, 100);
+    hudView->setGeometry(10, 10, 200, 100);
+    hudView->show();
+    
+    updateHUD();
+}
+
+void MainGameWindow::level1Setup() {
+    // Platforms setup
     auto *p1 = new Platform(500, 400, "brick", 2);
     auto *p2 = new Platform(1000, 400, "brick", 2);
     auto *p3 = new Platform(1700, 400, "brick", 4);
@@ -94,8 +146,7 @@ void MainGameWindow::setupGame(){
     p5->setZValue(3);
     p6->setZValue(3);
 
-
-    //manual
+    // Obstacles setup
     auto *o1 = new Platform(700, 465, "warp");
     auto *o2 = new Platform(1200, 465, "warp");
     auto *o3 = new Platform(2300, 465, "warp");
@@ -114,11 +165,11 @@ void MainGameWindow::setupGame(){
     o4->setZValue(3);
     o5->setZValue(3);
 
-
+    // Enemies setup
     RedT *e1 = new RedT(3100);
     RedT *e3 = new RedT(2900);
-    Spiny *e4=new Spiny(1000);
-    Goomba *e2=new Goomba(1800);
+    Spiny *e4 = new Spiny(1000);
+    Goomba *e2 = new Goomba(1800);
 
     enemies.append(e1);
     enemies.append(e2);
@@ -135,15 +186,7 @@ void MainGameWindow::setupGame(){
     e3->setZValue(3);
     e4->setZValue(3);
 
-    gameView=new QGraphicsView(gameScene,this);
-    gameView->installEventFilter(this);
-    gameView->setRenderHint(QPainter::Antialiasing);
-
-    gameView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    gameView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    statusBar()->hide();
-    setCentralWidget(gameView);
-    gameView->show();
+    // Coins setup
     Coin* coin1 = new Coin();
     Coin* coin2 = new Coin();
     Coin* coin3 = new Coin();
@@ -172,42 +215,59 @@ void MainGameWindow::setupGame(){
     coin5->setZValue(3);
     coin6->setZValue(3);
 
-    Pole* pole=new Pole();
-    pole->setPos(5000-350,365);
+    // End level items
+    Pole* pole = new Pole();
+    pole->setPos(5000-350, 365);
     gameScene->addItem(pole);
     pole->setZValue(2);
 
-    Castle* castle=new Castle();
-    castle->setPos(5000-230,370);
+    Castle* castle = new Castle();
+    castle->setPos(5000-230, 370);
     gameScene->addItem(castle);
     castle->setZValue(2);
 
-    coinSound = new QSoundEffect(this);
-    coinSound->setSource(QUrl("qrc:/sounds/sounds/coin.wav"));
-    coinSound->setVolume(0.75);
-
-    powerupSound = new QSoundEffect(this);
-    powerupSound->setSource(QUrl("qrc:/sounds/sounds/powerup.wav"));
-    powerupSound->setVolume(0.5);
-
+    // Power-ups setup
     PowerUp* powerup1 = new PowerUp(Gigantification);
     powerup1->setPos(2000, 520);
     powerup1->setZValue(3);
     gameScene->addItem(powerup1);
 
     PowerUp* powerup2 = new PowerUp(SpeedBoost);
-
     powerup2->setPos(1550, 520);
     powerup2->setZValue(3);
     gameScene->addItem(powerup2);
 
     PowerUp* powerup3 = new PowerUp(JumpBoost);
-
     powerup3->setPos(525, 365);
     powerup3->setZValue(3);
     gameScene->addItem(powerup3);
 }
 
+void MainGameWindow::level2Setup() {
+    // Level 2 setup will go here
+    // Currently empty
+}
+
+void MainGameWindow::level3Setup() {
+    // Level 3 setup will go here
+    // Currently empty
+}
+
+void MainGameWindow::level4Setup() {
+    // Level 4 setup will go here
+    // Currently empty
+}
+
+void MainGameWindow::level5Setup() {
+    // Level 5 setup will go here
+    // Currently empty
+}
+
+void MainGameWindow::updateHUD() {
+    if(scoreText) scoreText->setPlainText(QString("Score: ")+QString::number(score));
+    if(livesText) livesText->setPlainText(QString("Lives: ")+QString::number(player->getLives()));
+    if(levelText) levelText->setPlainText(QString("Level: ")+QString::number(currentLevel));
+}
 
 void MainGameWindow::keyPressEvent(QKeyEvent *event){
     if(event->key()==Qt::Key_Left){
@@ -238,8 +298,8 @@ bool MainGameWindow::eventFilter(QObject *object,QEvent *event){
 }
 
 void MainGameWindow::updateGame(){
-    qDebug() << ground->sceneBoundingRect().topLeft().y();
     player->update();
+    updateHUD();
     bool collidingSidePlatform = false;
     bool landedOnPlatform = false;
     QList<QGraphicsItem*> colliding = player->collidingItems(Qt::IntersectsItemBoundingRect);
@@ -285,6 +345,8 @@ void MainGameWindow::updateGame(){
             coinSound->play();
             gameScene->removeItem(item);
             delete item;
+            score += 100;
+            updateHUD();
         }
         if(dynamic_cast<Pole*>(item)&& !reachedPole){
             reachedPole=true;
@@ -307,33 +369,49 @@ void MainGameWindow::updateGame(){
             powerupSound->play();
             gameScene->removeItem(item);
             delete item;
+            score += 200;
+            updateHUD();
         }
         Spiny* spiny=dynamic_cast<Spiny*>(item);
         Enemy* enemy=dynamic_cast<Enemy*>(item);
-        if(spiny) {
-            gameScene->removeItem(player);
-            deathSong = new QSoundEffect(this);
-            deathSong->setSource(QUrl("qrc:/sounds/sounds/death.wav"));
-            deathSong->setVolume(0.25);
-            themeSong->stop();
-            deathSong->play();
-            QTimer::singleShot(8000, this, &MainGameWindow::close);
+        if(spiny){
+            if(!player->isInvincible()){
+                player->loseLife();
+                updateHUD();
+                if(player->getLives()<=0) {
+                    gameScene->removeItem(player);
+                    deathSong = new QSoundEffect(this);
+                    deathSong->setSource(QUrl("qrc:/sounds/sounds/death.wav"));
+                    deathSong->setVolume(0.25);
+                    themeSong->stop();
+                    deathSong->play();
+                    QTimer::singleShot(8000, this, &MainGameWindow::close);
+                }
+            }
         } 
-        else if(enemy) {
+        else if(enemy){
             QRectF playerRect = player->sceneBoundingRect();
             QRectF enemyRect = enemy->sceneBoundingRect();
             if(player->getVelocityY()>0 && playerRect.bottom()<=enemyRect.top()+20&&playerRect.right()>enemyRect.left()+5 &playerRect.left()<enemyRect.right()-5){
-                enemy->squish();
                 if(!enemy->getIsSquished()) player->setVelocityY(-10);
+                enemy->squish();
+                score+=300;
+                updateHUD();
             }
             else if(!enemy->getIsSquished()){
-                gameScene->removeItem(player);
-                deathSong = new QSoundEffect(this);
-                deathSong->setSource(QUrl("qrc:/sounds/sounds/death.wav"));
-                deathSong->setVolume(0.25);
-                themeSong->stop();
-                deathSong->play();
-                QTimer::singleShot(8000, this, &MainGameWindow::close);
+                if(!player->isInvincible()){
+                    player->loseLife();
+                    updateHUD();
+                    if(player->getLives()<=0){
+                        gameScene->removeItem(player);
+                        deathSong = new QSoundEffect(this);
+                        deathSong->setSource(QUrl("qrc:/sounds/sounds/death.wav"));
+                        deathSong->setVolume(0.25);
+                        themeSong->stop();
+                        deathSong->play();
+                        QTimer::singleShot(8000, this, &MainGameWindow::close);
+                    }
+                }
             }
         }
     }

@@ -10,15 +10,26 @@
 #include <QObject>
 #include <platform.h>
 
-Player::Player(QGraphicsItem *parent):QObject() ,QGraphicsPixmapItem(parent),facingRight(true),velocityX(0),movementSpeed(5.0),velocityY(0),gravity(0.5),isJumping(false),jumpForce(15.0),ground(470),currentState(IDLE),currentFrame(0){
+Player::Player(QGraphicsItem *parent):QObject() ,QGraphicsPixmapItem(parent),facingRight(true),velocityX(0),movementSpeed(5.0),velocityY(0),gravity(0.5),isJumping(false),jumpForce(15.0),ground(470),currentState(IDLE),currentFrame(0), lives(3), invincible(false), invincibleTimer(nullptr), flickerTimer(nullptr), flickerVisible(true){
     setPos(0,ground);
     loadSpriteSheet();
     updateSprite();
     jumpSound=new QSoundEffect(this);
     jumpSound->setSource(QUrl("qrc:/sounds/sounds/jump.wav"));
     jumpSound->setVolume(0.25);
+    // --- Flicker/Invincibility Timers ---
+    invincibleTimer = new QTimer(this);
+    flickerTimer = new QTimer(this);
+    connect(invincibleTimer, &QTimer::timeout, this, [this]() {
+        invincible = false;
+        setVisible(true);
+        flickerTimer->stop();
+    });
+    connect(flickerTimer, &QTimer::timeout, this, [this]() {
+        flickerVisible = !flickerVisible;
+        setVisible(flickerVisible);
+    });
 }
-
 
 void Player::moveLeft(){
     velocityX=-movementSpeed;
@@ -82,7 +93,6 @@ void Player::applyGravity(){
                 currentState=IDLE;
             }
         }
-        // Platform collision removed, now handled in MainGameWindow
     }
 }
 
@@ -119,7 +129,9 @@ void Player::updateSprite(){
         currentFramePixmap=currentFramePixmap.transformed(QTransform().scale(-1, 1));
     }
     setPixmap(currentFramePixmap);
-    
+    // Ensure flicker state is respected
+    if (invincible) setVisible(flickerVisible);
+    else setVisible(true);
 }
 
 void Player::setMovementSpeed(double speed) {movementSpeed = speed;}
@@ -138,4 +150,25 @@ void Player::applyGiantPowerUp(){
         ground-=height;
 
     });
+}
+
+void Player::loseLife() {
+    if (!invincible) {
+        lives--;
+        
+        // Start invincibility period
+        invincible = true;
+        invincibleTimer->start(3000); // 3 seconds of invincibility
+        
+        // Start flicker effect
+        flickerTimer->start(100); // Flicker every 100ms
+    }
+}
+
+void Player::setSpeedMultiplier(double multiplier) {
+    movementSpeed = 5.0 * multiplier;
+}
+
+void Player::setJumpBoost(double boost) {
+    jumpForce = 15.0 * boost;
 }

@@ -37,6 +37,15 @@ public:
     double getVelocityY() { return velocityY; }
     void setOnGround(bool val) { isJumping = !val; }
     bool isOnGround() { return !isJumping; }
+    int getLives(){
+        return lives;
+    }
+    void loseLife();
+    bool isInvincible(){
+        return invincible;
+    }
+    void setSpeedMultiplier(double multiplier);
+    void setJumpBoost(double boost);
 private:
     QPixmap sprite;
     bool facingRight;
@@ -67,6 +76,12 @@ private:
     void loadSpriteSheet();
     void updateAnimation();
     void updateSprite();
+    // --- Lives and Invincibility ---
+    int lives = 3;
+    bool invincible = false;
+    QTimer* invincibleTimer = nullptr;
+    QTimer* flickerTimer = nullptr;
+    bool flickerVisible = true;
 };
 
 #endif // PLAYER_H
