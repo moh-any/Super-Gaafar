@@ -32,6 +32,12 @@ public:
     void setJumpForce(double force);
     void applyGiantPowerUp();
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+    void setVelocityX(double vx) { velocityX = vx; }
+    void setVelocityY(double vy) { velocityY = vy; }
+    double getVelocityX() { return velocityX; }
+    double getVelocityY() { return velocityY; }
+    void setOnGround(bool val) { isJumping = !val; }
+    bool isOnGround() { return !isJumping; }
 private:
     QPixmap sprite;
     bool facingRight;

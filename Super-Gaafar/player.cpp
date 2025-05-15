@@ -71,8 +71,6 @@ void Player::applyGravity(){
     QList<QGraphicsItem*> colliding = this->collidingItems(Qt::IntersectsItemBoundingRect);
     for(auto item:colliding){
         Ground* tmp1=dynamic_cast<Ground*>(item);
-        Platform* tmp2=dynamic_cast<Platform*>(item);
-
         if(tmp1){
             setPos(pos().x(),ground+1);
             velocityY=0;
@@ -84,23 +82,7 @@ void Player::applyGravity(){
                 currentState=IDLE;
             }
         }
-        else if(tmp2){
-            if(velocityY>0){
-                setY(item->y() - pixmap().height());
-                velocityY=0;
-                isJumping=false;
-                if(velocityX!=0){
-                    currentState=RUNNING;
-                }
-                else{
-                    currentState=IDLE;
-                }
-            }
-            else{
-                setY(tmp2->y()+tmp2->pixmap().height()+1);
-                velocityY=5;
-            }
-        }
+        // Platform collision removed, now handled in MainGameWindow
     }
 }
 

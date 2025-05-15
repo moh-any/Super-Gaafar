@@ -236,13 +236,48 @@ bool MainGameWindow::eventFilter(QObject *object,QEvent *event){
     }
     else return QObject::eventFilter(object, event);
 }
+
 void MainGameWindow::updateGame(){
     player->update();
-    gameView->centerOn(player->pos());
+    bool collidingSidePlatform = false;
+    bool landedOnPlatform = false;
+    QList<QGraphicsItem*> colliding = player->collidingItems(Qt::IntersectsItemBoundingRect);
+    for(auto item : colliding){
+        Platform* platform = dynamic_cast<Platform*>(item);
+        if(platform) {
+            QRectF playerRect = player->sceneBoundingRect();
+            QRectF platRect = platform->sceneBoundingRect();
+            if(player->getVelocityX() > 0 && playerRect.right() > platRect.left() && playerRect.left() < platRect.left() && playerRect.bottom() > platRect.top() + 10 && playerRect.top() < platRect.bottom() - 10) {
+                collidingSidePlatform = true;
+                player->setX(platRect.left() - playerRect.width());
+                player->setVelocityX(0);
+            }
+            else if(player->getVelocityX() < 0 && playerRect.left() < platRect.right() && playerRect.right() > platRect.right() && playerRect.bottom() > platRect.top() + 10 && playerRect.top() < platRect.bottom() - 10) {
+                collidingSidePlatform = true;
+                player->setX(platRect.right());
+                player->setVelocityX(0);
+            }
+            else if(player->getVelocityY() > 0 && playerRect.bottom() >= platRect.top() && playerRect.bottom() <= platRect.top() + 20 && playerRect.right() > platRect.left() + 5 && playerRect.left() < platRect.right() - 5) {
+                player->setY(platRect.top() - playerRect.height() + 1);
+                player->setVelocityY(0);
+                player->setOnGround(true);
+                landedOnPlatform = true;
+            }
+            else if(player->getVelocityY() < 0 && playerRect.top() < platRect.bottom() && playerRect.bottom() > platRect.bottom() && playerRect.right() > platRect.left() + 5 && playerRect.left() < platRect.right() - 5) {
+                player->setY(platRect.bottom() + 1);
+                player->setVelocityY(2);
+            }
+        }
+    }
+    if(!collidingSidePlatform) {
+        gameView->centerOn(player->pos());
+    }
+    if(!landedOnPlatform && !player->isOnGround()) {
+        player->setOnGround(false);
+    }
     for (auto enemy : enemies){
         enemy->move();
     }
-    QList<QGraphicsItem*> colliding = player->collidingItems(Qt::IntersectsItemBoundingRect);
     for(auto item : colliding){
         Coin* coin=dynamic_cast<Coin*>(item);
         if(coin){
@@ -259,7 +294,7 @@ void MainGameWindow::updateGame(){
         }
         if(dynamic_cast<Castle*>(item)){
             gameScene->removeItem(player);
-            victorySong = new QSoundEffect(this);
+            victorySong=new QSoundEffect(this);
             victorySong->setSource(QUrl("qrc:/sounds/sounds/victory.wav"));
             victorySong->setVolume(0.75);
             themeSong->stop();
@@ -272,7 +307,9 @@ void MainGameWindow::updateGame(){
             gameScene->removeItem(item);
             delete item;
         }
-        if(dynamic_cast<Enemy*>(item)){
+        Spiny* spiny=dynamic_cast<Spiny*>(item);
+        Enemy* enemy=dynamic_cast<Enemy*>(item);
+        if(spiny) {
             gameScene->removeItem(player);
             deathSong = new QSoundEffect(this);
             deathSong->setSource(QUrl("qrc:/sounds/sounds/death.wav"));
@@ -280,17 +317,27 @@ void MainGameWindow::updateGame(){
             themeSong->stop();
             deathSong->play();
             QTimer::singleShot(8000, this, &MainGameWindow::close);
-        }
-        Platform *platform = dynamic_cast<Platform *> (item);
-        if(platform && player->getFacingRight()){
-            player->setPos(platform->pos().x()-player->boundingRect().width()+5,player->pos().y());
-        }
-        else if(platform && !player->getFacingRight()){
-            player->setPos(platform->pos().x()+platform->boundingRect().width(),player->pos().y());
+        } 
+        else if(enemy) {
+            QRectF playerRect = player->sceneBoundingRect();
+            QRectF enemyRect = enemy->sceneBoundingRect();
+            if(player->getVelocityY() > 0 && playerRect.bottom() <= enemyRect.top() + 20 && playerRect.right() > enemyRect.left() + 5 && playerRect.left() < enemyRect.right() - 5) {
+                gameScene->removeItem(enemy);
+                enemies.removeOne(enemy);
+                delete enemy;
+                player->setVelocityY(-10);
+            } else {
+                gameScene->removeItem(player);
+                deathSong = new QSoundEffect(this);
+                deathSong->setSource(QUrl("qrc:/sounds/sounds/death.wav"));
+                deathSong->setVolume(0.25);
+                themeSong->stop();
+                deathSong->play();
+                QTimer::singleShot(8000, this, &MainGameWindow::close);
+            }
         }
     }
 }
-
 
 void MainGameWindow::applyPowerUp(PowerUpType type){
     switch(type){
