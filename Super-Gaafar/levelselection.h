@@ -29,4 +29,4 @@ private:
     void startGame(int level);
 };
 
-#endif // LEVELSELECTION_H
+#endif

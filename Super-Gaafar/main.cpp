@@ -1,15 +1,10 @@
-#include "maingamewindow.h"
 #include "levelselection.h"
-
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    
-    // Create and show the level selection screen instead of the game window
-    LevelSelection levelSelect;
-    levelSelect.show();
-
+    LevelSelection w;
+    w.show();
     return a.exec();
 }

@@ -14,7 +14,7 @@
    <string>Super Gaafar - Level Selection</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-image: url(:/images/images/background.png);</string>
+   <string notr="true">background-color: #e6d6f7;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="contentContainer" native="true">
@@ -36,7 +36,7 @@
      <item>
       <spacer name="verticalSpacer_2">
        <property name="orientation">
-        <enum>Qt::Vertical</enum>
+        <enum>Qt::Orientation::Vertical</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -46,7 +46,7 @@
        </property>
       </spacer>
      </item>
-     <item alignment="Qt::AlignHCenter">
+     <item alignment="Qt::AlignmentFlag::AlignHCenter">
       <widget class="QLabel" name="titleLabel">
        <property name="styleSheet">
         <string notr="true">color: white;
@@ -58,17 +58,17 @@ border-radius: 10px;</string>
         <string>Super Gaafar</string>
        </property>
        <property name="alignment">
-        <set>Qt::AlignCenter</set>
+        <set>Qt::AlignmentFlag::AlignCenter</set>
        </property>
       </widget>
      </item>
      <item>
       <spacer name="verticalSpacer_3">
        <property name="orientation">
-        <enum>Qt::Vertical</enum>
+        <enum>Qt::Orientation::Vertical</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
+        <enum>QSizePolicy::Policy::Fixed</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -78,7 +78,7 @@ border-radius: 10px;</string>
        </property>
       </spacer>
      </item>
-     <item alignment="Qt::AlignHCenter">
+     <item alignment="Qt::AlignmentFlag::AlignHCenter">
       <widget class="QLabel" name="selectLevelLabel">
        <property name="styleSheet">
         <string notr="true">color: white; 
@@ -90,17 +90,17 @@ border-radius: 5px;</string>
         <string>Select Level</string>
        </property>
        <property name="alignment">
-        <set>Qt::AlignCenter</set>
+        <set>Qt::AlignmentFlag::AlignCenter</set>
        </property>
       </widget>
      </item>
      <item>
       <spacer name="verticalSpacer_4">
        <property name="orientation">
-        <enum>Qt::Vertical</enum>
+        <enum>Qt::Orientation::Vertical</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
+        <enum>QSizePolicy::Policy::Fixed</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -110,7 +110,7 @@ border-radius: 5px;</string>
        </property>
       </spacer>
      </item>
-     <item alignment="Qt::AlignHCenter">
+     <item alignment="Qt::AlignmentFlag::AlignHCenter">
       <widget class="QPushButton" name="level1Button">
        <property name="minimumSize">
         <size>
@@ -138,11 +138,11 @@ QPushButton:hover {
 }</string>
        </property>
        <property name="text">
-        <string>Level 1 - Beginner</string>
+        <string>Level 1</string>
        </property>
       </widget>
      </item>
-     <item alignment="Qt::AlignHCenter">
+     <item alignment="Qt::AlignmentFlag::AlignHCenter">
       <widget class="QPushButton" name="level2Button">
        <property name="minimumSize">
         <size>
@@ -170,11 +170,11 @@ QPushButton:hover {
 }</string>
        </property>
        <property name="text">
-        <string>Level 2 - Easy</string>
+        <string>Level 2</string>
        </property>
       </widget>
      </item>
-     <item alignment="Qt::AlignHCenter">
+     <item alignment="Qt::AlignmentFlag::AlignHCenter">
       <widget class="QPushButton" name="level3Button">
        <property name="minimumSize">
         <size>
@@ -202,11 +202,11 @@ QPushButton:hover {
 }</string>
        </property>
        <property name="text">
-        <string>Level 3 - Medium</string>
+        <string>Level 3</string>
        </property>
       </widget>
      </item>
-     <item alignment="Qt::AlignHCenter">
+     <item alignment="Qt::AlignmentFlag::AlignHCenter">
       <widget class="QPushButton" name="level4Button">
        <property name="minimumSize">
         <size>
@@ -234,11 +234,11 @@ QPushButton:hover {
 }</string>
        </property>
        <property name="text">
-        <string>Level 4 - Hard</string>
+        <string>Level 4</string>
        </property>
       </widget>
      </item>
-     <item alignment="Qt::AlignHCenter">
+     <item alignment="Qt::AlignmentFlag::AlignHCenter">
       <widget class="QPushButton" name="level5Button">
        <property name="minimumSize">
         <size>
@@ -266,14 +266,14 @@ QPushButton:hover {
 }</string>
        </property>
        <property name="text">
-        <string>Level 5 - Expert</string>
+        <string>Level 5</string>
        </property>
       </widget>
      </item>
      <item>
       <spacer name="verticalSpacer">
        <property name="orientation">
-        <enum>Qt::Vertical</enum>
+        <enum>Qt::Orientation::Vertical</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>

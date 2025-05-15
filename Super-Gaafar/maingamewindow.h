@@ -44,7 +44,6 @@ private slots:
     void updateGame();
     void setupGame(int startLevel = 1);
     void applyPowerUp(PowerUpType type);
-    // Level setup functions
     void level1Setup();
     void level2Setup();
     void level3Setup();
@@ -55,8 +54,8 @@ private:
     Ui::MainGameWindow *ui;
     QGraphicsScene *gameScene;
     QGraphicsView *gameView;
-    QGraphicsScene *hudScene;  // Scene for HUD elements
-    QGraphicsView *hudView;    // View for HUD elements
+    QGraphicsScene *hudScene;
+    QGraphicsView *hudView;
     Player *player;
     Ground *ground;
     Background *bg;
@@ -73,17 +72,17 @@ private:
     QList<Platform *> platforms;
     QList<Platform *> obstacles;
     QList<Enemy *> enemies;
-    QList<QGraphicsItem *> levelItems; // To track level-specific items for cleanup
+    QList<QGraphicsItem *> levelItems;
     int PlatformsNum;
     int ObstaclesNum;
     int EnemiesNum;
     int score = 0;
-    int currentLevel = 1; // Track the current level
+    int currentLevel = 1;
     QGraphicsTextItem* scoreText = nullptr;
     QGraphicsTextItem* livesText = nullptr;
-    QGraphicsTextItem* levelText = nullptr; // Display current level
+    QGraphicsTextItem* levelText = nullptr;
     void updateHUD();
-    void changeLevel(int newLevel); // Method to change levels
-    void clearCurrentLevel(); // Method to clear current level items
+    void changeLevel(int newLevel);
+    void clearCurrentLevel();
 };
 #endif // MAINGAMEWINDOW_H
