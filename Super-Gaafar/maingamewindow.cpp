@@ -267,23 +267,436 @@ void MainGameWindow::level1Setup() {
 }
 
 void MainGameWindow::level2Setup() {
-    // Level 2 setup will go here
-    // Currently empty
+    // Platforms setup (more and spaced further apart than level 1)
+    auto *p1 = new Platform(400, 350, "brick", 2);
+    auto *p2 = new Platform(900, 300, "brick", 3);
+    auto *p3 = new Platform(1500, 400, "brick", 2);
+    auto *p4 = new Platform(2100, 320, "brick", 4);
+    auto *p5 = new Platform(2700, 370, "brick", 3);
+    auto *p6 = new Platform(3400, 420, "brick", 2);
+    auto *p7 = new Platform(4200, 350, "brick", 3);
+
+    gameScene->addItem(p1);
+    gameScene->addItem(p2);
+    gameScene->addItem(p3);
+    gameScene->addItem(p4);
+    gameScene->addItem(p5);
+    gameScene->addItem(p6);
+    gameScene->addItem(p7);
+
+    p1->setZValue(3);
+    p2->setZValue(3);
+    p3->setZValue(3);
+    p4->setZValue(3);
+    p5->setZValue(3);
+    p6->setZValue(3);
+    p7->setZValue(3);
+
+    // Obstacles setup (more and some on platforms)
+    auto *o1 = new Platform(600, 465, "warp");
+    auto *o2 = new Platform(1200, 465, "warp");
+    auto *o3 = new Platform(1800, 465, "warp");
+    auto *o4 = new Platform(2500, 465, "warp");
+    auto *o5 = new Platform(3200, 465, "warp");
+    auto *o6 = new Platform(3900, 465, "warp");
+    auto *o7 = new Platform(4400, 465, "warp");
+
+    gameScene->addItem(o1);
+    gameScene->addItem(o2);
+    gameScene->addItem(o3);
+    gameScene->addItem(o4);
+    gameScene->addItem(o5);
+    gameScene->addItem(o6);
+    gameScene->addItem(o7);
+
+    o1->setZValue(3);
+    o2->setZValue(3);
+    o3->setZValue(3);
+    o4->setZValue(3);
+    o5->setZValue(3);
+    o6->setZValue(3);
+    o7->setZValue(3);
+
+    // Enemies setup (more, and some on platforms)
+    RedT *e1 = new RedT(1000); // on ground
+    RedT *e2 = new RedT(1600); // on ground
+    Spiny *e3 = new Spiny(2200); // on ground
+    Goomba *e4 = new Goomba(2800); // on ground
+    Spiny *e5 = new Spiny(3500); // on ground
+    Goomba *e6 = new Goomba(4100); // on ground
+    RedT *e7 = new RedT(4700); // on ground
+    // Enemies on platforms
+    Goomba *e8 = new Goomba(950); // on p2
+    Spiny *e9 = new Spiny(2120); // on p4
+
+    enemies.append(e1);
+    enemies.append(e2);
+    enemies.append(e3);
+    enemies.append(e4);
+    enemies.append(e5);
+    enemies.append(e6);
+    enemies.append(e7);
+    enemies.append(e8);
+    enemies.append(e9);
+
+    gameScene->addItem(e1);
+    gameScene->addItem(e2);
+    gameScene->addItem(e3);
+    gameScene->addItem(e4);
+    gameScene->addItem(e5);
+    gameScene->addItem(e6);
+    gameScene->addItem(e7);
+    gameScene->addItem(e8);
+    gameScene->addItem(e9);
+
+    e1->setZValue(3);
+    e2->setZValue(3);
+    e3->setZValue(3);
+    e4->setZValue(3);
+    e5->setZValue(3);
+    e6->setZValue(3);
+    e7->setZValue(3);
+    e8->setZValue(3);
+    e9->setZValue(3);
+
+    // Coins setup (optional, for reward)
+    Coin* coin1 = new Coin(); coin1->setPos(450, 300); gameScene->addItem(coin1); coin1->setZValue(3);
+    Coin* coin2 = new Coin(); coin2->setPos(950, 250); gameScene->addItem(coin2); coin2->setZValue(3);
+    Coin* coin3 = new Coin(); coin3->setPos(1550, 350); gameScene->addItem(coin3); coin3->setZValue(3);
+    Coin* coin4 = new Coin(); coin4->setPos(2150, 270); gameScene->addItem(coin4); coin4->setZValue(3);
+    Coin* coin5 = new Coin(); coin5->setPos(2750, 320); gameScene->addItem(coin5); coin5->setZValue(3);
+    Coin* coin6 = new Coin(); coin6->setPos(3450, 370); gameScene->addItem(coin6); coin6->setZValue(3);
+    Coin* coin7 = new Coin(); coin7->setPos(4050, 300); gameScene->addItem(coin7); coin7->setZValue(3);
+    Coin* coin8 = new Coin(); coin8->setPos(4650, 250); gameScene->addItem(coin8); coin8->setZValue(3);
+
+    // End level items
+    Pole* pole = new Pole();
+    pole->setPos(5000-350, 365);
+    gameScene->addItem(pole);
+    pole->setZValue(2);
+
+    Castle* castle = new Castle();
+    castle->setPos(5000-230, 370);
+    gameScene->addItem(castle);
+    castle->setZValue(2);
+
+    // Power-ups setup
+    PowerUp* powerup1 = new PowerUp(Gigantification);
+    powerup1->setPos(2000, 520);
+    powerup1->setZValue(3);
+    gameScene->addItem(powerup1);
+
+    PowerUp* powerup2 = new PowerUp(SpeedBoost);
+    powerup2->setPos(1550, 520);
+    powerup2->setZValue(3);
+    gameScene->addItem(powerup2);
 }
 
 void MainGameWindow::level3Setup() {
-    // Level 3 setup will go here
-    // Currently empty
+    // --- Platforms: varied heights and spacing ---
+    auto *p1 = new Platform(350, 420, "brick", 3);    // start
+    auto *p2 = new Platform(900, 350, "brick", 4);    // mid-high
+    auto *p3 = new Platform(1550, 350, "brick", 3);   // ground
+    auto *p4 = new Platform(2100, 320, "brick", 2);   // high
+    auto *p5 = new Platform(2650, 400, "brick", 3);   // mid
+    auto *p6 = new Platform(3300, 350, "brick", 2);  // high
+
+    gameScene->addItem(p1); p1->setZValue(3);
+    gameScene->addItem(p2); p2->setZValue(3);
+    gameScene->addItem(p3); p3->setZValue(3);
+    gameScene->addItem(p4); p4->setZValue(3);
+    gameScene->addItem(p5); p5->setZValue(3);
+    gameScene->addItem(p6); p6->setZValue(3);
+
+    // --- Obstacles: spaced between platforms, not overlapping ---
+    auto *o1 = new Platform(700, 465, "warp");  // after p2
+    auto *o3 = new Platform(1800, 465, "warp");  // after p3
+    auto *o4 = new Platform(2500, 465, "warp");  // after p4
+    auto *o5 = new Platform(3100, 465, "warp");  // after p5
+    auto *o6 = new Platform(3700, 465, "warp");  // after p6
+    auto *o7 = new Platform(4200, 465, "warp");  // after p7
+    gameScene->addItem(o1); o1->setZValue(3);
+    gameScene->addItem(o3); o3->setZValue(3);
+    gameScene->addItem(o4); o4->setZValue(3);
+    gameScene->addItem(o5); o5->setZValue(3);
+    gameScene->addItem(o6); o6->setZValue(3);
+    gameScene->addItem(o7); o7->setZValue(3);
+
+    // --- Enemies: never stacked, spaced, some on platforms, some on ground ---
+    Goomba *e1 = new Goomba(600);    // ground, before o1
+    Spiny  *e2 = new Spiny(1150);    // ground, after o1
+    RedT   *e3 = new RedT(1700);     // ground, after o2
+    Goomba *e4 = new Goomba(2250);   // ground, after o3
+    Spiny  *e5 = new Spiny(2950);    // ground, after o4
+    RedT   *e6 = new RedT(3550);     // ground, after o5
+    Goomba *e7 = new Goomba(4150);   // ground, after o6
+    // Enemies on platforms (centered, not stacked)
+    Spiny  *e8 = new Spiny(950);     // on p2
+    RedT   *e9 = new RedT(2100);     // on p4
+    Goomba *e10 = new Goomba(2650);  // on p5
+    Spiny  *e11 = new Spiny(3900);   // on p7
+    RedT   *e12 = new RedT(4450);    // on p8
+    enemies.append(e1); gameScene->addItem(e1); e1->setZValue(3);
+    enemies.append(e2); gameScene->addItem(e2); e2->setZValue(3);
+    enemies.append(e3); gameScene->addItem(e3); e3->setZValue(3);
+    enemies.append(e4); gameScene->addItem(e4); e4->setZValue(3);
+    enemies.append(e5); gameScene->addItem(e5); e5->setZValue(3);
+    enemies.append(e6); gameScene->addItem(e6); e6->setZValue(3);
+    enemies.append(e7); gameScene->addItem(e7); e7->setZValue(3);
+    enemies.append(e8); gameScene->addItem(e8); e8->setZValue(3);
+    enemies.append(e9); gameScene->addItem(e9); e9->setZValue(3);
+    enemies.append(e10); gameScene->addItem(e10); e10->setZValue(3);
+    enemies.append(e11); gameScene->addItem(e11); e11->setZValue(3);
+    enemies.append(e12); gameScene->addItem(e12); e12->setZValue(3);
+
+    // --- Coins: on/above platforms and in gaps ---
+    Coin* coin1 = new Coin(); coin1->setPos(400, 370); gameScene->addItem(coin1); coin1->setZValue(3);
+    Coin* coin2 = new Coin(); coin2->setPos(950, 300); gameScene->addItem(coin2); coin2->setZValue(3);
+    Coin* coin3 = new Coin(); coin3->setPos(1550, 370); gameScene->addItem(coin3); coin3->setZValue(3);
+    Coin* coin4 = new Coin(); coin4->setPos(2100, 270); gameScene->addItem(coin4); coin4->setZValue(3);
+    Coin* coin5 = new Coin(); coin5->setPos(2650, 350); gameScene->addItem(coin5); coin5->setZValue(3);
+    Coin* coin6 = new Coin(); coin6->setPos(3300, 300); gameScene->addItem(coin6); coin6->setZValue(3);
+    Coin* coin7 = new Coin(); coin7->setPos(3900, 370); gameScene->addItem(coin7); coin7->setZValue(3);
+    Coin* coin8 = new Coin(); coin8->setPos(4450, 270); gameScene->addItem(coin8); coin8->setZValue(3);
+
+    // --- End level items ---
+    Pole* pole = new Pole();
+    pole->setPos(5000-350, 365);
+    gameScene->addItem(pole);
+    pole->setZValue(2);
+    Castle* castle = new Castle();
+    castle->setPos(5000-230, 370);
+    gameScene->addItem(castle);
+    castle->setZValue(2);
+
+    // --- Power-ups: accessible, not overlapping ---
+    PowerUp* powerup1 = new PowerUp(Gigantification);
+    powerup1->setPos(1550, 520);
+    powerup1->setZValue(3);
+    gameScene->addItem(powerup1);
+    PowerUp* powerup2 = new PowerUp(SpeedBoost);
+    powerup2->setPos(3300, 520);
+    powerup2->setZValue(3);
+    gameScene->addItem(powerup2);
 }
 
 void MainGameWindow::level4Setup() {
-    // Level 4 setup will go here
-    // Currently empty
+    // Level 4: Hard - more platforms, more verticality, more enemies
+    auto *p1 = new Platform(300, 420, "brick", 3);
+    auto *p2 = new Platform(800, 350, "brick", 3);
+    auto *p3 = new Platform(1400, 300, "brick", 3);
+    auto *p4 = new Platform(1900, 400, "brick", 3);
+    auto *p5 = new Platform(2500, 320, "brick", 3);
+    auto *p6 = new Platform(3100, 370, "brick", 3);
+    auto *p7 = new Platform(3700, 300, "brick", 3);
+    gameScene->addItem(p1); p1->setZValue(3);
+    gameScene->addItem(p2); p2->setZValue(3);
+    gameScene->addItem(p3); p3->setZValue(3);
+    gameScene->addItem(p4); p4->setZValue(3);
+    gameScene->addItem(p5); p5->setZValue(3);
+    gameScene->addItem(p6); p6->setZValue(3);
+    gameScene->addItem(p7); p7->setZValue(3);
+
+    // Obstacles
+    auto *o1 = new Platform(600, 465, "warp");
+    auto *o2 = new Platform(1200, 465, "warp");
+    auto *o3 = new Platform(1800, 465, "warp");
+    auto *o4 = new Platform(2400, 465, "warp");
+    auto *o5 = new Platform(3000, 465, "warp");
+    auto *o6 = new Platform(3600, 465, "warp");
+    auto *o7 = new Platform(4200, 465, "warp");
+    gameScene->addItem(o1); o1->setZValue(3);
+    gameScene->addItem(o2); o2->setZValue(3);
+    gameScene->addItem(o3); o3->setZValue(3);
+    gameScene->addItem(o4); o4->setZValue(3);
+    gameScene->addItem(o5); o5->setZValue(3);
+    gameScene->addItem(o6); o6->setZValue(3);
+    gameScene->addItem(o7); o7->setZValue(3);
+
+    // Enemies (ground and platforms, spaced)
+    Goomba *e1 = new Goomba(500);    // ground
+    Spiny  *e2 = new Spiny(1000);    // ground
+    RedT   *e3 = new RedT(1700);     // ground
+    Goomba *e4 = new Goomba(2300);   // ground
+    Spiny  *e5 = new Spiny(2800);    // ground
+    RedT   *e6 = new RedT(3500);     // ground
+    Goomba *e7 = new Goomba(4100);   // ground
+    Spiny  *e8 = new Spiny(4700);    // ground
+    // On platforms
+    RedT   *e9 = new RedT(800);      // p2
+    Goomba *e10 = new Goomba(1900);  // p4
+    Spiny  *e11 = new Spiny(3150);   // p6
+    enemies.append(e1); gameScene->addItem(e1); e1->setZValue(3);
+    enemies.append(e2); gameScene->addItem(e2); e2->setZValue(3);
+    enemies.append(e3); gameScene->addItem(e3); e3->setZValue(3);
+    enemies.append(e4); gameScene->addItem(e4); e4->setZValue(3);
+    enemies.append(e5); gameScene->addItem(e5); e5->setZValue(3);
+    enemies.append(e6); gameScene->addItem(e6); e6->setZValue(3);
+    enemies.append(e7); gameScene->addItem(e7); e7->setZValue(3);
+    enemies.append(e8); gameScene->addItem(e8); e8->setZValue(3);
+    enemies.append(e9); gameScene->addItem(e9); e9->setZValue(3);
+    enemies.append(e10); gameScene->addItem(e10); e10->setZValue(3);
+    enemies.append(e11); gameScene->addItem(e11); e11->setZValue(3);
+    // Coins
+    Coin* coin1 = new Coin(); coin1->setPos(350, 370); gameScene->addItem(coin1); coin1->setZValue(3);
+    Coin* coin2 = new Coin(); coin2->setPos(800, 300); gameScene->addItem(coin2); coin2->setZValue(3);
+    Coin* coin3 = new Coin(); coin3->setPos(1400, 250); gameScene->addItem(coin3); coin3->setZValue(3);
+    Coin* coin4 = new Coin(); coin4->setPos(1900, 350); gameScene->addItem(coin4); coin4->setZValue(3);
+    Coin* coin5 = new Coin(); coin5->setPos(2500, 270); gameScene->addItem(coin5); coin5->setZValue(3);
+    Coin* coin6 = new Coin(); coin6->setPos(3100, 320); gameScene->addItem(coin6); coin6->setZValue(3);
+    Coin* coin7 = new Coin(); coin7->setPos(3700, 250); gameScene->addItem(coin7); coin7->setZValue(3);
+    Coin* coin8 = new Coin(); coin8->setPos(4200, 370); gameScene->addItem(coin8); coin8->setZValue(3);
+    Coin* coin9 = new Coin(); coin9->setPos(4700, 300); gameScene->addItem(coin9); coin9->setZValue(3);
+
+    // End level items
+    Pole* pole = new Pole();
+    pole->setPos(5000-350, 365);
+    gameScene->addItem(pole);
+    pole->setZValue(2);
+    Castle* castle = new Castle();
+    castle->setPos(5000-230, 370);
+    gameScene->addItem(castle);
+    castle->setZValue(2);
+
+    // Power-ups
+    PowerUp* powerup1 = new PowerUp(Gigantification);
+    powerup1->setPos(1900, 520);
+    powerup1->setZValue(3);
+    gameScene->addItem(powerup1);
+    PowerUp* powerup2 = new PowerUp(SpeedBoost);
+    powerup2->setPos(3100, 520);
+    powerup2->setZValue(3);
+    gameScene->addItem(powerup2);
+    PowerUp* powerup3 = new PowerUp(JumpBoost);
+    powerup3->setPos(4100, 520);
+    powerup3->setZValue(3);
+    gameScene->addItem(powerup3);
 }
 
 void MainGameWindow::level5Setup() {
-    // Level 5 setup will go here
-    // Currently empty
+    // Level 5: Expert - refined for maximum challenge and variety
+    // Platforms (vertical, horizontal, some small, some far apart)
+    auto *p1 = new Platform(200, 420, "brick", 2);      // start
+    auto *p2 = new Platform(600, 350, "brick", 2);      // small, mid
+    auto *p3 = new Platform(950, 270, "brick", 1);      // high, small
+    auto *p4 = new Platform(1350, 400, "brick", 3);     // wide
+    auto *p5 = new Platform(1800, 320, "brick", 2);     // mid-high
+    auto *p6 = new Platform(2200, 250, "brick", 1);     // high, small
+    auto *p7 = new Platform(2600, 370, "brick", 2);     // mid
+    auto *p8 = new Platform(3050, 300, "brick", 2);     // high
+    auto *p9 = new Platform(3500, 220, "brick", 1);     // very high
+    auto *p10 = new Platform(3900, 350, "brick", 2);    // mid
+    auto *p11 = new Platform(4300, 270, "brick", 1);    // high
+    auto *p12 = new Platform(4700, 420, "brick", 2);    // end, ground
+    gameScene->addItem(p1); p1->setZValue(3);
+    gameScene->addItem(p2); p2->setZValue(3);
+    gameScene->addItem(p3); p3->setZValue(3);
+    gameScene->addItem(p4); p4->setZValue(3);
+    gameScene->addItem(p5); p5->setZValue(3);
+    gameScene->addItem(p6); p6->setZValue(3);
+    gameScene->addItem(p7); p7->setZValue(3);
+    gameScene->addItem(p8); p8->setZValue(3);
+    gameScene->addItem(p9); p9->setZValue(3);
+    gameScene->addItem(p10); p10->setZValue(3);
+    gameScene->addItem(p11); p11->setZValue(3);
+    gameScene->addItem(p12); p12->setZValue(3);
+
+    // Obstacles (lots, spaced, some after jumps, no overlap)
+    auto *o1 = new Platform(400, 465, "warp");
+    auto *o2 = new Platform(800, 465, "warp");
+    auto *o3 = new Platform(1200, 465, "warp");
+    auto *o4 = new Platform(1600, 465, "warp");
+    auto *o5 = new Platform(2000, 465, "warp");
+    auto *o6 = new Platform(2400, 465, "warp");
+    auto *o7 = new Platform(2800, 465, "warp");
+    auto *o8 = new Platform(3200, 465, "warp");
+    auto *o9 = new Platform(3600, 465, "warp");
+    auto *o10 = new Platform(4000, 465, "warp");
+    auto *o11 = new Platform(4400, 465, "warp");
+    gameScene->addItem(o1); o1->setZValue(3);
+    gameScene->addItem(o2); o2->setZValue(3);
+    gameScene->addItem(o3); o3->setZValue(3);
+    gameScene->addItem(o4); o4->setZValue(3);
+    gameScene->addItem(o5); o5->setZValue(3);
+    gameScene->addItem(o6); o6->setZValue(3);
+    gameScene->addItem(o7); o7->setZValue(3);
+    gameScene->addItem(o8); o8->setZValue(3);
+    gameScene->addItem(o9); o9->setZValue(3);
+    gameScene->addItem(o10); o10->setZValue(3);
+    gameScene->addItem(o11); o11->setZValue(3);
+
+    // Enemies (ground and platforms, spaced, no stacking)
+    Goomba *e1 = new Goomba(350);    // ground
+    Spiny  *e2 = new Spiny(850);     // ground
+    RedT   *e3 = new RedT(1300);     // ground
+    Goomba *e4 = new Goomba(1750);   // ground
+    Spiny  *e5 = new Spiny(2200);    // ground
+    RedT   *e6 = new RedT(2650);     // ground
+    Goomba *e7 = new Goomba(3100);   // ground
+    Spiny  *e8 = new Spiny(3550);    // ground
+    RedT   *e9 = new RedT(4000);     // ground
+    Goomba *e10 = new Goomba(4450);  // ground
+    // On platforms (centered, not stacked)
+    Spiny  *e11 = new Spiny(600);    // p2
+    RedT   *e12 = new RedT(1350);    // p4
+    Goomba *e13 = new Goomba(1800);  // p5
+    Spiny  *e14 = new Spiny(2600);   // p7
+    RedT   *e15 = new RedT(3500);    // p9
+    Goomba *e16 = new Goomba(4700);  // p12
+    enemies.append(e1); gameScene->addItem(e1); e1->setZValue(3);
+    enemies.append(e2); gameScene->addItem(e2); e2->setZValue(3);
+    enemies.append(e3); gameScene->addItem(e3); e3->setZValue(3);
+    enemies.append(e4); gameScene->addItem(e4); e4->setZValue(3);
+    enemies.append(e5); gameScene->addItem(e5); e5->setZValue(3);
+    enemies.append(e6); gameScene->addItem(e6); e6->setZValue(3);
+    enemies.append(e7); gameScene->addItem(e7); e7->setZValue(3);
+    enemies.append(e8); gameScene->addItem(e8); e8->setZValue(3);
+    enemies.append(e9); gameScene->addItem(e9); e9->setZValue(3);
+    enemies.append(e10); gameScene->addItem(e10); e10->setZValue(3);
+    enemies.append(e11); gameScene->addItem(e11); e11->setZValue(3);
+    enemies.append(e12); gameScene->addItem(e12); e12->setZValue(3);
+    enemies.append(e13); gameScene->addItem(e13); e13->setZValue(3);
+    enemies.append(e14); gameScene->addItem(e14); e14->setZValue(3);
+    enemies.append(e15); gameScene->addItem(e15); e15->setZValue(3);
+    enemies.append(e16); gameScene->addItem(e16); e16->setZValue(3);
+
+    // Coins (hard to reach, but fair)
+    Coin* coin1 = new Coin(); coin1->setPos(200, 370); gameScene->addItem(coin1); coin1->setZValue(3);
+    Coin* coin2 = new Coin(); coin2->setPos(600, 300); gameScene->addItem(coin2); coin2->setZValue(3);
+    Coin* coin3 = new Coin(); coin3->setPos(950, 220); gameScene->addItem(coin3); coin3->setZValue(3);
+    Coin* coin4 = new Coin(); coin4->setPos(1350, 350); gameScene->addItem(coin4); coin4->setZValue(3);
+    Coin* coin5 = new Coin(); coin5->setPos(1800, 270); gameScene->addItem(coin5); coin5->setZValue(3);
+    Coin* coin6 = new Coin(); coin6->setPos(2200, 200); gameScene->addItem(coin6); coin6->setZValue(3);
+    Coin* coin7 = new Coin(); coin7->setPos(2600, 320); gameScene->addItem(coin7); coin7->setZValue(3);
+    Coin* coin8 = new Coin(); coin8->setPos(3050, 250); gameScene->addItem(coin8); coin8->setZValue(3);
+    Coin* coin9 = new Coin(); coin9->setPos(3500, 170); gameScene->addItem(coin9); coin9->setZValue(3);
+    Coin* coin10 = new Coin(); coin10->setPos(3900, 300); gameScene->addItem(coin10); coin10->setZValue(3);
+    Coin* coin11 = new Coin(); coin11->setPos(4300, 220); gameScene->addItem(coin11); coin11->setZValue(3);
+    Coin* coin12 = new Coin(); coin12->setPos(4700, 370); gameScene->addItem(coin12); coin12->setZValue(3);
+
+    // End level items
+    Pole* pole = new Pole();
+    pole->setPos(5000-350, 365);
+    gameScene->addItem(pole);
+    pole->setZValue(2);
+    Castle* castle = new Castle();
+    castle->setPos(5000-230, 370);
+    gameScene->addItem(castle);
+    castle->setZValue(2);
+
+    // Power-ups (hard to reach)
+    PowerUp* powerup1 = new PowerUp(Gigantification);
+    powerup1->setPos(1350, 520);
+    powerup1->setZValue(3);
+    gameScene->addItem(powerup1);
+    PowerUp* powerup2 = new PowerUp(SpeedBoost);
+    powerup2->setPos(2600, 520);
+    powerup2->setZValue(3);
+    gameScene->addItem(powerup2);
+    PowerUp* powerup3 = new PowerUp(JumpBoost);
+    powerup3->setPos(3900, 520);
+    powerup3->setZValue(3);
+    gameScene->addItem(powerup3);
 }
 
 void MainGameWindow::updateHUD() {
@@ -443,7 +856,11 @@ void MainGameWindow::updateGame(){
                             deathSong->setVolume(0.25);
                             themeSong->stop();
                             deathSong->play();
-                            QTimer::singleShot(8000, this, &MainGameWindow::close);
+                            QTimer::singleShot(8000, this, [this]() {
+                                LevelSelection *levelSelect = new LevelSelection();
+                                levelSelect->show();
+                                this->close();
+                            });
                         }
                     }
                 }
