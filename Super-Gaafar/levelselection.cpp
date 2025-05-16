@@ -1,6 +1,7 @@
 #include "levelselection.h"
 #include "ui_levelselection.h"
 #include "maingamewindow.h"
+#include "credits.h"
 #include <QFont>
 #include <QSoundEffect>
 #include <QUrl>
@@ -16,6 +17,7 @@ LevelSelection::LevelSelection(QWidget *parent) : QMainWindow(parent), ui(new Ui
     connect(ui->level3Button, &QPushButton::clicked, this, &LevelSelection::onLevel3ButtonClicked);
     connect(ui->level4Button, &QPushButton::clicked, this, &LevelSelection::onLevel4ButtonClicked);
     connect(ui->level5Button, &QPushButton::clicked, this, &LevelSelection::onLevel5ButtonClicked);
+    connect(ui->creditsButton, &QPushButton::clicked, this, &LevelSelection::onCreditsButtonClicked);
     ui->titleLabel->setFont(QFont("Arial", 32, QFont::Bold));
     ui->selectLevelLabel->setFont(QFont("Arial", 18));
     menuSound = new QSoundEffect(this);
@@ -67,4 +69,15 @@ void LevelSelection::onLevel4ButtonClicked()
 void LevelSelection::onLevel5ButtonClicked()
 {
     startGame(5);
+}
+
+void LevelSelection::onCreditsButtonClicked()
+{
+    if (menuSound) {
+        menuSound->stop();
+    }
+    Credits *creditsWindow = new Credits(this);
+    creditsWindow->setAttribute(Qt::WA_DeleteOnClose);
+    this->hide();
+    creditsWindow->show();
 }

@@ -13,6 +13,7 @@ SOURCES += \
     background.cpp \
     castle.cpp \
     coin.cpp \
+    credits.cpp \
     enemy.cpp \
     flag.cpp \
     goomba.cpp \
@@ -31,6 +32,7 @@ HEADERS += \
     background.h \
     castle.h \
     coin.h \
+    credits.h \
     enemy.h \
     flag.h \
     goomba.h \
@@ -45,6 +47,7 @@ HEADERS += \
     spiny.h
 
 FORMS += \
+    credits.ui \
     levelselection.ui \
     maingamewindow.ui
 

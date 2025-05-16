@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QSoundEffect>
+#include "credits.h"
 
 namespace Ui {
 class LevelSelection;
@@ -22,6 +23,7 @@ private slots:
     void onLevel3ButtonClicked();
     void onLevel4ButtonClicked();
     void onLevel5ButtonClicked();
+    void onCreditsButtonClicked();
 
 private:
     Ui::LevelSelection *ui;

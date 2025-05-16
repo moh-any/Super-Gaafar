@@ -25,5 +25,6 @@
         <file>sounds/levelclear.wav</file>
         <file>sounds/victory.wav</file>
         <file>sounds/5friends.wav</file>
+        <file>sounds/credits.wav</file>
     </qresource>
 </RCC>
