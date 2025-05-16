@@ -263,29 +263,32 @@ QPushButton:hover {
       <string>Level 5</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="creditsButton">
+    <widget class="QWidget" name="">
      <property name="geometry">
       <rect>
-       <x>300</x>
+       <x>201</x>
        <y>510</y>
-       <width>200</width>
-       <height>44</height>
+       <width>409</width>
+       <height>46</height>
       </rect>
      </property>
-     <property name="minimumSize">
-      <size>
-       <width>200</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>200</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton {
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="creditsButton">
+        <property name="minimumSize">
+         <size>
+          <width>200</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
     background-color: rgba(50, 50, 200, 180);
     color: white;
     border-radius: 15px;
@@ -296,10 +299,45 @@ QPushButton:hover {
 QPushButton:hover {
     background-color: rgba(80, 80, 255, 200);
 }</string>
-     </property>
-     <property name="text">
-      <string>Credits</string>
-     </property>
+        </property>
+        <property name="text">
+         <string>Credits</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="playGaafarsSong">
+        <property name="minimumSize">
+         <size>
+          <width>200</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
+    background-color: rgba(50, 50, 200, 180);
+    color: white;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 10px;
+}
+QPushButton:hover {
+    background-color: rgba(80, 80, 255, 200);
+}</string>
+        </property>
+        <property name="text">
+         <string>Play Gaafar's Song</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </widget>
   </widget>

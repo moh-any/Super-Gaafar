@@ -24,10 +24,12 @@ private slots:
     void onLevel4ButtonClicked();
     void onLevel5ButtonClicked();
     void onCreditsButtonClicked();
+    void onPlayGaafarsSongClicked();
 
 private:
     Ui::LevelSelection *ui;
     QSoundEffect *menuSound;
+    bool playedGaafarsSong = false;
     void startGame(int level);
 };
 

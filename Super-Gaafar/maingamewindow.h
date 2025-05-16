@@ -35,10 +35,14 @@ class MainGameWindow : public QMainWindow
 
 public:
     MainGameWindow(QWidget *parent = nullptr, int startLevel = 1);
+    MainGameWindow(QWidget *parent = nullptr, int startLevel = 1, bool playGaafarsSong = false);
     ~MainGameWindow();
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
     bool eventFilter(QObject *object,QEvent *event);
+
+public slots:
+    void playGaafarsSong();
 
 private slots:
     void updateGame();

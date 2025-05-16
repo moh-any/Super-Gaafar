@@ -18,6 +18,7 @@ LevelSelection::LevelSelection(QWidget *parent) : QMainWindow(parent), ui(new Ui
     connect(ui->level4Button, &QPushButton::clicked, this, &LevelSelection::onLevel4ButtonClicked);
     connect(ui->level5Button, &QPushButton::clicked, this, &LevelSelection::onLevel5ButtonClicked);
     connect(ui->creditsButton, &QPushButton::clicked, this, &LevelSelection::onCreditsButtonClicked);
+    connect(ui->playGaafarsSong, &QPushButton::clicked, this, &LevelSelection::onPlayGaafarsSongClicked);
     ui->titleLabel->setFont(QFont("Arial", 32, QFont::Bold));
     ui->selectLevelLabel->setFont(QFont("Arial", 18));
     menuSound = new QSoundEffect(this);
@@ -36,12 +37,14 @@ LevelSelection::~LevelSelection()
     }
 }
 
+bool playedGaafarsSong = false;
+
 void LevelSelection::startGame(int level)
 {
     if (menuSound) {
         menuSound->stop();
     }
-    MainGameWindow *gameWindow = new MainGameWindow(nullptr, level);
+    MainGameWindow *gameWindow = new MainGameWindow(nullptr, level, playedGaafarsSong);
     gameWindow->show();
     this->close();
 }
@@ -80,4 +83,16 @@ void LevelSelection::onCreditsButtonClicked()
     creditsWindow->setAttribute(Qt::WA_DeleteOnClose);
     this->hide();
     creditsWindow->show();
+}
+
+void LevelSelection::onPlayGaafarsSongClicked()
+{
+    if (menuSound) {
+        menuSound->stop();
+        menuSound->setSource(QUrl("qrc:/sounds/sounds/friends.wav"));
+        menuSound->setVolume(0.5);
+        menuSound->setLoopCount(QSoundEffect::Infinite);
+        menuSound->play();
+    }
+    playedGaafarsSong = true;
 }

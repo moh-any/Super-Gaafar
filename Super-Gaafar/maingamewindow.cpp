@@ -8,7 +8,7 @@
 #include <QKeyEvent>
 #include <QEvent>
 
-MainGameWindow::MainGameWindow(QWidget *parent, int startLevel)
+MainGameWindow::MainGameWindow(QWidget *parent, int startLevel, bool playGaafarsSong)
     : QMainWindow(parent)
     , ui(new Ui::MainGameWindow)
 {
@@ -28,7 +28,11 @@ MainGameWindow::MainGameWindow(QWidget *parent, int startLevel)
     connect(gameTimer,&QTimer::timeout,this,&MainGameWindow::updateGame);
     gameTimer->start(15);
     themeSong = new QSoundEffect(this);
-    themeSong->setSource(QUrl("qrc:/sounds/sounds/ThemeSong.wav"));
+    if (playGaafarsSong) {
+        themeSong->setSource(QUrl("qrc:/sounds/sounds/friends.wav"));
+    } else {
+        themeSong->setSource(QUrl("qrc:/sounds/sounds/ThemeSong.wav"));
+    }
     themeSong->setVolume(0.75);
     themeSong->setLoopCount(QSoundEffect::Infinite);
     themeSong->play();
@@ -121,7 +125,20 @@ void MainGameWindow::setupGame(int startLevel){
     updateHUD();
 }
 
+void MainGameWindow::clearCurrentLevel() {
+    for (auto item : gameScene->items()) {
+        if (item != player && item != ground && item != bg) {
+            gameScene->removeItem(item);
+            delete item;
+        }
+    }
+    enemies.clear();
+    platforms.clear();
+    obstacles.clear();
+}
+
 void MainGameWindow::level1Setup() {
+    clearCurrentLevel();
     auto *p1 = new Platform(500, 400, "brick", 2);
     auto *p2 = new Platform(1000, 400, "brick", 2);
     auto *p3 = new Platform(1700, 400, "brick", 4);
@@ -218,6 +235,7 @@ void MainGameWindow::level1Setup() {
 }
 
 void MainGameWindow::level2Setup() {
+    clearCurrentLevel();
     auto *p1 = new Platform(400, 350, "brick", 2);
     auto *p2 = new Platform(900, 300, "brick", 3);
     auto *p3 = new Platform(1500, 400, "brick", 2);
@@ -264,46 +282,23 @@ void MainGameWindow::level2Setup() {
     RedT *e2 = new RedT(1600);
     Spiny *e3 = new Spiny(2200);
     Goomba *e4 = new Goomba(2800);
-    Spiny *e5 = new Spiny(3500);
-    Goomba *e6 = new Goomba(4100);
-    RedT *e7 = new RedT(4700);
-    Goomba *e8 = new Goomba(950);
-    Spiny *e9 = new Spiny(2120);
     enemies.append(e1);
     enemies.append(e2);
     enemies.append(e3);
     enemies.append(e4);
-    enemies.append(e5);
-    enemies.append(e6);
-    enemies.append(e7);
-    enemies.append(e8);
-    enemies.append(e9);
     gameScene->addItem(e1);
     gameScene->addItem(e2);
     gameScene->addItem(e3);
     gameScene->addItem(e4);
-    gameScene->addItem(e5);
-    gameScene->addItem(e6);
-    gameScene->addItem(e7);
-    gameScene->addItem(e8);
-    gameScene->addItem(e9);
     e1->setZValue(3);
     e2->setZValue(3);
     e3->setZValue(3);
     e4->setZValue(3);
-    e5->setZValue(3);
-    e6->setZValue(3);
-    e7->setZValue(3);
-    e8->setZValue(3);
-    e9->setZValue(3);
     Coin* coin1 = new Coin(); coin1->setPos(450, 300); gameScene->addItem(coin1); coin1->setZValue(3);
     Coin* coin2 = new Coin(); coin2->setPos(950, 250); gameScene->addItem(coin2); coin2->setZValue(3);
     Coin* coin3 = new Coin(); coin3->setPos(1550, 350); gameScene->addItem(coin3); coin3->setZValue(3);
     Coin* coin4 = new Coin(); coin4->setPos(2150, 270); gameScene->addItem(coin4); coin4->setZValue(3);
     Coin* coin5 = new Coin(); coin5->setPos(2750, 320); gameScene->addItem(coin5); coin5->setZValue(3);
-    Coin* coin6 = new Coin(); coin6->setPos(3450, 370); gameScene->addItem(coin6); coin6->setZValue(3);
-    Coin* coin7 = new Coin(); coin7->setPos(4050, 300); gameScene->addItem(coin7); coin7->setZValue(3);
-    Coin* coin8 = new Coin(); coin8->setPos(4650, 250); gameScene->addItem(coin8); coin8->setZValue(3);
     Pole* pole = new Pole();
     pole->setPos(5000-350, 365);
     gameScene->addItem(pole);
@@ -323,6 +318,7 @@ void MainGameWindow::level2Setup() {
 }
 
 void MainGameWindow::level3Setup() {
+    clearCurrentLevel();
     auto *p1 = new Platform(350, 420, "brick", 3);
     auto *p2 = new Platform(900, 350, "brick", 4);
     auto *p3 = new Platform(1550, 350, "brick", 3);
@@ -351,34 +347,15 @@ void MainGameWindow::level3Setup() {
     Spiny  *e2 = new Spiny(1150);
     RedT   *e3 = new RedT(1700);
     Goomba *e4 = new Goomba(2250);
-    Spiny  *e5 = new Spiny(2950);
-    RedT   *e6 = new RedT(3550);
-    Goomba *e7 = new Goomba(4150);
-    Spiny  *e8 = new Spiny(950);
-    RedT   *e9 = new RedT(2100);
-    Goomba *e10 = new Goomba(2650);
-    Spiny  *e11 = new Spiny(3900);
-    RedT   *e12 = new RedT(4450);
     enemies.append(e1); gameScene->addItem(e1); e1->setZValue(3);
     enemies.append(e2); gameScene->addItem(e2); e2->setZValue(3);
     enemies.append(e3); gameScene->addItem(e3); e3->setZValue(3);
     enemies.append(e4); gameScene->addItem(e4); e4->setZValue(3);
-    enemies.append(e5); gameScene->addItem(e5); e5->setZValue(3);
-    enemies.append(e6); gameScene->addItem(e6); e6->setZValue(3);
-    enemies.append(e7); gameScene->addItem(e7); e7->setZValue(3);
-    enemies.append(e8); gameScene->addItem(e8); e8->setZValue(3);
-    enemies.append(e9); gameScene->addItem(e9); e9->setZValue(3);
-    enemies.append(e10); gameScene->addItem(e10); e10->setZValue(3);
-    enemies.append(e11); gameScene->addItem(e11); e11->setZValue(3);
-    enemies.append(e12); gameScene->addItem(e12); e12->setZValue(3);
     Coin* coin1 = new Coin(); coin1->setPos(400, 370); gameScene->addItem(coin1); coin1->setZValue(3);
     Coin* coin2 = new Coin(); coin2->setPos(950, 300); gameScene->addItem(coin2); coin2->setZValue(3);
     Coin* coin3 = new Coin(); coin3->setPos(1550, 370); gameScene->addItem(coin3); coin3->setZValue(3);
     Coin* coin4 = new Coin(); coin4->setPos(2100, 270); gameScene->addItem(coin4); coin4->setZValue(3);
     Coin* coin5 = new Coin(); coin5->setPos(2650, 350); gameScene->addItem(coin5); coin5->setZValue(3);
-    Coin* coin6 = new Coin(); coin6->setPos(3300, 300); gameScene->addItem(coin6); coin6->setZValue(3);
-    Coin* coin7 = new Coin(); coin7->setPos(3900, 370); gameScene->addItem(coin7); coin7->setZValue(3);
-    Coin* coin8 = new Coin(); coin8->setPos(4450, 270); gameScene->addItem(coin8); coin8->setZValue(3);
     Pole* pole = new Pole();
     pole->setPos(5000-350, 365);
     gameScene->addItem(pole);
@@ -398,6 +375,7 @@ void MainGameWindow::level3Setup() {
 }
 
 void MainGameWindow::level4Setup() {
+    clearCurrentLevel();
     auto *p1 = new Platform(300, 420, "brick", 3);
     auto *p2 = new Platform(800, 350, "brick", 3);
     auto *p3 = new Platform(1400, 300, "brick", 3);
@@ -430,33 +408,15 @@ void MainGameWindow::level4Setup() {
     Spiny  *e2 = new Spiny(1000);
     RedT   *e3 = new RedT(1700);
     Goomba *e4 = new Goomba(2300);
-    Spiny  *e5 = new Spiny(2800);
-    RedT   *e6 = new RedT(3500);
-    Goomba *e7 = new Goomba(4100);
-    Spiny  *e8 = new Spiny(4700);
-    RedT   *e9 = new RedT(800);
-    Goomba *e10 = new Goomba(1900);
-    Spiny  *e11 = new Spiny(3150);
     enemies.append(e1); gameScene->addItem(e1); e1->setZValue(3);
     enemies.append(e2); gameScene->addItem(e2); e2->setZValue(3);
     enemies.append(e3); gameScene->addItem(e3); e3->setZValue(3);
     enemies.append(e4); gameScene->addItem(e4); e4->setZValue(3);
-    enemies.append(e5); gameScene->addItem(e5); e5->setZValue(3);
-    enemies.append(e6); gameScene->addItem(e6); e6->setZValue(3);
-    enemies.append(e7); gameScene->addItem(e7); e7->setZValue(3);
-    enemies.append(e8); gameScene->addItem(e8); e8->setZValue(3);
-    enemies.append(e9); gameScene->addItem(e9); e9->setZValue(3);
-    enemies.append(e10); gameScene->addItem(e10); e10->setZValue(3);
-    enemies.append(e11); gameScene->addItem(e11); e11->setZValue(3);
     Coin* coin1 = new Coin(); coin1->setPos(350, 370); gameScene->addItem(coin1); coin1->setZValue(3);
     Coin* coin2 = new Coin(); coin2->setPos(800, 300); gameScene->addItem(coin2); coin2->setZValue(3);
     Coin* coin3 = new Coin(); coin3->setPos(1400, 250); gameScene->addItem(coin3); coin3->setZValue(3);
     Coin* coin4 = new Coin(); coin4->setPos(1900, 350); gameScene->addItem(coin4); coin4->setZValue(3);
     Coin* coin5 = new Coin(); coin5->setPos(2500, 270); gameScene->addItem(coin5); coin5->setZValue(3);
-    Coin* coin6 = new Coin(); coin6->setPos(3100, 320); gameScene->addItem(coin6); coin6->setZValue(3);
-    Coin* coin7 = new Coin(); coin7->setPos(3700, 250); gameScene->addItem(coin7); coin7->setZValue(3);
-    Coin* coin8 = new Coin(); coin8->setPos(4200, 370); gameScene->addItem(coin8); coin8->setZValue(3);
-    Coin* coin9 = new Coin(); coin9->setPos(4700, 300); gameScene->addItem(coin9); coin9->setZValue(3);
     Pole* pole = new Pole();
     pole->setPos(5000-350, 365);
     gameScene->addItem(pole);
@@ -480,6 +440,7 @@ void MainGameWindow::level4Setup() {
 }
 
 void MainGameWindow::level5Setup() {
+    clearCurrentLevel();
     auto *p1 = new Platform(200, 420, "brick", 2);
     auto *p2 = new Platform(800, 340, "brick", 2);
     auto *p4 = new Platform(1800, 400, "brick", 3);
@@ -510,30 +471,15 @@ void MainGameWindow::level5Setup() {
     Spiny  *e2 = new Spiny(950);
     RedT   *e3 = new RedT(1250);
     Goomba *e4 = new Goomba(2000);
-    Spiny  *e5 = new Spiny(2700);
-    RedT   *e6 = new RedT(3200);
-    Goomba *e7 = new Goomba(3900);
-    Spiny  *e8 = new Spiny(800);
-    RedT   *e9 = new RedT(1800);
-    Goomba *e10 = new Goomba(3600);
     enemies.append(e1); gameScene->addItem(e1); e1->setZValue(3);
     enemies.append(e2); gameScene->addItem(e2); e2->setZValue(3);
     enemies.append(e3); gameScene->addItem(e3); e3->setZValue(3);
     enemies.append(e4); gameScene->addItem(e4); e4->setZValue(3);
-    enemies.append(e5); gameScene->addItem(e5); e5->setZValue(3);
-    enemies.append(e6); gameScene->addItem(e6); e6->setZValue(3);
-    enemies.append(e7); gameScene->addItem(e7); e7->setZValue(3);
-    enemies.append(e8); gameScene->addItem(e8); e8->setZValue(3);
-    enemies.append(e9); gameScene->addItem(e9); e9->setZValue(3);
-    enemies.append(e10); gameScene->addItem(e10); e10->setZValue(3);
     Coin* coin1 = new Coin(); coin1->setPos(300, 370); gameScene->addItem(coin1); coin1->setZValue(3);
     Coin* coin2 = new Coin(); coin2->setPos(900, 290); gameScene->addItem(coin2); coin2->setZValue(3);
     Coin* coin3 = new Coin(); coin3->setPos(1400, 210); gameScene->addItem(coin3); coin3->setZValue(3);
     Coin* coin4 = new Coin(); coin4->setPos(1800, 350); gameScene->addItem(coin4); coin4->setZValue(3);
     Coin* coin5 = new Coin(); coin5->setPos(2400, 270); gameScene->addItem(coin5); coin5->setZValue(3);
-    Coin* coin6 = new Coin(); coin6->setPos(3000, 320); gameScene->addItem(coin6); coin6->setZValue(3);
-    Coin* coin7 = new Coin(); coin7->setPos(3600, 250); gameScene->addItem(coin7); coin7->setZValue(3);
-    Coin* coin8 = new Coin(); coin8->setPos(4200, 370); gameScene->addItem(coin8); coin8->setZValue(3);
     Pole* pole = new Pole();
     pole->setPos(5000-350, 365);
     gameScene->addItem(pole);
@@ -618,62 +564,94 @@ void MainGameWindow::updateGame(){
                 player->setVelocityY(2);
             }
         }
-        if(!collidingSidePlatform) {
-            gameView->centerOn(player->pos());
+    }
+    if(!collidingSidePlatform) {
+        gameView->centerOn(player->pos());
+    }
+    if(!landedOnPlatform && !player->isOnGround()) {
+        player->setOnGround(false);
+    }
+    for (auto enemy : enemies){
+        enemy->move();
+    }
+    for(auto item : colliding){
+        Coin* coin=dynamic_cast<Coin*>(item);
+        if(coin){
+            coinSound->play();
+            gameScene->removeItem(item);
+            delete item;
+            score += 100;
+            updateHUD();
+            break;
         }
-        if(!landedOnPlatform && !player->isOnGround()) {
-            player->setOnGround(false);
+        if(dynamic_cast<Pole*>(item)&& !reachedPole){
+            reachedPole=true;
+            flag=new Flag();
+            flag->setPos(5000-325,500);
+            gameScene->addItem(flag);
+            flag->setZValue(2);
         }
-        for (auto enemy : enemies){
-            enemy->move();
-        }
-        for(auto item : colliding){
-            Coin* coin=dynamic_cast<Coin*>(item);
-            if(coin){
-                coinSound->play();
-                gameScene->removeItem(item);
-                delete item;
-                score += 100;
-                updateHUD();
+        if(dynamic_cast<Castle*>(item)){
+            if (!levelCompleted) {
+                levelCompleted = true;
+                gameScene->removeItem(player);
+                victorySong=new QSoundEffect(this);
+                victorySong->setSource(QUrl("qrc:/sounds/sounds/victory.wav"));
+                victorySong->setVolume(0.75);
+                themeSong->stop();
+                victorySong->play();
+                QTimer::singleShot(8000, this, [this]() {
+                    LevelSelection *levelSelect = new LevelSelection();
+                    levelSelect->show();
+                    this->close();
+                });
+                break;
             }
-            if(dynamic_cast<Pole*>(item)&& !reachedPole){
-                reachedPole=true;
-                flag=new Flag();
-                flag->setPos(5000-325,500);
-                gameScene->addItem(flag);
-                flag->setZValue(2);
-            }        
-            if(dynamic_cast<Castle*>(item)){
-                if (!levelCompleted) {
-                    levelCompleted = true;
+        }
+        if(dynamic_cast<PowerUp*>(item)){
+            applyPowerUp(((PowerUp*)item)->getType());
+            powerupSound->play();
+            gameScene->removeItem(item);
+            delete item;
+            score += 200;
+            updateHUD();
+            break;
+        }
+        Spiny* spiny=dynamic_cast<Spiny*>(item);
+        Enemy* enemy=dynamic_cast<Enemy*>(item);
+        if(spiny){
+            if(!player->isInvincible()){
+                player->loseLife();
+                updateHUD();
+                if(player->getLives()<=0) {
                     gameScene->removeItem(player);
-                    victorySong=new QSoundEffect(this);
-                    victorySong->setSource(QUrl("qrc:/sounds/sounds/victory.wav"));
-                    victorySong->setVolume(0.75);
+                    deathSong = new QSoundEffect(this);
+                    deathSong->setSource(QUrl("qrc:/sounds/sounds/death.wav"));
+                    deathSong->setVolume(0.25);
                     themeSong->stop();
-                    victorySong->play();
+                    deathSong->play();
                     QTimer::singleShot(8000, this, [this]() {
                         LevelSelection *levelSelect = new LevelSelection();
                         levelSelect->show();
                         this->close();
                     });
+                    break;
                 }
             }
-            if(dynamic_cast<PowerUp*>(item)){
-                applyPowerUp(((PowerUp*)item)->getType());
-                powerupSound->play();
-                gameScene->removeItem(item);
-                delete item;
-                score += 200;
+        } else if(enemy){
+            QRectF playerRect = player->sceneBoundingRect();
+            QRectF enemyRect = enemy->sceneBoundingRect();
+            if(player->getVelocityY()>0 && playerRect.bottom()<=enemyRect.top()+20&&playerRect.right()>enemyRect.left()+5 && playerRect.left()<enemyRect.right()-5){
+                if(!enemy->getIsSquished()) player->setVelocityY(-10);
+                enemy->squish();
+                score+=300;
                 updateHUD();
             }
-            Spiny* spiny=dynamic_cast<Spiny*>(item);
-            Enemy* enemy=dynamic_cast<Enemy*>(item);
-            if(spiny){
+            else if(!enemy->getIsSquished()){
                 if(!player->isInvincible()){
                     player->loseLife();
                     updateHUD();
-                    if(player->getLives()<=0) {
+                    if(player->getLives()<=0){
                         gameScene->removeItem(player);
                         deathSong = new QSoundEffect(this);
                         deathSong->setSource(QUrl("qrc:/sounds/sounds/death.wav"));
@@ -685,34 +663,7 @@ void MainGameWindow::updateGame(){
                             levelSelect->show();
                             this->close();
                         });
-                    }
-                }
-            } else if(enemy){
-                QRectF playerRect = player->sceneBoundingRect();
-                QRectF enemyRect = enemy->sceneBoundingRect();
-                if(player->getVelocityY()>0 && playerRect.bottom()<=enemyRect.top()+20&&playerRect.right()>enemyRect.left()+5 && playerRect.left()<enemyRect.right()-5){
-                    if(!enemy->getIsSquished()) player->setVelocityY(-10);
-                    enemy->squish();
-                    score+=300;
-                    updateHUD();
-                }
-                else if(!enemy->getIsSquished()){
-                    if(!player->isInvincible()){
-                        player->loseLife();
-                        updateHUD();
-                        if(player->getLives()<=0){
-                            gameScene->removeItem(player);
-                            deathSong = new QSoundEffect(this);
-                            deathSong->setSource(QUrl("qrc:/sounds/sounds/death.wav"));
-                            deathSong->setVolume(0.25);
-                            themeSong->stop();
-                            deathSong->play();
-                            QTimer::singleShot(8000, this, [this]() {
-                                LevelSelection *levelSelect = new LevelSelection();
-                                levelSelect->show();
-                                this->close();
-                            });
-                        }
+                        break;
                     }
                 }
             }
@@ -733,5 +684,15 @@ void MainGameWindow::applyPowerUp(PowerUpType type){
     case Gigantification:
         player->applyGiantPowerUp();
         break;
+    }
+}
+
+void MainGameWindow::playGaafarsSong() {
+    if (themeSong) {
+        themeSong->stop();
+        themeSong->setSource(QUrl("qrc:/sounds/sounds/friends.wav"));
+        themeSong->setVolume(0.75);
+        themeSong->setLoopCount(QSoundEffect::Infinite);
+        themeSong->play();
     }
 }
